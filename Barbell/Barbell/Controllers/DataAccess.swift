@@ -6,14 +6,44 @@
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
+import UIKit
 import Foundation
 
 public class DataAccess {
     class func connectToDatabase(registerInfo: RegisterInfo) -> Bool {
-        var request = URLRequest(url: URL(string: "http://bbserver.eastus.cloudapp.azure.com/api/user/\(registerInfo.email)/" )!)
+        var request = URLRequest(url: URL(string: "http://bbapi.eastus.cloudapp.azure.com/api/user/\(registerInfo.email)/")!)
         request.httpMethod = "POST"
-        let postString = "\(registerInfo.firstName)" + " " + "\(registerInfo.lastName)" + "\(registerInfo.password)"
-        request.httpBody = postString.data(using: .utf8)
+        
+        print("Request STRING \(request)")
+        
+        //"{name:hi ads, password:kj}"\\
+        let postString = "\"{name:\(registerInfo.firstName)" + " " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
+        //print("POST STRING::\(postString)")
+        
+        do {
+            let postData = try JSONSerialization.data(withJSONObject: postString, options: [])
+            print ("\n\(postData)\n\n\n")
+        } catch {
+            let err = error as NSError
+            print("ERROR IS \(err)")
+        }
+    
+        /*
+        if let postData = try JSONSerialization.jsonObject(with: (postString as? Data)!, options: []) {
+            
+        }catch{
+            
+        }
+        */
+        
+       
+        
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {                                                 // check for fundamental networking error
                 print("error=\(error)")
