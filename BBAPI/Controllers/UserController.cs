@@ -136,10 +136,10 @@ namespace BBAPI.Controllers
 			}
 
 
-			//before any logic, make sure email is formatted and unique
+			//before any logic, make sure email is formatted and exists
 			var emailVerfiyResponse = RedisDB.emailVerify(email);
 
-			if (emailVerfiyResponse != 1)
+			if (emailVerfiyResponse != -3)
 			{
 				//send error code
 				switch (emailVerfiyResponse)
@@ -150,8 +150,8 @@ namespace BBAPI.Controllers
 					case -2:
 						return Ok("email is not vaild format");
 
-					case -3:
-						return Ok("email is already registered");
+					case 1:
+						return Ok("email doesnt exist");
 
 					case -4:
 						return Ok("some try catch error");
@@ -171,7 +171,7 @@ namespace BBAPI.Controllers
 			//send to RedisDB
 			RedisDB.workoutHash(key, postParams[2], postParams[4], postParams[6]);
 
-			var returnString = "user:" + postParams[2] + "pss:" + postParams[4];
+			var returnString = "id:" + postParams[2] + "name:" + postParams[4] + "weight:" + postParams[6];
 
 			return Ok("you put" + returnString);
 		}
