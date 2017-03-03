@@ -13,11 +13,12 @@ namespace BBAPI.Controllers
 {
     class RedisDB 
     {
-        private static string windowsVMCache = string.Format("{0}:{1}", "localhost",6379);
+		private static string pWordPath = System.Web.Configuration.WebConfigurationManager.AppSettings["bbAPI_Auth"];
+		private static string windowsVMCache = string.Format("{0}:{1},password={2}", "localhost",6379, pWordPath);
 
         private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
         {
-            return ConnectionMultiplexer.Connect(windowsVMCache);
+			return ConnectionMultiplexer.Connect(windowsVMCache);
         });
         
         public static ConnectionMultiplexer Connection
