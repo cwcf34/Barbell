@@ -1,11 +1,10 @@
 ﻿<Properties StartupConfiguration="{B6E4B045-34F2-48C8-8AC2-63FC17130676}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/UserController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/RedisDB.cs">
     <Files>
       <File FileName="Models/User.cs" Line="14" Column="1" />
       <File FileName="Controllers/RedisDB.cs" Line="34" Column="28" />
       <File FileName="Controllers/UserController.cs" Line="122" Column="41" />
-      <File FileName="App_Start/WebApiConfig.cs" Line="31" Column="4" />
-      <File FileName="index.html" Line="77" Column="5" />
+      <File FileName="index.html" Line="82" Column="25" />
       <File FileName="Web.config" Line="17" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
