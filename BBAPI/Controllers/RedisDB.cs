@@ -96,12 +96,13 @@ namespace BBAPI.Controllers
 			}
         }
 
-		/*
-        public static bool StoreData( string key, string value)
+
+        public static void workoutHash(string key, string id, string name, string weight)
         {
-            return cache.StringSet(key, value);
+			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weight", weight) });
         }
 
+		/*
         private static void DeleteData(IDatabase cache, string key)
         {
             cache.KeyDelete(key);

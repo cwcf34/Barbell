@@ -124,7 +124,56 @@ namespace BBAPI.Controllers
 		[HttpPut]
 		public IHttpActionResult PutUser(string email, [FromBody]string data)
 		{
-			return Ok("you put" + data);
+
+			//check if body is empty, white space or null
+			// or appropriate JSON fields are not in post body
+			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("id:") || !data.Contains("name:") || !data.Contains("weight:"))
+			{
+				var resp = "Data is null. Please send formatted data: ";
+				var resp2 = "\"{id:name, name:pw, weight:weight}\"";
+				string emptyResponse = resp + resp2;
+				return Ok(emptyResponse);
+			}
+
+
+			//before any logic, make sure email is formatted and unique
+			var emailVerfiyResponse = RedisDB.emailVerify(email);
+
+			if (emailVerfiyResponse != 1)
+			{
+				//send error code
+				switch (emailVerfiyResponse)
+				{
+					case -1:
+						return Ok("email is empty");
+
+					case -2:
+						return Ok("email is not vaild format");
+
+					case -3:
+						return Ok("email is already registered");
+
+					case -4:
+						return Ok("some try catch error");
+				}
+			}
+
+			//parse email and body data
+			char[] delimiterChars = { '{', '}', ',', ':' };
+			string[] postParams = data.Split(delimiterChars);
+
+			//email is now verified as avail in cache
+			//create key
+			var key = "user:" + email + postParams[4];
+
+			//create hash for new user
+			//store hash in Redis
+			//send to RedisDB
+			RedisDB.workoutHash(key, postParams[2], postParams[4], postParams[6]);
+
+			var returnString = "user:" + postParams[2] + "pss:" + postParams[4];
+
+			return Ok("you put" + returnString);
 		}
 	}
 }
