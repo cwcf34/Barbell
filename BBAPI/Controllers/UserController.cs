@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Linq;
 using System.Collections.Generic;
 using System.Web.Http;
 using BBAPI.Models;

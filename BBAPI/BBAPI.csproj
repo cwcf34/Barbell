@@ -71,6 +71,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\RedisDB.cs" />
+    <Compile Include="Controllers\WorkoutController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
