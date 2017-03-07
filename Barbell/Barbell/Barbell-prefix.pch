@@ -1,0 +1,21 @@
+//
+//  Barbell-prefix.pch
+//  Barbell
+//
+//  Created by Caleb Albertson on 2/24/17.
+//  Copyright © 2017 Team Barbell. All rights reserved.
+//
+
+#ifndef Barbell_prefix_pch
+#define Barbell_prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#endif
+
+#endif /* Barbell_prefix_pch */
