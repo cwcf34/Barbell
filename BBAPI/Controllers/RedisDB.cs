@@ -1,13 +1,10 @@
-using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Web;
 using System.Text;
-using System.Threading.Tasks;
+using System.Net.Mail;
+using StackExchange.Redis;
 // to hash and salt pword: 
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using System.Net.Mail;
 
 namespace BBAPI.Controllers
 {
