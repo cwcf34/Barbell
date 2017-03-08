@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12106.1" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ufj-Q2-zB6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ufj-Q2-zB6">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12074.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -406,22 +406,46 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0dA-Qe-PGF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="701.60000000000002" y="-1250.824587706147"/>
+            <point key="canvasLocation" x="1582" y="-1531"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Routines-->
         <scene sceneID="zm0-nG-G6A">
             <objects>
-                <tableViewController id="4bj-Hh-kTG" sceneMemberID="viewController">
+                <tableViewController id="4bj-Hh-kTG" customClass="CreateWorkoutTableViewController" customModule="Barbell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="khU-wD-KnS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="sNq-Bq-acJ">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="addWorkout" textLabel="ANc-hb-jHc" imageView="97t-Hr-gfp" style="IBUITableViewCellStyleDefault" id="sNq-Bq-acJ">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sNq-Bq-acJ" id="xyC-6B-z7t">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Add a Routine" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ANc-hb-jHc">
+                                            <rect key="frame" x="73" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="14009659.jpeg" id="97t-Hr-gfp">
+                                            <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </imageView>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="B3D-9r-X1U" kind="show" id="hU7-7M-xtj"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="listOfWorkouts" rowHeight="116" id="OOW-tX-qgE">
+                                <rect key="frame" x="0.0" y="72" width="375" height="116"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OOW-tX-qgE" id="F96-Hx-fHu">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="115.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -431,11 +455,61 @@
                             <outlet property="delegate" destination="4bj-Hh-kTG" id="BPZ-bm-Ud5"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="Uys-Hb-emj"/>
+                    <navigationItem key="navigationItem" title="Routines" id="Uys-Hb-emj">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="EZ1-DC-dh8"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D8H-YB-vbw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2542" y="-815"/>
+            <point key="canvasLocation" x="2541.5999999999999" y="-815.44227886056979"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="njP-20-OhI">
+            <objects>
+                <viewController id="B3D-9r-X1U" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qrF-dS-p6B"/>
+                        <viewControllerLayoutGuide type="bottom" id="8CX-pH-q3V"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="XBy-wC-8Ou">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="14009659.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="1Zr-5d-ff8">
+                                <rect key="frame" x="16" y="90" width="110" height="110"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="110" id="3CB-Hh-VsA"/>
+                                    <constraint firstAttribute="height" constant="110" id="pvO-Ru-sJA"/>
+                                </constraints>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter a routine name...." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zjf-cZ-8cG">
+                                <rect key="frame" x="148" y="90" width="199" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="wKJ-aD-Y8C">
+                                <rect key="frame" x="0.0" y="233" width="375" height="385"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wKJ-aD-Y8C" firstAttribute="leading" secondItem="XBy-wC-8Ou" secondAttribute="leading" id="3Bu-rW-VPE"/>
+                            <constraint firstItem="wKJ-aD-Y8C" firstAttribute="bottom" secondItem="8CX-pH-q3V" secondAttribute="top" id="3V1-XG-c9X"/>
+                            <constraint firstItem="wKJ-aD-Y8C" firstAttribute="top" secondItem="1Zr-5d-ff8" secondAttribute="bottom" constant="33" id="Dbq-9c-40k"/>
+                            <constraint firstAttribute="trailing" secondItem="wKJ-aD-Y8C" secondAttribute="trailing" id="Mzh-su-XaR"/>
+                            <constraint firstItem="1Zr-5d-ff8" firstAttribute="top" secondItem="qrF-dS-p6B" secondAttribute="bottom" constant="26" id="OAu-bY-6ze"/>
+                            <constraint firstItem="zjf-cZ-8cG" firstAttribute="leading" secondItem="1Zr-5d-ff8" secondAttribute="trailing" constant="22" id="VEa-4L-JfN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="zjf-cZ-8cG" secondAttribute="trailing" constant="12" id="dAa-Ud-V14"/>
+                            <constraint firstItem="1Zr-5d-ff8" firstAttribute="leading" secondItem="XBy-wC-8Ou" secondAttribute="leadingMargin" id="hvm-np-9FQ"/>
+                            <constraint firstItem="zjf-cZ-8cG" firstAttribute="top" secondItem="1Zr-5d-ff8" secondAttribute="top" id="ibf-3i-H1B"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h10-pB-MMp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3413.5999999999999" y="-815.44227886056979"/>
         </scene>
         <!--Workouts-->
         <scene sceneID="h1g-4N-ahD">
