@@ -176,7 +176,7 @@ namespace BBAPI.Controllers
 				for (count = 0; count < numParams; count++)
 				{
 					returnString = returnString + "postParam[" + count + "]: " + postParams[count];
-					if (postParams[count] == "email:")
+					if (postParams[count] == "email")
 					{
 						emailParamNum = count + 1;
 					}
