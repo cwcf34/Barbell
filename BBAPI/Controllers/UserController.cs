@@ -157,32 +157,11 @@ namespace BBAPI.Controllers
 				}
 
 				//parse email and body data
-				/*
 				char[] delimiterChars = { '{', '}', ',', ':' };
 				string[] postParams = data.Split(delimiterChars);
 
 				int numParams = postParams.Length;
 				int count = 0;
-
-
-
-				for (count = 0; count < numParams; count = count = count + 2)
-				{
-					
-				}
-				*/
-
-				//parse email and body data
-				char[] delimiterChars = { '{', '}', ',', ':' };
-				string[] postParams = data.Split(delimiterChars);
-
-				int numParams = postParams.Length;
-				int count = 0;
-
-
-				//email is now verified as avail in cache
-				//create key
-				var key = "user:" + email;
 
 				//create hash for new user
 				//store hash in Redis
@@ -190,8 +169,9 @@ namespace BBAPI.Controllers
 				//RedisDB.createUserHash(key, postParams[2], postParams[4], postParams[6]);
 
 				int emailParamNum = 0;
+
 				var returnString = "";
-				var fullReturn = "allParams:" + numParams + "Param0: " + postParams[0] + "name: " + postParams[2] + "email: " + postParams[4] + "password: " + postParams[6];
+				//var fullReturn = "allParams:" + numParams + "Param0: " + postParams[0] + "name: " + postParams[2] + "email: " + postParams[4] + "password: " + postParams[6];
 
 				for (count = 0; count < numParams; count++)
 				{
@@ -203,7 +183,7 @@ namespace BBAPI.Controllers
 				}
 
 				//before any logic, make sure email is formatted and unique
-				var newEmailVerfiyResponse = 1;
+				var newEmailVerfiyResponse = RedisDB.emailVerify(postParams[emailParamNum]);
 
 				if (newEmailVerfiyResponse != 1)
 				{
@@ -211,18 +191,25 @@ namespace BBAPI.Controllers
 					switch (newEmailVerfiyResponse)
 					{
 						case -1:
-							return Ok("1email is empty");
+							return Ok("New email is empty.");
 
 						case -2:
-							return Ok("1email is not vaild format");
+							return Ok("New email is not vaild format.");
 
 						case -3:
-							return Ok("1email is already registered");
+							return Ok("New email is already registered.");
 
 						case -4:
-							return Ok("1some try catch error");
+							return Ok("Some New try catch error");
 					}
 				}
+
+				//user is registerd and now allowed to change field to  new unique Email
+				//grab old user Hash data 
+
+				//create new key for new User hash w/ remaining data
+
+
 
 				return Ok("you put" + returnString + "and email response was unique");
 			}
