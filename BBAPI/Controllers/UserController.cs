@@ -125,53 +125,111 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("id:") || !data.Contains("name:") || !data.Contains("weight:"))
+			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "\"{id:name, name:pw, weight:weight}\"";
+				var resp2 = "\"{name:name, email:email, password:pw}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
-
-
-			//before any logic, make sure email is formatted and exists
-			var emailVerfiyResponse = RedisDB.emailVerify(email);
-
-			if (emailVerfiyResponse != -3)
+			else if (data.Contains("email:"))
 			{
-				//send error code
-				switch (emailVerfiyResponse)
+				//before any logic, make sure email is formatted and exists
+				var emailVerfiyResponse = RedisDB.emailVerify(email);
+
+				if (emailVerfiyResponse != -3)
 				{
-					case -1:
-						return Ok("email is empty");
+					//send error code
+					switch (emailVerfiyResponse)
+					{
+						case -1:
+							return Ok("email is empty");
 
-					case -2:
-						return Ok("email is not vaild format");
+						case -2:
+							return Ok("email is not vaild format");
 
-					case 1:
-						return Ok("email doesnt exist");
+						case 1:
+							return Ok("email doesnt exist");
 
-					case -4:
-						return Ok("some try catch error");
+						case -4:
+							return Ok("some try catch error");
+					}
 				}
+
+				//parse email and body data
+				/*
+				char[] delimiterChars = { '{', '}', ',', ':' };
+				string[] postParams = data.Split(delimiterChars);
+
+				int numParams = postParams.Length;
+				int count = 0;
+
+
+
+				for (count = 0; count < numParams; count = count = count + 2)
+				{
+					
+				}
+				*/
+
+				//parse email and body data
+				char[] delimiterChars = { '{', '}', ',', ':' };
+				string[] postParams = data.Split(delimiterChars);
+
+				int numParams = postParams.Length;
+				int count = 0;
+
+
+				//email is now verified as avail in cache
+				//create key
+				var key = "user:" + email;
+
+				//create hash for new user
+				//store hash in Redis
+				//send to RedisDB
+				//RedisDB.createUserHash(key, postParams[2], postParams[4], postParams[6]);
+
+				int emailParamNum = 0;
+				var returnString = "";
+				var fullReturn = "allParams:" + numParams + "Param0: " + postParams[0] + "name: " + postParams[2] + "email: " + postParams[4] + "password: " + postParams[6];
+
+				for (count = 0; count < numParams; count++)
+				{
+					returnString = returnString + "postParam[" + count + "]: " + postParams[count];
+					if (postParams[count] == "email:")
+					{
+						emailParamNum = count + 1;
+					}
+				}
+
+				//before any logic, make sure email is formatted and unique
+				var newEmailVerfiyResponse = RedisDB.emailVerify(postParams[emailParamNum]);
+
+				if (newEmailVerfiyResponse != 1)
+				{
+					//send error code
+					switch (newEmailVerfiyResponse)
+					{
+						case -1:
+							return Ok("1email is empty");
+
+						case -2:
+							return Ok("1email is not vaild format");
+
+						case -3:
+							return Ok("1email is already registered");
+
+						case -4:
+							return Ok("1some try catch error");
+					}
+				}
+
+				return Ok("you put" + returnString + "and email response was unique");
 			}
-
-			//parse email and body data
-			char[] delimiterChars = { '{', '}', ',', ':' };
-			string[] postParams = data.Split(delimiterChars);
-
-			//email is now verified as avail in cache
-			//create key
-			var key = "user:" + email + postParams[4];
-
-			//create hash for new user
-			//store hash in Redis
-			//send to RedisDB
-			RedisDB.workoutHash(key, postParams[2], postParams[4], postParams[6]);
-
-			var returnString = "id:" + postParams[2] + "name:" + postParams[4] + "weight:" + postParams[6];
-
-			return Ok("you put" + returnString);
+			else
+			{
+				return Ok("some else if error");
+			}
 		}
 	}
 }

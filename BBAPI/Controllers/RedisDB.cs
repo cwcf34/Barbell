@@ -94,9 +94,9 @@ namespace BBAPI.Controllers
         }
 
 
-        public static void workoutHash(string key, string id, string name, string weight)
+        public static void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
         {
-			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weight", weight) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
         }
 
 		/*
@@ -154,6 +154,27 @@ namespace BBAPI.Controllers
 				return -4;
 			}
         }
+
+		/// <summary>
+		/// Does the key exist.
+		/// </summary>
+		/// <returns>If the key exist</returns>
+		/// <param name="key">Key</param>
+
+		public static int doesKeyExist(string key)
+		{
+			//check if unique routineID
+			if (cache.KeyExists(key))
+			{
+				//routineID taken
+				//send error code to  
+				return -1;
+			}
+			else
+			{
+				return 1;
+			}
+		}
 
         //Compute a hash using the Sha512 algorithm
 		/// <summary>
