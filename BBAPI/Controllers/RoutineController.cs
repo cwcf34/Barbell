@@ -5,7 +5,7 @@ using BBAPI.Models;
 
 namespace BBAPI.Controllers
 {
-	public class WorkoutController : ApiController
+	public class RoutineController : ApiController
 	{
 		//create a new Routine with mulitple workouts
 
