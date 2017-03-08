@@ -203,7 +203,7 @@ namespace BBAPI.Controllers
 				}
 
 				//before any logic, make sure email is formatted and unique
-				var newEmailVerfiyResponse = RedisDB.emailVerify(postParams[emailParamNum]);
+				var newEmailVerfiyResponse = 1;
 
 				if (newEmailVerfiyResponse != 1)
 				{
