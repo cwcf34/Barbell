@@ -85,8 +85,12 @@ namespace BBAPI.Controllers
 					var key = "user:" + email;
 					var data = new HashEntry[] {};
 					data = cache.HashGetAll(key);
-					string getResponse = data[0].ToString() + data[1].ToString();
-					return data.ToString();
+					string getResponse = "{";
+					for (int i = 0; i < data.Length; i++)
+					{
+						getResponse = getResponse + " data[" + i + "]:" + data[i];
+					}
+					return getResponse;
 				
 				case -4:
 				default:
