@@ -132,7 +132,7 @@ namespace BBAPI.Controllers
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
-			else if (data.Contains("email:"))
+			else if (data.Contains("email:") && data.Contains("name:") && data.Contains("password:"))
 			{
 				//before any logic, make sure email is formatted and exists
 				var emailVerfiyResponse = RedisDB.emailVerify(email);
@@ -160,30 +160,12 @@ namespace BBAPI.Controllers
 				char[] delimiterChars = { '{', '}', ',', ':' };
 				string[] postParams = data.Split(delimiterChars);
 
-				int numParams = postParams.Length;
-				int count = 0;
-
-				//create hash for new user
-				//store hash in Redis
-				//send to RedisDB
-				//RedisDB.createUserHash(key, postParams[2], postParams[4], postParams[6]);
-
-				int emailParamNum = 0;
 
 				var returnString = "";
 				//var fullReturn = "allParams:" + numParams + "Param0: " + postParams[0] + "name: " + postParams[2] + "email: " + postParams[4] + "password: " + postParams[6];
 
-				for (count = 0; count < numParams; count++)
-				{
-					returnString = returnString + "postParam[" + count + "]: " + postParams[count];
-					if (postParams[count] == "email")
-					{
-						emailParamNum = count + 1;
-					}
-				}
-
 				//before any logic, make sure email is formatted and unique
-				var newEmailVerfiyResponse = RedisDB.emailVerify(postParams[emailParamNum]);
+				var newEmailVerfiyResponse = RedisDB.emailVerify(postParams[4]);
 
 				if (newEmailVerfiyResponse != 1)
 				{
@@ -204,14 +186,19 @@ namespace BBAPI.Controllers
 					}
 				}
 
-				//user is registerd and now allowed to change field to  new unique Email
-				//grab old user Hash data 
+				//user is registerd and now allowed to change field to a new unique Email
+				//grab old user Hash data
+				var oldData = RedisDB.getUserData(email);
+				var oldPostParams = oldData.Split(delimiterChars);
+				var oldName = oldPostParams[2];
+				var oldPassword = oldPostParams[6];
+
 
 				//create new key for new User hash w/ remaining data
 
 
 
-				return Ok("you put" + returnString + "and email response was unique");
+				return Ok("you put" + returnString + "and email response was unique\n" + "OLDDATA:\n" + oldData + "\noldName:" + oldName + "\noldPass:" + oldPassword);
 			}
 			else
 			{

@@ -47,17 +47,18 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword) });
         }
 
+
 		/// <summary>
 		/// Updates the user hash.
 		/// </summary>
 		/// <param name="key">Key.</param>
-		/// <param name="updatedField">Updated field.</param>
-		/// <param name="newValue">New value.</param>
-
-        public static void updateUserHash(string key, string updatedField, string newValue)
-        {
-            cache.HashSet(key, new HashEntry[] {new HashEntry(updatedField, newValue)});
-        }
+		/// <param name="name">Name.</param>
+		/// <param name="email">Email.</param>
+		/// <param name="password">Password.</param>
+        public static void updateUserHash(string key, string name, string email, string password)
+		{
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", password) });
+		}
         
 		/// <summary>
 		/// Gets the user data.
@@ -85,7 +86,7 @@ namespace BBAPI.Controllers
 					var data = new HashEntry[] {};
 					data = cache.HashGetAll(key);
 					string getResponse = data[0].ToString() + data[1].ToString();
-					return getResponse;
+					return data.ToString();
 				
 				case -4:
 				default:
