@@ -146,11 +146,6 @@ namespace BBAPI.Controllers
 			var postPassword = postParams[6];
 
 
-			//var returnString = "";
-			var fullReturn = "allParams:" + postParams.Length + "\n" + "Param0:" + postParams[0] + "\n" + "Param1:" + postParams[1] + "\n" + "Param2:" + postParams[2] + "\n" + "Param3:" + postParams[3] + "\n" + "Param4:" + postParams[4] + "\n" + "Param5:" + postParams[5] + "\n" + "Param6:" + postParams[6] + "\n";
-
-			return Ok(fullReturn);
-
 			if (String.IsNullOrWhiteSpace(newEmail) && String.IsNullOrWhiteSpace(postName) && String.IsNullOrWhiteSpace(postPassword))
 			{
 				return Ok("All fields are null! Send Data.");
@@ -159,6 +154,11 @@ namespace BBAPI.Controllers
 			//grab old user Hash data
 			var currData = RedisDB.getUserData(currEmail);
 			var currRedisData = currData.Split(delimiterChars);
+
+			//var returnString = "";
+			var fullReturn = "allParams:" + currRedisData.Length + "\n" + "Param0:" + currRedisData[0] + "\n" + "Param1:" + currRedisData[1] + "\n" + "Param2:" + currRedisData[2] + "\n" + "Param3:" + currRedisData[3] + "\n" + "Param4:" + currRedisData[4] + "\n" + "Param5:" + currRedisData[5] + "\n" + "Param6:" + currRedisData[6] + "\n";
+
+			return Ok(fullReturn);
 
 			//if sending Put request and email field has data
 			//user wants to change email address
