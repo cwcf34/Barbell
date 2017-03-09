@@ -55,10 +55,10 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}",data) || !data.Contains("name:") || !data.Contains("password:"))
+			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("password:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "\"{name:name, password:pw}\""; 
+				var resp2 = "\"{name:name, password:pw}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -90,11 +90,11 @@ namespace BBAPI.Controllers
 			var key = "user:" + email;
 
 			//parse email and body data
-			char[] delimiterChars = {'{', '}', ',', ':'};
+			char[] delimiterChars = { '{', '}', ',', ':' };
 			string[] postParams = data.Split(delimiterChars);
 
 			//if name or password fields are empty
-			if (String.IsNullOrWhiteSpace(postParams[2]) || String.IsNullOrWhiteSpace(postParams[4])) 
+			if (String.IsNullOrWhiteSpace(postParams[2]) || String.IsNullOrWhiteSpace(postParams[4]))
 			{
 				string postError = "user=" + postParams[2] + "pss=" + postParams[3];
 				return Ok(postError);
@@ -126,7 +126,7 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data))
+			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("email:") || !data.Contains("password:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
 				var resp2 = "\"{name:name, email:email, password:pw}\"";
@@ -152,7 +152,7 @@ namespace BBAPI.Controllers
 			//if sending Put request and email field has data
 			//user wants to change email address
 			//old user hash is deleted in the process / new hash key is created
-			if (data.Contains("email:") && !(String.IsNullOrWhiteSpace(newEmail)))
+			if (!(String.IsNullOrWhiteSpace(newEmail)))
 			{
 				//before any logic, make sure email is formatted and exists
 				var emailVerfiyResponse = RedisDB.emailVerify(currEmail);
@@ -221,7 +221,7 @@ namespace BBAPI.Controllers
 				RedisDB.deleteKey("user:" + currEmail);
 
 				//create new key, and update hash
-				RedisDB.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
+				RedisDB.createUserHash("user:" + newEmail, postName, newEmail, postPassword);
 
 				return Ok("Successfully updated your profile with new email!");
 			}
@@ -255,14 +255,14 @@ namespace BBAPI.Controllers
 				if (String.IsNullOrWhiteSpace(postName))
 				{
 					//grab curr name
-					postName = currRedisData[2];
+					postName = currRedisData[3];
 				}
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
 					//grab curr password
-					postPassword = currRedisData[5];
+					postPassword = currRedisData[1];
 				}
 				else
 				{
