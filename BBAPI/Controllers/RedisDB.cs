@@ -85,10 +85,10 @@ namespace BBAPI.Controllers
 					var key = "user:" + email;
 					var data = new HashEntry[] {};
 					data = cache.HashGetAll(key);
-					string getResponse = "{";
+					string getResponse = "";
 					for (int i = 0; i < data.Length; i++)
 					{
-						getResponse = getResponse + " data[" + i + "]:" + data[i];
+						getResponse = getResponse + " " + data[i];
 					}
 					return getResponse;
 				
@@ -104,12 +104,12 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
         }
 
-		/*
-        private static void DeleteData(IDatabase cache, string key)
+
+        public static void deleteKey(string key)
         {
             cache.KeyDelete(key);
         }
-        */
+
 
         //close connection needed
 
@@ -189,7 +189,7 @@ namespace BBAPI.Controllers
 		/// <param name="sha512Hash">Sha512 hash.</param>
 		/// <param name="input">Input.</param>
 
-        private static string GetSha512Hash(SHA512 sha512Hash, string input)
+        public static string GetSha512Hash(SHA512 sha512Hash, string input)
         {
 
             // Convert the input string to a byte array and compute the hash.

@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Web.Http;
 using BBAPI.Models;
+using System.Web.Http;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace BBAPI.Controllers
 {
@@ -120,7 +121,7 @@ namespace BBAPI.Controllers
 		/// <param name="email">Email.</param>
 		/// <param name="data">Data.</param>
 		[HttpPut]
-		public IHttpActionResult PutUser(string email, [FromBody]string data)
+		public IHttpActionResult PutUser(string currEmail, [FromBody]string data)
 		{
 
 			//check if body is empty, white space or null
@@ -132,10 +133,28 @@ namespace BBAPI.Controllers
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
-			else if (data.Contains("email:") && data.Contains("name:") && data.Contains("password:"))
+
+			//parse email and body data
+			char[] delimiterChars = { '{', '}', ',', ':' };
+			string[] postParams = data.Split(delimiterChars);
+
+			//get new email
+			var newEmail = postParams[4];
+			//grab any other data that is to be changed
+			var postName = postParams[2];
+			var postPassword = postParams[6];
+
+			//grab old user Hash data
+			var currData = RedisDB.getUserData(currEmail);
+			var currRedisData = currData.Split(delimiterChars);
+
+			//if sending Put request and email field has data
+			//user wants to change email address
+			//old user hash is deleted in the process / new hash key is created
+			if (data.Contains("email:") && !(String.IsNullOrWhiteSpace(newEmail)))
 			{
 				//before any logic, make sure email is formatted and exists
-				var emailVerfiyResponse = RedisDB.emailVerify(email);
+				var emailVerfiyResponse = RedisDB.emailVerify(currEmail);
 
 				if (emailVerfiyResponse != -3)
 				{
@@ -156,16 +175,11 @@ namespace BBAPI.Controllers
 					}
 				}
 
-				//parse email and body data
-				char[] delimiterChars = { '{', '}', ',', ':' };
-				string[] postParams = data.Split(delimiterChars);
-
-
 				var returnString = "";
 				//var fullReturn = "allParams:" + numParams + "Param0: " + postParams[0] + "name: " + postParams[2] + "email: " + postParams[4] + "password: " + postParams[6];
 
-				//before any logic, make sure email is formatted and unique
-				var newEmailVerfiyResponse = RedisDB.emailVerify(postParams[4]);
+				//before any logic, make sure New Email is formatted and unique
+				var newEmailVerfiyResponse = RedisDB.emailVerify(newEmail);
 
 				if (newEmailVerfiyResponse != 1)
 				{
@@ -186,23 +200,80 @@ namespace BBAPI.Controllers
 					}
 				}
 
-				//user is registerd and now allowed to change field to a new unique Email
-				//grab old user Hash data
-				var oldData = RedisDB.getUserData(email);
-				var oldPostParams = oldData.Split(delimiterChars);
-				var oldName = oldPostParams[2];
-				var oldPassword = oldPostParams[6];
+				//user is registerd and now allowed to change currEmail to a new unique Email
 
+				//if null, user keeps curr name
+				if (String.IsNullOrWhiteSpace(postName))
+				{
+					//grab curr name
+					postName = currRedisData[4];
+				}
 
-				//create new key for new User hash w/ remaining data
+				//if null, user keeps curr password
+				if (String.IsNullOrWhiteSpace(postPassword))
+				{
+					//grab curr password
+					postPassword = currRedisData[2];
+				}
 
+				//delete old key w old data
+				RedisDB.deleteKey("user:" + currEmail);
 
+				//create new key, and update hash
+				RedisDB.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
 
-				return Ok("you put" + returnString + "and email response was unique\n" + "OLDDATA:\n" + oldData + "\noldName:" + oldName + "\noldPass:" + oldPassword);
+				return Ok("Successfully updated your profile with new email!");
 			}
-			else
+			else 
 			{
-				return Ok("some else if error");
+				//before any logic, make sure email is formatted and exists
+				var emailVerfiyResponse = RedisDB.emailVerify(currEmail);
+
+				if (emailVerfiyResponse != -3)
+				{
+					//send error code
+					switch (emailVerfiyResponse)
+					{
+						case -1:
+							return Ok("email is empty");
+
+						case -2:
+							return Ok("email is not vaild format");
+
+						case 1:
+							return Ok("email doesnt exist");
+
+						case -4:
+							return Ok("some try catch error");
+					}
+				}
+
+				//check if post data is null
+
+				//if null, user keeps curr name
+				if (String.IsNullOrWhiteSpace(postName))
+				{
+					//grab curr name
+					postName = currRedisData[4];
+				}
+
+				//if null, user keeps curr password
+				if (String.IsNullOrWhiteSpace(postPassword))
+				{
+					//grab curr password
+					postPassword = currRedisData[2];
+				}
+				else
+				{
+					SHA512 sha512Hash = SHA512.Create();
+					string salt = Guid.NewGuid().ToString();
+					string saltedPassword = postPassword + salt;
+					postPassword = RedisDB.GetSha512Hash(sha512Hash, saltedPassword);
+				}
+
+				RedisDB.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
+
+				return Ok("Successfully Updated your profile");
 			}
 		}
 	}
