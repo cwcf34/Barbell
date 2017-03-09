@@ -90,7 +90,7 @@ namespace BBAPI.Controllers
 					{
 						getResponse = getResponse + "data[" + i + "]" + data[i];
 					}
-					return getResponse;
+					return data.ToDictionary().ToString();
 				
 				case -4:
 				default:
