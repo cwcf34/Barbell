@@ -136,7 +136,7 @@ namespace BBAPI.Controllers
 
 			var currEmail = email;
 			//parse email and body data
-			char[] delimiterChars = { '{', '}', ',', ':' };
+			char[] delimiterChars = { '{', '}', ',', ':', ' '};
 			string[] postParams = data.Split(delimiterChars);
 
 			//get new email
