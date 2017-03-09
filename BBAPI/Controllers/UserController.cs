@@ -145,6 +145,11 @@ namespace BBAPI.Controllers
 			var postName = postParams[2];
 			var postPassword = postParams[6];
 
+			if (String.IsNullOrWhiteSpace(newEmail) && String.IsNullOrWhiteSpace(postName) && String.IsNullOrWhiteSpace(postPassword))
+			{
+				return Ok("All fields are null! Send Data.");
+			}
+
 			//grab old user Hash data
 			var currData = RedisDB.getUserData(currEmail);
 			var currRedisData = currData.Split(delimiterChars);
@@ -207,21 +212,25 @@ namespace BBAPI.Controllers
 				if (String.IsNullOrWhiteSpace(postName))
 				{
 					//grab curr name
-					postName = currRedisData[2];
+					postName = currRedisData[3];
 				}
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
 					//grab curr password
-					postPassword = currRedisData[6];
+					postPassword = currRedisData[1];
+				}
+				else
+				{
+					postPassword = RedisDB.createSecurePass(postPassword);
 				}
 
 				//delete old key w old data
 				RedisDB.deleteKey("user:" + currEmail);
 
 				//create new key, and update hash
-				RedisDB.createUserHash("user:" + newEmail, postName, newEmail, postPassword);
+				RedisDB.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
 
 				return Ok("Successfully updated your profile with new email!");
 			}
@@ -266,10 +275,7 @@ namespace BBAPI.Controllers
 				}
 				else
 				{
-					SHA512 sha512Hash = SHA512.Create();
-					string salt = Guid.NewGuid().ToString();
-					string saltedPassword = postPassword + salt;
-					postPassword = RedisDB.GetSha512Hash(sha512Hash, saltedPassword);
+					postPassword = RedisDB.createSecurePass(postPassword);
 				}
 
 				RedisDB.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
@@ -277,5 +283,7 @@ namespace BBAPI.Controllers
 				return Ok("Successfully Updated your profile");
 			}
 		}
+
+
 	}
 }

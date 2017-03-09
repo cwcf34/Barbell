@@ -38,11 +38,8 @@ namespace BBAPI.Controllers
 
         public static void createUserHash(string key, string name, string email, string password)
         {
-     		//no need to check email here, check in controller
-			SHA512 sha512Hash = SHA512.Create();
-			string salt = Guid.NewGuid().ToString();
-			string saltedPassword = password + salt;
-			saltedPassword = GetSha512Hash(sha512Hash, saltedPassword);
+			//no need to check email here, check in controller
+			var saltedPassword = createSecurePass(password);
 
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword) });
         }
@@ -179,6 +176,22 @@ namespace BBAPI.Controllers
 			{
 				return 1;
 			}
+		}
+
+
+		/// <summary>
+		/// Creates the secure pass.
+		/// </summary>
+		/// <returns>The secure pass.</returns>
+		/// <param name="pword">Pword.</param>
+
+		public static string createSecurePass(string pword)
+		{
+			SHA512 sha512Hash = SHA512.Create();
+			string salt = Guid.NewGuid().ToString();
+			string saltedPassword = pword + salt;
+
+			return GetSha512Hash(sha512Hash, saltedPassword);
 		}
 
         //Compute a hash using the Sha512 algorithm
