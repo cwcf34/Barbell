@@ -145,6 +145,12 @@ namespace BBAPI.Controllers
 			var postName = postParams[2];
 			var postPassword = postParams[6];
 
+
+			//var returnString = "";
+			var fullReturn = "allParams:" + postParams.Length + "\n" + "Param0:" + postParams[0] + "\n" + "Param1:" + postParams[1] + "\n" + "Param2:" + postParams[2] + "\n" + "Param3:" + postParams[3] + "\n" + "Param4:" + postParams[4] + "\n" + "Param5:" + postParams[5] + "\n" + "Param6:" + postParams[6] + "\n";
+
+			return Ok(fullReturn);
+
 			if (String.IsNullOrWhiteSpace(newEmail) && String.IsNullOrWhiteSpace(postName) && String.IsNullOrWhiteSpace(postPassword))
 			{
 				return Ok("All fields are null! Send Data.");
@@ -181,8 +187,6 @@ namespace BBAPI.Controllers
 					}
 				}
 
-				//var returnString = "";
-				//var fullReturn = "allParams:" + numParams + "Param0: " + postParams[0] + "name: " + postParams[2] + "email: " + postParams[4] + "password: " + postParams[6];
 
 				//before any logic, make sure New Email is formatted and unique
 				var newEmailVerfiyResponse = RedisDB.emailVerify(newEmail);
@@ -264,7 +268,7 @@ namespace BBAPI.Controllers
 				if (String.IsNullOrWhiteSpace(postName))
 				{
 					//grab curr name
-					postName = currRedisData[4];
+					postName = currRedisData[3];
 				}
 
 				//if null, user keeps curr password
