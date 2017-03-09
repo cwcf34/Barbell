@@ -155,11 +155,6 @@ namespace BBAPI.Controllers
 			var currData = RedisDB.getUserData(currEmail);
 			var currRedisData = currData.Split(delimiterChars);
 
-			//var returnString = "";
-			var fullReturn = "allParams:" + currRedisData.Length + "\n" + "Param0:" + currRedisData[0] + "\n" + "Param1:" + currRedisData[1] + "\n" + "Param2:" + currRedisData[2] + "\n" + "Param3:" + currRedisData[3] + "\n" + "Param4:" + currRedisData[4] + "\n" + "Param5:" + currRedisData[5] + "\n" + "Param6:" + currRedisData[6] + "\n";
-
-			return Ok(fullReturn);
-
 			//if sending Put request and email field has data
 			//user wants to change email address
 			//old user hash is deleted in the process / new hash key is created
@@ -215,15 +210,27 @@ namespace BBAPI.Controllers
 				//if null, user keeps curr name
 				if (String.IsNullOrWhiteSpace(postName))
 				{
-					//grab curr name
-					postName = currRedisData[4];
+					for (int i = 0; i < currRedisData.Length; i++)
+					{
+						if (currRedisData[i] == "name")
+						{
+							//grab curr name
+							postName = currRedisData[i + 2];
+						}
+					}
 				}
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
-					//grab curr password
-					postPassword = currRedisData[2];
+					for (int i = 0; i < currRedisData.Length; i++)
+					{
+						if (currRedisData[i] == "password")
+						{
+							//grab curr password
+							postPassword = currRedisData[i+2];
+						}
+					}
 				}
 				else
 				{
@@ -267,15 +274,27 @@ namespace BBAPI.Controllers
 				//if null, user keeps curr name
 				if (String.IsNullOrWhiteSpace(postName))
 				{
-					//grab curr name
-					postName = currRedisData[3];
+					for (int i = 0; i < currRedisData.Length; i++)
+					{
+						if (currRedisData[i] == "name")
+						{
+							//grab curr name
+							postName = currRedisData[i + 2];
+						}
+					}
 				}
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
-					//grab curr password
-					postPassword = currRedisData[2];
+					for (int i = 0; i < currRedisData.Length; i++)
+					{
+						if (currRedisData[i] == "password")
+						{
+							//grab curr password
+							postPassword = currRedisData[i + 2];
+						}
+					}
 				}
 				else
 				{
