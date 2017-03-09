@@ -88,7 +88,7 @@ namespace BBAPI.Controllers
 					string getResponse = "";
 					for (int i = 0; i < data.Length; i++)
 					{
-						getResponse = getResponse + " " + data[i];
+						getResponse = getResponse + "data[" + i + "]" + data[i];
 					}
 					return getResponse;
 				
