@@ -262,7 +262,7 @@ namespace BBAPI.Controllers
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
 					//grab curr password
-					postPassword = currRedisData[6];
+					postPassword = currRedisData[5];
 				}
 				else
 				{
