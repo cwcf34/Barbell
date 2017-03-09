@@ -14,6 +14,9 @@ namespace BBAPI.Controllers
 			new User {Email = "dl@me.com", Name = "us", Gender = "male", Age = 100}
 		};
 
+		//use singleton
+		RedisDB redisCache = RedisDB._instance;
+
 		/// <summary>
 		/// Gets all users.
 		/// </summary>
@@ -35,7 +38,7 @@ namespace BBAPI.Controllers
 		public IHttpActionResult GetUser(string email)
 		{
 			//search for user hash w key in cache
-			return Ok(RedisDB.getUserData(email));
+			return Ok(redisCache.getUserData(email));
 		}
 
 
@@ -64,7 +67,7 @@ namespace BBAPI.Controllers
 			}
 
 			//before any logic, make sure email is formatted and unique
-			var emailVerfiyResponse = RedisDB.emailVerify(email);
+			var emailVerfiyResponse = redisCache.emailVerify(email);
 
 			if (emailVerfiyResponse != 1)
 			{
@@ -103,7 +106,7 @@ namespace BBAPI.Controllers
 			//create hash for new user
 			//store hash in Redis
 			//send to RedisDB
-			RedisDB.createUserHash(key, postParams[2], email, postParams[4]);
+			redisCache.createUserHash(key, postParams[2], email, postParams[4]);
 
 			var returnString = "user:" + postParams[2] + "pss:" + postParams[4];
 
@@ -152,7 +155,7 @@ namespace BBAPI.Controllers
 			}
 
 			//grab old user Hash data
-			var currData = RedisDB.getUserData(currEmail);
+			var currData = redisCache.getUserData(currEmail);
 			var currRedisData = currData.Split(delimiterChars);
 
 			//if sending Put request and email field has data
@@ -161,7 +164,7 @@ namespace BBAPI.Controllers
 			if (!(String.IsNullOrWhiteSpace(newEmail)))
 			{
 				//before any logic, make sure email is formatted and exists
-				var emailVerfiyResponse = RedisDB.emailVerify(currEmail);
+				var emailVerfiyResponse = redisCache.emailVerify(currEmail);
 
 				if (emailVerfiyResponse != -3)
 				{
@@ -184,7 +187,7 @@ namespace BBAPI.Controllers
 
 
 				//before any logic, make sure New Email is formatted and unique
-				var newEmailVerfiyResponse = RedisDB.emailVerify(newEmail);
+				var newEmailVerfiyResponse = redisCache.emailVerify(newEmail);
 
 				if (newEmailVerfiyResponse != 1)
 				{
@@ -234,21 +237,21 @@ namespace BBAPI.Controllers
 				}
 				else
 				{
-					postPassword = RedisDB.createSecurePass(postPassword);
+					postPassword = redisCache.createSecurePass(postPassword);
 				}
 
 				//delete old key w old data
-				RedisDB.deleteKey("user:" + currEmail);
+				redisCache.deleteKey("user:" + currEmail);
 
 				//create new key, and update hash
-				RedisDB.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
+				redisCache.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
 
 				return Ok("Successfully updated your profile with new email!");
 			}
 			else 
 			{
 				//before any logic, make sure email is formatted and exists
-				var emailVerfiyResponse = RedisDB.emailVerify(currEmail);
+				var emailVerfiyResponse = redisCache.emailVerify(currEmail);
 
 				if (emailVerfiyResponse != -3)
 				{
@@ -298,10 +301,10 @@ namespace BBAPI.Controllers
 				}
 				else
 				{
-					postPassword = RedisDB.createSecurePass(postPassword);
+					postPassword = redisCache.createSecurePass(postPassword);
 				}
 
-				RedisDB.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
+				redisCache.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
 
 				return Ok("Successfully Updated your profile");
 			}

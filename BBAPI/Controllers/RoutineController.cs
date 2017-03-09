@@ -7,6 +7,9 @@ namespace BBAPI.Controllers
 {
 	public class RoutineController : ApiController
 	{
+		//use singleton
+		RedisDB redisCache = RedisDB._instance;
+
 		//create a new Routine with mulitple workouts
 
 		//create new Routine
@@ -24,7 +27,7 @@ namespace BBAPI.Controllers
 			}
 
 			//before any logic, make sure email is formatted and registered
-			var emailVerfiyResponse = RedisDB.emailVerify(email);
+			var emailVerfiyResponse = redisCache.emailVerify(email);
 
 			//if email is registered  
 			if (emailVerfiyResponse != -3)
@@ -55,7 +58,7 @@ namespace BBAPI.Controllers
 			//create routine key
 			var key = "user:" + email + ":" + id;
 
-			while (RedisDB.doesKeyExist(key) == 1)
+			while (redisCache.doesKeyExist(key) == 1)
 			{
 				id = getRandomId();
 
@@ -70,7 +73,7 @@ namespace BBAPI.Controllers
 			var creator = email;
 
 			//get routine data
-			RedisDB.createRoutineHash(key, id, name, weeks, isPubilc, creator);
+			redisCache.createRoutineHash(key, id, name, weeks, isPubilc, creator);
 			return Ok("New Routine Created");
 					
 		}

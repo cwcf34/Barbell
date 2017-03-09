@@ -10,6 +10,8 @@ namespace BBAPI.Controllers
 {
     class RedisDB 
     {
+		public static readonly RedisDB _instance = new RedisDB();
+
 		private static string pWordPath = System.Web.Configuration.WebConfigurationManager.AppSettings["bbAPI_Auth"];
 		private static string windowsVMCache = string.Format("{0}:{1},password={2}", "localhost",6379, pWordPath);
 
@@ -36,7 +38,7 @@ namespace BBAPI.Controllers
 		/// <param name="email">Email.</param>
 		/// <param name="password">Password.</param>
 
-        public static void createUserHash(string key, string name, string email, string password)
+        public void createUserHash(string key, string name, string email, string password)
         {
 			//no need to check email here, check in controller
 			var saltedPassword = createSecurePass(password);
@@ -52,7 +54,7 @@ namespace BBAPI.Controllers
 		/// <param name="name">Name.</param>
 		/// <param name="email">Email.</param>
 		/// <param name="password">Password.</param>
-        public static void updateUserHash(string key, string name, string email, string password)
+        public void updateUserHash(string key, string name, string email, string password)
 		{
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", password) });
 		}
@@ -63,7 +65,7 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-        public static string getUserData(string email)
+        public string getUserData(string email)
         {
 			int emailVerifyResponse = emailVerify(email);
 
@@ -96,13 +98,13 @@ namespace BBAPI.Controllers
         }
 
 
-        public static void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
+        public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
         {
 			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
         }
 
 
-        public static void deleteKey(string key)
+        public void deleteKey(string key)
         {
             cache.KeyDelete(key);
         }
@@ -117,7 +119,7 @@ namespace BBAPI.Controllers
 		/// <returns>The verify code.</returns>
 		/// <param name="email">Email.</param>
 
-        public static int emailVerify(string email)
+        public int emailVerify(string email)
         {
 			var key = "user:" + email;
 			 
@@ -163,7 +165,7 @@ namespace BBAPI.Controllers
 		/// <returns>If the key exist</returns>
 		/// <param name="key">Key</param>
 
-		public static int doesKeyExist(string key)
+		public int doesKeyExist(string key)
 		{
 			//check if unique routineID
 			if (cache.KeyExists(key))
@@ -185,7 +187,7 @@ namespace BBAPI.Controllers
 		/// <returns>The secure pass.</returns>
 		/// <param name="pword">Pword.</param>
 
-		public static string createSecurePass(string pword)
+		public string createSecurePass(string pword)
 		{
 			SHA512 sha512Hash = SHA512.Create();
 			string salt = Guid.NewGuid().ToString();
@@ -202,7 +204,7 @@ namespace BBAPI.Controllers
 		/// <param name="sha512Hash">Sha512 hash.</param>
 		/// <param name="input">Input.</param>
 
-        public static string GetSha512Hash(SHA512 sha512Hash, string input)
+        public string GetSha512Hash(SHA512 sha512Hash, string input)
         {
 
             // Convert the input string to a byte array and compute the hash.
