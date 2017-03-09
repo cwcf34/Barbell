@@ -88,9 +88,9 @@ namespace BBAPI.Controllers
 					string getResponse = "";
 					for (int i = 0; i < data.Length; i++)
 					{
-						getResponse = getResponse + "data[" + i + "]" + data[i];
+						getResponse = getResponse + data[i] + ",";
 					}
-					return data.ToDictionary().ToString();
+					return getResponse;
 				
 				case -4:
 				default:
