@@ -121,7 +121,7 @@ namespace BBAPI.Controllers
 		/// <param name="email">Email.</param>
 		/// <param name="data">Data.</param>
 		[HttpPut]
-		public IHttpActionResult PutUser(string currEmail, [FromBody]string data)
+		public IHttpActionResult PutUser(string email, [FromBody]string data)
 		{
 
 			//check if body is empty, white space or null
@@ -134,6 +134,7 @@ namespace BBAPI.Controllers
 				return Ok(emptyResponse);
 			}
 
+			var currEmail = email;
 			//parse email and body data
 			char[] delimiterChars = { '{', '}', ',', ':' };
 			string[] postParams = data.Split(delimiterChars);
@@ -175,7 +176,7 @@ namespace BBAPI.Controllers
 					}
 				}
 
-				var returnString = "";
+				//var returnString = "";
 				//var fullReturn = "allParams:" + numParams + "Param0: " + postParams[0] + "name: " + postParams[2] + "email: " + postParams[4] + "password: " + postParams[6];
 
 				//before any logic, make sure New Email is formatted and unique
