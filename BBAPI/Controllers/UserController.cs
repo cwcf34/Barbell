@@ -207,14 +207,14 @@ namespace BBAPI.Controllers
 				if (String.IsNullOrWhiteSpace(postName))
 				{
 					//grab curr name
-					postName = currRedisData[4];
+					postName = currRedisData[2];
 				}
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
 					//grab curr password
-					postPassword = currRedisData[2];
+					postPassword = currRedisData[6];
 				}
 
 				//delete old key w old data
@@ -255,14 +255,14 @@ namespace BBAPI.Controllers
 				if (String.IsNullOrWhiteSpace(postName))
 				{
 					//grab curr name
-					postName = currRedisData[4];
+					postName = currRedisData[2];
 				}
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
 					//grab curr password
-					postPassword = currRedisData[2];
+					postPassword = currRedisData[6];
 				}
 				else
 				{
