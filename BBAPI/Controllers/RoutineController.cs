@@ -18,10 +18,10 @@ namespace BBAPI.Controllers
 		{
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:"))
+			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "\"{name:routineName, weeks:numberOfweeks, public:0/1: creator:email }\"";
+				var resp2 = "\"{name:routineName,weeks:numberOfweeks,public:0/1,creator:email}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -58,6 +58,7 @@ namespace BBAPI.Controllers
 			//create routine key
 			var key = "user:" + email + ":" + id;
 
+			//while key is taken, generate new key
 			while (redisCache.doesKeyExist(key) == 1)
 			{
 				id = getRandomId();
@@ -70,9 +71,9 @@ namespace BBAPI.Controllers
 			var name = postParams[2];
 			var weeks = postParams[4];
 			var isPubilc = postParams[6];
-			var creator = email;
+			var creator = postParams[8];
 
-			//get routine data
+			//create routine data
 			redisCache.createRoutineHash(key, id, name, weeks, isPubilc, creator);
 			return Ok("New Routine Created");
 					

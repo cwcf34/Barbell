@@ -100,8 +100,11 @@ namespace BBAPI.Controllers
 
         public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
         {
+			//creates hash data for routine
 			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
-        }
+        	
+			//creates routine List of workouts 
+		}
 
 
         public void deleteKey(string key)
@@ -167,16 +170,17 @@ namespace BBAPI.Controllers
 
 		public int doesKeyExist(string key)
 		{
-			//check if unique routineID
+			//check if key is in cache
 			if (cache.KeyExists(key))
 			{
-				//routineID taken
-				//send error code to  
-				return -1;
+				//key taken
+				//send error code  
+				return 1;
 			}
 			else
 			{
-				return 1;
+				//key available 
+				return 0;
 			}
 		}
 
@@ -204,7 +208,7 @@ namespace BBAPI.Controllers
 		/// <param name="sha512Hash">Sha512 hash.</param>
 		/// <param name="input">Input.</param>
 
-        public string GetSha512Hash(SHA512 sha512Hash, string input)
+        private string GetSha512Hash(SHA512 sha512Hash, string input)
         {
 
             // Convert the input string to a byte array and compute the hash.
