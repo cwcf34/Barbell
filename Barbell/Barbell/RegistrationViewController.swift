@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class RegistrationViewController: UIViewController {
     
@@ -34,10 +35,18 @@ class RegistrationViewController: UIViewController {
             
             let registerInfo = RegisterInfo.init(email: emailField.text!, password: passwordField.text!, firstName: firstNameField.text!, lastName: lastNameField.text!)
             
-            
             print(registerInfo.email)
             let dbResponse = DataAccess.connectToDatabase(registerInfo: registerInfo)
             print(dbResponse)
+            
+            //Add user info to persistent Database
+            let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
+            user.fname = firstNameField.text
+            user.lname = lastNameField.text
+            user.email = emailField.text
+            
+            CoreDataController.saveContext()
+            
         } else {
             if(!emailField.hasText) {
                 emailField.text = "Please enter an email."
