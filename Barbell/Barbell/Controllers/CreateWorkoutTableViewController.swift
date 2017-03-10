@@ -42,7 +42,6 @@ class CreateWorkoutTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "addWorkout", for: indexPath) 
         
         // Configure the cell...
-        cell.textLabel?.text = "Add Workout"
         
         return cell
     }
@@ -92,5 +91,41 @@ class CreateWorkoutTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
+    
+    /*Logic for searching through workouts */
+    
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        filterPlayers = allPlayers?.filter({ (players: Player) -> Bool in
+//            return players.firstName?.lowercased().range(of: searchText.lowercased()) != nil
+//        })
+//        
+//        if searchText != ""{
+//            shouldShowSearch = true
+//            self.tableView.reloadData()
+//        }
+//        else{
+//            shouldShowSearch = false
+//            self.tableView.reloadData()
+//        }
+//    }
+//    
+//    
+//    func createSearchbar() {
+//        searchBar.showsCancelButton = false
+//        searchBar.placeholder = "Enter search"
+//        searchBar.delegate = self
+//        
+//        self.navigationItem.titleView = searchBar
+//    }
+//    
+//    func searchBarSearchButtonClicked(searchBar: UISearchBar){
+//        shouldShowSearch = true
+//        searchBar.endEditing(true)
+//        self.tableView.reloadData()
+//    }
+    
+    /*End Search Logic*/
 
 }
