@@ -23,6 +23,9 @@
 		6F0E3CE41E6A038900357004 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0E3CE21E6A038900357004 /* LoginViewController.swift */; };
 		6F0E3CE61E6A0C3000357004 /* TestWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0E3CE51E6A0C3000357004 /* TestWorkoutViewController.swift */; };
 		6F0E3CE81E6A0FF600357004 /* WorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F0E3CE71E6A0FF600357004 /* WorkoutModel.swift */; };
+		6F1B5FDB1E733AAF00C23711 /* Exercises+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1B5FD91E733AAF00C23711 /* Exercises+CoreDataClass.swift */; };
+		6F1B5FDC1E733AAF00C23711 /* Exercises+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1B5FDA1E733AAF00C23711 /* Exercises+CoreDataProperties.swift */; };
+		6F9E12471E733D0800A05FA5 /* workouts.json in Resources */ = {isa = PBXBuildFile; fileRef = 6F9E12461E733D0800A05FA5 /* workouts.json */; };
 		C30AE7F81E5CF7F80093507B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30AE7F71E5CF7F80093507B /* AppDelegate.swift */; };
 		C30AE7FF1E5CF7F80093507B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C30AE7FD1E5CF7F80093507B /* Main.storyboard */; };
 		C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30AE8001E5CF7F80093507B /* Assets.xcassets */; };
@@ -51,6 +54,9 @@
 		6F0E3CE21E6A038900357004 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		6F0E3CE51E6A0C3000357004 /* TestWorkoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestWorkoutViewController.swift; sourceTree = "<group>"; };
 		6F0E3CE71E6A0FF600357004 /* WorkoutModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutModel.swift; sourceTree = "<group>"; };
+		6F1B5FD91E733AAF00C23711 /* Exercises+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Exercises+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6F1B5FDA1E733AAF00C23711 /* Exercises+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Exercises+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6F9E12461E733D0800A05FA5 /* workouts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = workouts.json; sourceTree = "<group>"; };
 		C30AE7F41E5CF7F80093507B /* Barbell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barbell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30AE7F71E5CF7F80093507B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C30AE7FE1E5CF7F80093507B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -110,6 +116,7 @@
 				C30AE7FD1E5CF7F80093507B /* Main.storyboard */,
 				C30AE8001E5CF7F80093507B /* Assets.xcassets */,
 				C30AE8021E5CF7F80093507B /* LaunchScreen.storyboard */,
+				6F9E12461E733D0800A05FA5 /* workouts.json */,
 				C30AE8051E5CF7F80093507B /* Info.plist */,
 			);
 			path = Barbell;
@@ -132,6 +139,8 @@
 		C384A1C81E5D1FAA0026FD99 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6F1B5FD91E733AAF00C23711 /* Exercises+CoreDataClass.swift */,
+				6F1B5FDA1E733AAF00C23711 /* Exercises+CoreDataProperties.swift */,
 				6F0E3CCD1E6A032800357004 /* Achievement+CoreDataClass.swift */,
 				6F0E3CCE1E6A032800357004 /* Achievement+CoreDataProperties.swift */,
 				6F0E3CCF1E6A032800357004 /* CoreDataModel.xcdatamodeld */,
@@ -210,6 +219,7 @@
 				C30AE8041E5CF7F80093507B /* LaunchScreen.storyboard in Resources */,
 				C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */,
 				63FA5E111E7224AF00DEE65D /* Plus.png in Resources */,
+				6F9E12471E733D0800A05FA5 /* workouts.json in Resources */,
 				63FA5E101E7224AF00DEE65D /* HeadDick.jpeg in Resources */,
 				C30AE7FF1E5CF7F80093507B /* Main.storyboard in Resources */,
 			);
@@ -233,10 +243,12 @@
 				C30AE7F81E5CF7F80093507B /* AppDelegate.swift in Sources */,
 				C384A1CA1E5D202D0026FD99 /* RegisterInfo.swift in Sources */,
 				6F0E3CDC1E6A032800357004 /* User+CoreDataClass.swift in Sources */,
+				6F1B5FDC1E733AAF00C23711 /* Exercises+CoreDataProperties.swift in Sources */,
 				6F0E3CDB1E6A032800357004 /* Routine+CoreDataProperties.swift in Sources */,
 				C384A1CC1E5D26AC0026FD99 /* DataAccess.swift in Sources */,
 				6F0E3CDD1E6A032800357004 /* User+CoreDataProperties.swift in Sources */,
 				6F0E3CE31E6A038900357004 /* CoreDataController.swift in Sources */,
+				6F1B5FDB1E733AAF00C23711 /* Exercises+CoreDataClass.swift in Sources */,
 				6F0E3CD71E6A032800357004 /* Achievement+CoreDataClass.swift in Sources */,
 				6F0E3CD91E6A032800357004 /* CoreDataModel.xcdatamodeld in Sources */,
 				6F0E3CD81E6A032800357004 /* Achievement+CoreDataProperties.swift in Sources */,
