@@ -8,7 +8,7 @@ namespace OAuth
 {
     public static class DBModel
     {
-        private static string pWordPath = ""; //fix this
+        private static string pWordPath = Settings.redispw; //fix this
         private static string windowsVMCache = string.Format("{0}:{1},password={2}", "localhost", 6379, pWordPath);
 
         private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
