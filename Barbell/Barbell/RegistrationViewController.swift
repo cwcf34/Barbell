@@ -36,7 +36,7 @@ class RegistrationViewController: UIViewController {
             let registerInfo = RegisterInfo.init(email: emailField.text!, password: passwordField.text!, firstName: firstNameField.text!, lastName: lastNameField.text!)
             
             print(registerInfo.email)
-            let dbResponse = DataAccess.connectToDatabase(registerInfo: registerInfo)
+            let dbResponse = DataAccess.register(registerInfo: registerInfo)
             print(dbResponse)
             
             //Add user info to persistent Database

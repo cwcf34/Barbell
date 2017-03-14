@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 public class DataAccess {
-    class func connectToDatabase(registerInfo: RegisterInfo) -> Bool {
+    class func register(registerInfo: RegisterInfo) -> Bool {
         var request = URLRequest(url: URL(string: "http://bbapi.eastus.cloudapp.azure.com/api/user/\(registerInfo.email)/")!)
         request.httpMethod = "POST"
         
@@ -24,25 +24,6 @@ public class DataAccess {
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
         request.httpBody = postDATA
-        
-        /*
-        do {
-            let postData = try JSONSerialization.data(withJSONObject: postString, options: [])
-            print ("\n\(postData)\n\n\n")
-        } catch {
-            let err = error as NSError
-            print("ERROR IS \(err)")
-        }
-    
-        
-        if let postData = try JSONSerialization.jsonObject(with: (postString as? Data)!, options: []) {
-            
-        }catch{
-            
-        }
-        */
-        
-       
         
         let headers = [
             "content-type": "application/json"
@@ -121,4 +102,8 @@ public class DataAccess {
         
         return true
     }
+    
+    //class func login (loginInfo: LoginInformation ) -> String{
+    //
+    //}
 }
