@@ -1,18 +1,17 @@
-using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Web;
 using System.Text;
-using System.Threading.Tasks;
+using System.Net.Mail;
+using StackExchange.Redis;
 // to hash and salt pword: 
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using System.Net.Mail;
 
 namespace BBAPI.Controllers
 {
     class RedisDB 
     {
+		public static readonly RedisDB _instance = new RedisDB();
+
 		private static string pWordPath = System.Web.Configuration.WebConfigurationManager.AppSettings["bbAPI_Auth"];
 		private static string windowsVMCache = string.Format("{0}:{1},password={2}", "localhost",6379, pWordPath);
 
@@ -39,28 +38,26 @@ namespace BBAPI.Controllers
 		/// <param name="email">Email.</param>
 		/// <param name="password">Password.</param>
 
-        public static void createUserHash(string key, string name, string email, string password)
+        public void createUserHash(string key, string name, string email, string password)
         {
-     		//no need to check email here, check in controller
-			SHA512 sha512Hash = SHA512.Create();
-			string salt = Guid.NewGuid().ToString();
-			string saltedPassword = password + salt;
-			saltedPassword = GetSha512Hash(sha512Hash, saltedPassword);
+			//no need to check email here, check in controller
+			var saltedPassword = createSecurePass(password);
 
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword) });
         }
+
 
 		/// <summary>
 		/// Updates the user hash.
 		/// </summary>
 		/// <param name="key">Key.</param>
-		/// <param name="updatedField">Updated field.</param>
-		/// <param name="newValue">New value.</param>
-
-        public static void updateUserHash(string key, string updatedField, string newValue)
-        {
-            cache.HashSet(key, new HashEntry[] {new HashEntry(updatedField, newValue)});
-        }
+		/// <param name="name">Name.</param>
+		/// <param name="email">Email.</param>
+		/// <param name="password">Password.</param>
+        public void updateUserHash(string key, string name, string email, string password)
+		{
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", password) });
+		}
         
 		/// <summary>
 		/// Gets the user data.
@@ -68,7 +65,7 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-        public static string getUserData(string email)
+        public string getUserData(string email)
         {
 			int emailVerifyResponse = emailVerify(email);
 
@@ -87,7 +84,11 @@ namespace BBAPI.Controllers
 					var key = "user:" + email;
 					var data = new HashEntry[] {};
 					data = cache.HashGetAll(key);
-					string getResponse = data[0].ToString() + data[1].ToString();
+					string getResponse = String.Empty;
+					for (int i = 0; i < data.Length; i++)
+					{
+						getResponse = getResponse + data[i] + ",";
+					}
 					return getResponse;
 				
 				case -4:
@@ -96,17 +97,21 @@ namespace BBAPI.Controllers
 			}
         }
 
-		/*
-        public static bool StoreData( string key, string value)
-        {
-            return cache.StringSet(key, value);
-        }
 
-        private static void DeleteData(IDatabase cache, string key)
+        public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
+        {
+			//creates hash data for routine
+			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
+        	
+			//creates routine List of workouts 
+		}
+
+
+        public void deleteKey(string key)
         {
             cache.KeyDelete(key);
         }
-        */
+
 
         //close connection needed
 
@@ -117,7 +122,7 @@ namespace BBAPI.Controllers
 		/// <returns>The verify code.</returns>
 		/// <param name="email">Email.</param>
 
-        public static int emailVerify(string email)
+        public int emailVerify(string email)
         {
 			var key = "user:" + email;
 			 
@@ -157,6 +162,44 @@ namespace BBAPI.Controllers
 			}
         }
 
+		/// <summary>
+		/// Does the key exist.
+		/// </summary>
+		/// <returns>If the key exist</returns>
+		/// <param name="key">Key</param>
+
+		public int doesKeyExist(string key)
+		{
+			//check if key is in cache
+			if (cache.KeyExists(key))
+			{
+				//key taken
+				//send error code  
+				return 1;
+			}
+			else
+			{
+				//key available 
+				return 0;
+			}
+		}
+
+
+		/// <summary>
+		/// Creates the secure pass.
+		/// </summary>
+		/// <returns>The secure pass.</returns>
+		/// <param name="pword">Pword.</param>
+
+		public string createSecurePass(string pword)
+		{
+			SHA512 sha512Hash = SHA512.Create();
+			string salt = Guid.NewGuid().ToString();
+			string saltedPassword = pword + salt;
+
+			return GetSha512Hash(sha512Hash, saltedPassword);
+		}
+
         //Compute a hash using the Sha512 algorithm
 		/// <summary>
 		/// Gets the sha512 hash.
@@ -165,7 +208,7 @@ namespace BBAPI.Controllers
 		/// <param name="sha512Hash">Sha512 hash.</param>
 		/// <param name="input">Input.</param>
 
-        private static string GetSha512Hash(SHA512 sha512Hash, string input)
+        private string GetSha512Hash(SHA512 sha512Hash, string input)
         {
 
             // Convert the input string to a byte array and compute the hash.

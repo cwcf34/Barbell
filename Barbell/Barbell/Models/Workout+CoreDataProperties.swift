@@ -2,7 +2,7 @@
 //  Workout+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 2/24/17.
+//  Created by Caleb Albertson on 3/10/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -16,14 +16,28 @@ extension Workout {
         return NSFetchRequest<Workout>(entityName: "Workout")
     }
 
-    @NSManaged public var descript: String?
-    @NSManaged public var duration: Int16
+    @NSManaged public var weekday: String?
     @NSManaged public var id: Int16
-    @NSManaged public var name: String
-    @NSManaged public var reps: Int16
-    @NSManaged public var sets: Int16
-    @NSManaged public var weight: Int16
+    @NSManaged public var weeknumber: Int16
     @NSManaged public var createdRoutine: Routine?
     @NSManaged public var creator: User?
+    @NSManaged public var hasExercises: NSSet?
+
+}
+
+// MARK: Generated accessors for hasExercises
+extension Workout {
+
+    @objc(addHasExercisesObject:)
+    @NSManaged public func addToHasExercises(_ value: Exercise)
+
+    @objc(removeHasExercisesObject:)
+    @NSManaged public func removeFromHasExercises(_ value: Exercise)
+
+    @objc(addHasExercises:)
+    @NSManaged public func addToHasExercises(_ values: NSSet)
+
+    @objc(removeHasExercises:)
+    @NSManaged public func removeFromHasExercises(_ values: NSSet)
 
 }
