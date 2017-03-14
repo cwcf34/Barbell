@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6328E9131E78A4DC005A5E3D /* LoginInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328E9121E78A4DC005A5E3D /* LoginInfo.swift */; };
 		63FA5E101E7224AF00DEE65D /* HeadDick.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 63FA5E0E1E7224AF00DEE65D /* HeadDick.jpeg */; };
 		63FA5E111E7224AF00DEE65D /* Plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 63FA5E0F1E7224AF00DEE65D /* Plus.png */; };
 		63FA5E131E722A1800DEE65D /* addWorkOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FA5E121E722A1800DEE65D /* addWorkOutViewController.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6328E9121E78A4DC005A5E3D /* LoginInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInfo.swift; sourceTree = "<group>"; };
 		63FA5E0E1E7224AF00DEE65D /* HeadDick.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = HeadDick.jpeg; sourceTree = "<group>"; };
 		63FA5E0F1E7224AF00DEE65D /* Plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plus.png; sourceTree = "<group>"; };
 		63FA5E121E722A1800DEE65D /* addWorkOutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addWorkOutViewController.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				6F0E3CD61E6A032800357004 /* Workout+CoreDataProperties.swift */,
 				C384A1C91E5D202D0026FD99 /* RegisterInfo.swift */,
 				6F0E3CE71E6A0FF600357004 /* WorkoutModel.swift */,
+				6328E9121E78A4DC005A5E3D /* LoginInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				6F0E3CD91E6A032800357004 /* CoreDataModel.xcdatamodeld in Sources */,
 				6F0E3CD81E6A032800357004 /* Achievement+CoreDataProperties.swift in Sources */,
 				C3E32C3B1E6F8E4800800545 /* CreateWorkoutTableViewController.swift in Sources */,
+				6328E9131E78A4DC005A5E3D /* LoginInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
