@@ -92,6 +92,7 @@ namespace BBAPI.Controllers
 			//get unique id for workout\\
 			var workoutId = getRandomId();
 
+			//create routineData list to hold workout days
 			redisCache.createRoutineDataList(key, workoutId);
 
 			/*

@@ -113,7 +113,7 @@ namespace BBAPI.Controllers
 		public void createRoutineDataList(string key, int id)
 		{
 			var emptyList = new RedisValue();
-			cache.ListSetByIndex(key, 0, emptyList);
+			cache.ListRightPush(key, emptyList);
 
 		}
 
