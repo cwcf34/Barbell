@@ -2,7 +2,7 @@
 //  Routine+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 2/24/17.
+//  Created by Caleb Albertson on 3/10/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -18,6 +18,7 @@ extension Routine {
 
     @NSManaged public var id: Int16
     @NSManaged public var name: String?
+    @NSManaged public var numberOfWeeks: String?
     @NSManaged public var creator: User?
     @NSManaged public var users: NSSet?
     @NSManaged public var workouts: NSSet?
