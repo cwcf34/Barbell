@@ -107,7 +107,7 @@ namespace BBAPI.Controllers
         public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
         {
 			//creates hash data for routine
-			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
 		}
 
 		public void createRoutineDataList(string key, int id)
