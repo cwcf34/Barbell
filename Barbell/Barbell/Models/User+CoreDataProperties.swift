@@ -22,7 +22,11 @@ extension User {
     @NSManaged public var lname: String?
     @NSManaged public var weight: Int16
     @NSManaged public var workoutsCompleted: Int16
-    @NSManaged public var workoutStyle: String?
+    @NSManaged public var bench: Int16
+    @NSManaged public var squat: Int16
+    @NSManaged public var deadlift: Int16
+    @NSManaged public var snatch: Int16
+    @NSManaged public var cleanAndJerk: Int16
     @NSManaged public var achievements: NSSet?
     @NSManaged public var madeWorkouts: NSSet?
     @NSManaged public var scheduleArr: NSSet?
