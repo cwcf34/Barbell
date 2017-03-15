@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Http;
-using BBAPI.Models;
+using System.Collections.Generic;
+
 
 namespace BBAPI.Controllers
 {
@@ -53,30 +53,76 @@ namespace BBAPI.Controllers
 			char[] delimiterChars = { '{', '}', ',', ':' };
 			string[] postParams = data.Split(delimiterChars);
 
-			var id = getRandomId();
+			var routineId = getRandomId();
 
 			//create routine key
-			var key = "user:" + email + ":" + id;
+			var key = "user:" + email + ":" + routineId;
 
 			//while key is taken, generate new key
 			while (redisCache.doesKeyExist(key) == 1)
 			{
-				id = getRandomId();
+				routineId = getRandomId();
 
 				//create new routine key
-				key = "user:" + email + ":" + id;
+				key = "user:" + email + ":" + routineId;
 			}
 
 
-			var name = postParams[2];
-			var weeks = postParams[4];
+			var routineName = postParams[2];
+			var routineWeeks = postParams[4];
 			var isPubilc = postParams[6];
-			var creator = postParams[8];
+			var routineCreator = postParams[8];
 
-			//create routine data
-			redisCache.createRoutineHash(key, id, name, weeks, isPubilc, creator);
+			//create routine hash and routine data list
+			redisCache.createRoutineHash(key, routineId, routineName, routineWeeks, isPubilc, routineCreator);
+
+			/* 
+			 * create list to hold workouts
+			 *  - key: user:hello@me.com:routineId:routineData
+			 *  - value: list that holds workout ids in list
+			 * 
+			 * for new routines created, create an empty list
+			 * 
+			 * then add routine to user Routines list
+			 * - key: user:hello@me.com:routines
+			 * - value: list that holds routine ids in list
+			 */
+			key = key + ":routineData";
+
+			//get unique id for workout\\
+			var workoutId = getRandomId();
+
+			redisCache.createRoutineDataList(key, workoutId);
+
+			/*
+			 * create (7*numWeeks) number of blank workouts
+			 * so the app can function even with 7 empty
+			 * workouts for a week, all populated with ids 
+			 */
+
+			createEmptyWorkouts(routineId, Int16.Parse(routineWeeks), email);
+		
+
+			//now add routine to users routine list
+			redisCache.addRoutineToUserList("user:" + email + ":routines", routineId);
+			          
 			return Ok("New Routine Created");
 					
+		}
+
+		public void createEmptyWorkouts(int routineId, int weeks, string email)
+		{
+
+			var routineKey = "user:" + email + ":" + routineId + ":routineData";
+			//create ids and empty lists for 7*weeks
+			var count = 7 * weeks;
+
+			for (var i = 0; i < count; i++)
+			{
+				//id is based on day count
+				redisCache.addWorkoutToRoutineDataList(routineKey, i);
+			}
+
 		}
 
 		private int getRandomId()
