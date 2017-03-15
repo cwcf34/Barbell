@@ -3,6 +3,7 @@ using System.Web;
 using System.Text;
 using System.Net.Mail;
 using StackExchange.Redis;
+using System.Collections.Generic;
 // to hash and salt pword: 
 using System.Security.Cryptography;
 
@@ -97,15 +98,29 @@ namespace BBAPI.Controllers
 			}
         }
 
+		public void addRoutineToUserList(string key, int routineId)
+		{
+			//push routine id onto list
+			cache.ListLeftPush(key, routineId);
+		}
 
         public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
         {
 			//creates hash data for routine
 			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
-        	
-			//creates routine List of workouts 
 		}
 
+		public void createRoutineDataList(string key, int id)
+		{
+			var emptyList = new RedisValue();
+			cache.ListSetByIndex(key, 0, emptyList);
+
+		}
+
+		public void addWorkoutToRoutineDataList(string key, int workoutId)
+		{
+			cache.ListRightPush(key, workoutId); 
+		}
 
         public void deleteKey(string key)
         {
