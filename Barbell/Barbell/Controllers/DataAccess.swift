@@ -9,16 +9,19 @@
 import UIKit
 import Foundation
 
+
 public class DataAccess {
+    
+    private static var apiURL = "http://bbapi.eastus.cloudapp.azure.com/api/"
     class func register(registerInfo: RegisterInfo) -> Bool {
-        var request = URLRequest(url: URL(string: "http://bbapi.eastus.cloudapp.azure.com/api/user/\(registerInfo.email)/")!)
+        var request = URLRequest(url: URL(string: apiURL + "user/\(registerInfo.email)/")!)
         request.httpMethod = "POST"
         
         
         print("Request STRING \(request)")
         
         //"{name:hi ads, password:kj}"\\
-        let postString = "\"{name:\(registerInfo.firstName)" + " " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
+        let postString = "\"{name:\(registerInfo.firstName)" + ", " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
         //print("POST STRING::\(postString)")
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
@@ -51,7 +54,7 @@ public class DataAccess {
     }
     
     class func createWorkout(workoutModel: WorkoutModel) -> Bool {
-        var request = URLRequest(url: URL(string: "http://bbapi.eastus.cloudapp.azure.com/api/user/c@me.com/")!)
+        var request = URLRequest(url: URL(string: apiURL + "user/c@me.com/")!)
         request.httpMethod = "PUT"
         
         print("Request STRING \(request)")
@@ -103,7 +106,43 @@ public class DataAccess {
         return true
     }
     
-    //class func login (loginInfo: LoginInformation ) -> String{
-    //
-    //}
+    class func login (loginInfo: LoginInfo ) -> Bool{
+        var request = URLRequest(url: URL(string: apiURL + "user/\(loginInfo.email)/")!)
+        request.httpMethod = "POST"
+        
+        
+        //print("Request STRING \(request)")
+        
+        //"{name:hi ads, password:kj}"\\
+        let postString = "\"{password:\(loginInfo.password)}\" "
+        //print("POST STRING::\(postString)")
+        
+        let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+        
+        request.httpBody = postDATA
+        
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
+        }
+        task.resume()
+        
+        return true
+    }
 }

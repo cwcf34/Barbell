@@ -15,11 +15,11 @@ public class LoginInfo {
     var client_secret: String
     var grant_type: String
     
-    init(email: String, password: String, client_id: String, client_secret: String) {
+    init(email: String, password: String) {
         self.email = email
         self.password = password
-        self.client_id = client_id
-        self.client_secret = client_secret
+        self.client_id = "iOS"
+        self.client_secret = "secret"
         self.grant_type = "password"
     }
 }
