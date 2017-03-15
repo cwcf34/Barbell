@@ -107,7 +107,7 @@ namespace BBAPI.Controllers
 			//now add routine to users routine list
 			redisCache.addRoutineToUserList("user:" + email + ":routines", routineId);
 			          
-			return Ok("New Routine Created");
+			return Ok("Created " + routineName + " successfully!");
 					
 		}
 
