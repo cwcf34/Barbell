@@ -74,6 +74,7 @@
     <Compile Include="Controllers\RoutineController.cs" />
     <Compile Include="Controllers\WorkoutController.cs" />
     <Compile Include="Controllers\Array.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

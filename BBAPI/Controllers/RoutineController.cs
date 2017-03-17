@@ -113,6 +113,7 @@ namespace BBAPI.Controllers
 
 		public void createEmptyWorkouts(int routineId, int weeks, string email)
 		{
+			int[] idList = { };
 
 			var routineKey = "user:" + email + ":" + routineId + ":routineData";
 			//create ids and empty lists for 7*weeks
@@ -120,9 +121,12 @@ namespace BBAPI.Controllers
 
 			for (var i = 0; i < count; i++)
 			{
-				//id is based on day count
-				redisCache.addWorkoutToRoutineDataList(routineKey, i);
+				idList.SetValue(i, i);
 			}
+
+			//id is based on day count
+			redisCache.addWorkoutToRoutineDataList(routineKey, idList);
+
 
 		}
 

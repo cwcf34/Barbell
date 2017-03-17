@@ -1,10 +1,11 @@
 ﻿<Properties StartupConfiguration="{B6E4B045-34F2-48C8-8AC2-63FC17130676}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/WorkoutController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/LoginController.cs">
     <Files>
       <File FileName="Controllers/UserController.cs" Line="97" Column="52" />
-      <File FileName="Controllers/RoutineController.cs" Line="1" Column="1" />
-      <File FileName="Controllers/RedisDB.cs" Line="1" Column="1" />
-      <File FileName="Controllers/WorkoutController.cs" Line="13" Column="33" />
+      <File FileName="Controllers/RoutineController.cs" Line="47" Column="14" />
+      <File FileName="Controllers/RedisDB.cs" Line="125" Column="46" />
+      <File FileName="Controllers/WorkoutController.cs" Line="12" Column="13" />
+      <File FileName="Controllers/LoginController.cs" Line="3" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
