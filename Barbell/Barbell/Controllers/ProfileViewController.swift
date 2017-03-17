@@ -29,40 +29,43 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        user = getUser()
+        user = CoreDataController.getUser()
         
         
         if let user = user as? [User] {
             firstName.text = user.first?.fname
             lastName.text = user.first?.lname
-            age.text = "\(user.first?.age)"
-            weight.text = "\(user.first?.weight)"
-            squat.text = "\(user.first?.squat)"
-            bench.text = "\(user.first?.bench)"
-            deadlift.text = "\(user.first?.deadlift)"
-            snatch.text = "\(user.first?.snatch)"
-            cleanAndJerk.text = "\(user.first?.cleanAndJerk)"
-            workoutsCompleted.text = "\(user.first?.workoutsCompleted)"
+            
+            if let userAge = user.first?.age{
+                age.text = userAge.description
+            }
+            if let userWeight = user.first?.weight{
+                weight.text = userWeight.description
+            }
+            if let userSquat = user.first?.squat{
+                squat.text = userSquat.description
+            }
+            if let userBench = user.first?.bench{
+                bench.text = userBench.description
+            }
+            if let userDeadlift = user.first?.deadlift{
+                deadlift.text = userDeadlift.description
+            }
+            if let userSnatch = user.first?.snatch{
+                snatch.text = userSnatch.description
+            }
+            if let userClean = user.first?.cleanAndJerk{
+                cleanAndJerk.text = userClean.description
+            }
+            if let userWorkouts = user.first?.workoutsCompleted{
+                workoutsCompleted.text = userWorkouts.description
+            }
         }
         
         
         // Do any additional setup after loading the view.
     }
     
-    func getUser() -> [User]{
-        let fetchRequest = NSFetchRequest<User>(entityName: "User")
-        do{
-            let foundPlayer = try getContext().fetch(fetchRequest)
-            return foundPlayer
-        }catch{
-            print("we messed this up")
-        }
-        return [User]()
-    }
-    
-    func getContext() -> NSManagedObjectContext {
-        return CoreDataController.persistentContainer.viewContext
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -81,12 +84,49 @@ class ProfileViewController: UIViewController {
                 }
                 
             }
-            //user.first?.weight = weight.text
-            //user.first?.squat = squat.text
-            //user.first?.bench = bench.text
-            //user.first?.deadlift = deadlift.text
-            //user.first?.snatch = snatch.text
-            //user.first?.cleanAndJerk = cleanAndJerk.text
+            if let weightString = weight.text {
+                
+                if let weight = Int16(weightString) {
+                    user.first?.weight = weight
+                }
+                
+            }
+            if let squatString = squat.text {
+                
+                if let squat = Int16(squatString) {
+                    user.first?.squat = squat
+                }
+                
+            }
+            if let benchString = bench.text {
+                
+                if let bench = Int16(benchString) {
+                    user.first?.bench = bench
+                }
+                
+            }
+            if let deadliftString = deadlift.text {
+                
+                if let deadlift = Int16(deadliftString) {
+                    user.first?.deadlift = deadlift
+                }
+                
+            }
+            if let snatchString = snatch.text {
+                
+                if let snatch = Int16(snatchString) {
+                    user.first?.snatch = snatch
+                }
+                
+            }
+            if let cleanAndJerkString = cleanAndJerk.text {
+                
+                if let cleanAndJerk = Int16(cleanAndJerkString) {
+                    user.first?.cleanAndJerk = cleanAndJerk
+                }
+                
+            }
+            
         }
         
         CoreDataController.saveContext()

@@ -47,4 +47,20 @@ class CoreDataController{
             }
         }
     }
+    
+    class func getContext() -> NSManagedObjectContext {
+        return CoreDataController.persistentContainer.viewContext
+    }
+    //Since there should only ever be one User entity in coredata at a time, this funcion will return that user
+    
+    class func getUser() -> [User]{
+        let fetchRequest = NSFetchRequest<User>(entityName: "User")
+        do{
+            let foundUser = try getContext().fetch(fetchRequest)
+            return foundUser
+        }catch{
+            print("we messed this up")
+        }
+        return [User]()
+    }
 }
