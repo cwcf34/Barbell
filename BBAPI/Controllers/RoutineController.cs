@@ -92,6 +92,7 @@ namespace BBAPI.Controllers
 			//get unique id for workout\\
 			var workoutId = getRandomId();
 
+			//create routineData list to hold workout days
 			redisCache.createRoutineDataList(key, workoutId);
 
 			/*
@@ -106,12 +107,13 @@ namespace BBAPI.Controllers
 			//now add routine to users routine list
 			redisCache.addRoutineToUserList("user:" + email + ":routines", routineId);
 			          
-			return Ok("New Routine Created");
+			return Ok("Created " + routineName + " successfully!");
 					
 		}
 
 		public void createEmptyWorkouts(int routineId, int weeks, string email)
 		{
+			int[] idList = { };
 
 			var routineKey = "user:" + email + ":" + routineId + ":routineData";
 			//create ids and empty lists for 7*weeks
@@ -119,9 +121,12 @@ namespace BBAPI.Controllers
 
 			for (var i = 0; i < count; i++)
 			{
-				//id is based on day count
-				redisCache.addWorkoutToRoutineDataList(routineKey, i);
+				idList.SetValue(i, i);
 			}
+
+			//id is based on day count
+			redisCache.addWorkoutToRoutineDataList(routineKey, idList);
+
 
 		}
 

@@ -107,19 +107,27 @@ namespace BBAPI.Controllers
         public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
         {
 			//creates hash data for routine
-			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
 		}
 
 		public void createRoutineDataList(string key, int id)
 		{
 			var emptyList = new RedisValue();
-			cache.ListSetByIndex(key, 0, emptyList);
+			cache.ListRightPush(key, emptyList);
 
 		}
 
-		public void addWorkoutToRoutineDataList(string key, int workoutId)
+		public void addWorkoutToRoutineDataList(string key, int[] workoutId)
 		{
-			cache.ListRightPush(key, workoutId); 
+			RedisValue[] ids = { };
+
+
+			for (var i = 0; i < workoutId.Length; i++)
+			{
+				ids.SetValue(workoutId[i].ToString(), i);
+			}
+
+			cache.ListRightPush(key, ids); 
 		}
 
         public void deleteKey(string key)

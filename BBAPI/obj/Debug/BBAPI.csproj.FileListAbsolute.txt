@@ -12,3 +12,4 @@
 /Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/bin/System.Web.Http.WebHost.xml
 /Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/bin/Newtonsoft.Json.xml
 /Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/bin/StackExchange.Redis.xml
+/Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/obj/Debug/BBAPI.csprojResolveAssemblyReference.cache
