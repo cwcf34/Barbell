@@ -81,12 +81,49 @@ class ProfileViewController: UIViewController {
                 }
                 
             }
-            //user.first?.weight = weight.text
-            //user.first?.squat = squat.text
-            //user.first?.bench = bench.text
-            //user.first?.deadlift = deadlift.text
-            //user.first?.snatch = snatch.text
-            //user.first?.cleanAndJerk = cleanAndJerk.text
+            if let weightString = weight.text {
+                
+                if let weight = Int16(weightString) {
+                    user.first?.weight = weight
+                }
+                
+            }
+            if let squatString = squat.text {
+                
+                if let squat = Int16(squatString) {
+                    user.first?.squat = squat
+                }
+                
+            }
+            if let benchString = bench.text {
+                
+                if let bench = Int16(benchString) {
+                    user.first?.bench = bench
+                }
+                
+            }
+            if let deadliftString = deadlift.text {
+                
+                if let deadlift = Int16(deadliftString) {
+                    user.first?.deadlift = deadlift
+                }
+                
+            }
+            if let snatchString = snatch.text {
+                
+                if let snatch = Int16(snatchString) {
+                    user.first?.snatch = snatch
+                }
+                
+            }
+            if let cleanAndJerkString = cleanAndJerk.text {
+                
+                if let cleanAndJerk = Int16(cleanAndJerkString) {
+                    user.first?.cleanAndJerk = cleanAndJerk
+                }
+                
+            }
+            
         }
         
         CoreDataController.saveContext()
