@@ -7,18 +7,26 @@
 //
 
 import UIKit
+import CoreData
 
 class addWorkOutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var routine: UITextField!
     @IBOutlet weak var realTableView: UITableView!
+    @IBOutlet weak var publicSwitch: UISwitch!
+    
     var weeks = ["Week 1", "Week 2", "Week 3"]
     var value = 3
+    
+    var user = [User]()
+    var thisRoutine = Routine()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        user = CoreDataController.getUser()
+        
         realTableView.delegate = self
         realTableView.dataSource = self
         realTableView.register(CustomCell.self, forCellReuseIdentifier: "CustomCell")
@@ -32,10 +40,6 @@ class addWorkOutViewController: UIViewController, UITableViewDataSource, UITable
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    @IBAction func SaveRoutine(_ sender: Any) {
-        //logic to send stuff to db
-    }
 
     @IBAction func AddWeeks(_ sender: Any) {
         if(stepper.value < Double(value)) {
@@ -48,6 +52,33 @@ class addWorkOutViewController: UIViewController, UITableViewDataSource, UITable
         value = Int(stepper.value);
         
     }
+    
+    @IBAction func saveRoutine(_ sender: Any) {
+        
+        
+        //CoreData
+       // if let routineObject = routineObject as? Routine{
+         let routineObject:Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
+            routineObject.name = routine.text
+            if publicSwitch.isOn {
+                routineObject.isPublic = true
+            }
+            else{
+                routineObject.isPublic = false
+            }
+            routineObject.numberOfWeeks = Int16(weeks.count)
+            routineObject.creator = user.first
+            routineObject.addToUsers(user.first!)
+            user.first?.addToScheduleArr(routineObject)
+        
+       
+            //}
+        thisRoutine = routineObject
+        CoreDataController.saveContext()
+        //
+    }
+    
+
     
     func insert() {
         weeks.append("Week \(weeks.count + 1)")

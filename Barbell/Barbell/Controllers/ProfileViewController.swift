@@ -29,40 +29,43 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        user = getUser()
+        user = CoreDataController.getUser()
         
         
         if let user = user as? [User] {
             firstName.text = user.first?.fname
             lastName.text = user.first?.lname
-            age.text = "\(user.first?.age)"
-            weight.text = "\(user.first?.weight)"
-            squat.text = "\(user.first?.squat)"
-            bench.text = "\(user.first?.bench)"
-            deadlift.text = "\(user.first?.deadlift)"
-            snatch.text = "\(user.first?.snatch)"
-            cleanAndJerk.text = "\(user.first?.cleanAndJerk)"
-            workoutsCompleted.text = "\(user.first?.workoutsCompleted)"
+            
+            if let userAge = user.first?.age{
+                age.text = userAge.description
+            }
+            if let userWeight = user.first?.weight{
+                weight.text = userWeight.description
+            }
+            if let userSquat = user.first?.squat{
+                squat.text = userSquat.description
+            }
+            if let userBench = user.first?.bench{
+                bench.text = userBench.description
+            }
+            if let userDeadlift = user.first?.deadlift{
+                deadlift.text = userDeadlift.description
+            }
+            if let userSnatch = user.first?.snatch{
+                snatch.text = userSnatch.description
+            }
+            if let userClean = user.first?.cleanAndJerk{
+                cleanAndJerk.text = userClean.description
+            }
+            if let userWorkouts = user.first?.workoutsCompleted{
+                workoutsCompleted.text = userWorkouts.description
+            }
         }
         
         
         // Do any additional setup after loading the view.
     }
     
-    func getUser() -> [User]{
-        let fetchRequest = NSFetchRequest<User>(entityName: "User")
-        do{
-            let foundPlayer = try getContext().fetch(fetchRequest)
-            return foundPlayer
-        }catch{
-            print("we messed this up")
-        }
-        return [User]()
-    }
-    
-    func getContext() -> NSManagedObjectContext {
-        return CoreDataController.persistentContainer.viewContext
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

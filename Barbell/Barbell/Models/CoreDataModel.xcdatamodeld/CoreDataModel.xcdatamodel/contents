@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12124.1" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Achievement" representedClassName=".Achievement" syncable="YES">
         <attribute name="achievementNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -18,8 +18,9 @@
     </entity>
     <entity name="Routine" representedClassName=".Routine" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isPublic" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="numberOfWeeks" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberOfWeeks" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="madeRoutine" inverseEntity="User" syncable="YES"/>
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="scheduleArr" inverseEntity="User" syncable="YES"/>
         <relationship name="workouts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Workout" inverseName="createdRoutine" inverseEntity="Workout" syncable="YES"/>
@@ -52,7 +53,7 @@
     <elements>
         <element name="Achievement" positionX="214" positionY="18" width="128" height="88"/>
         <element name="Exercises" positionX="-333" positionY="-7" width="128" height="178"/>
-        <element name="Routine" positionX="162" positionY="200" width="128" height="133"/>
+        <element name="Routine" positionX="162" positionY="200" width="128" height="148"/>
         <element name="User" positionX="-90" positionY="-18" width="128" height="270"/>
         <element name="Workout" positionX="-261" positionY="216" width="128" height="133"/>
     </elements>
