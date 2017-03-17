@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import CoreData
 
 class CreateWorkoutTableViewController: UITableViewController {
+    
+    var routines = [Routine]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +49,20 @@ class CreateWorkoutTableViewController: UITableViewController {
         return cell
     }
  
+    func loadRoutines() -> [Routine]{
+        
+        
+        //CoreData
+        let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
+        do{
+            let foundRoutine = try CoreDataController.getContext().fetch(fetchRequest)
+            return foundRoutine
+        }catch{
+            print("we messed this up")
+        }
+        return [Routine]()
+        
+    }
 
     /*
     // Override to support conditional editing of the table view.
