@@ -44,11 +44,11 @@ namespace BBAPI.Controllers
 			//no need to check email here, check in controller
 
 			//create new hash
-			SHA512 sha512Hash = SHA512.Create();
+			SHA512 sha512Hash = SHA512.Create(password);
 
 			var saltedPassword = createSecurePass(sha512Hash, password);
 
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword), new HashEntry("hash", sha512Hash.ToString()) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword) });
         }
 
 		public string validateUserPass(string key)
