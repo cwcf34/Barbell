@@ -53,8 +53,19 @@ namespace BBAPI.Controllers
 			char[] delimiterChars = { '{', '}', ',', ':' };
 			string[] postParams = data.Split(delimiterChars);
 
-			return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + "\n" + postParams[3] );
+			var plainPassword = postParams[2];
+
+			var saltedPass = redisCache.createSecurePass(plainPassword);
+			var redisPass = redisCache.validateUserPass("user:"+email);
+
+			if (saltedPass == redisPass)
+			{
+				return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + "\n" + postParams[3]);
+			}
+			else
+			{
+				return Ok("Incorrect Password");
+			}
 		}
-			
 	}
 }

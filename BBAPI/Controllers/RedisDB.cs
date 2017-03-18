@@ -47,6 +47,11 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword) });
         }
 
+		public string validateUserPass(string key)
+		{
+			return cache.HashGet(key, "password");
+		}
+
 
 		/// <summary>
 		/// Updates the user hash.
