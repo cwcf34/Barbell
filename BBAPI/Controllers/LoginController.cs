@@ -68,7 +68,7 @@ namespace BBAPI.Controllers
 
 
 				//get SALT from DB,
-				var salt = parsedData[0];
+				var salt = parsedData[3];
 
 				//add salt to pass
 				var saltedPass = plainPassword + salt;
@@ -82,7 +82,7 @@ namespace BBAPI.Controllers
 
 				}
 
-				return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + " \n 0 " + parsedData[0] + " \n 1 " + parsedData[1] + " \n 2 " + parsedData[2] + " \n 3 " + parsedData[3]);
+				return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + " \n 0 " + parsedData[0] + hashSaltPassword +  " \n 1 " + parsedData[1] + " \n 2 " + parsedData[2] + " \n 3 " + parsedData[3]);
 
 			}
 			else
