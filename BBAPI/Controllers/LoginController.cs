@@ -53,7 +53,7 @@ namespace BBAPI.Controllers
 			char[] delimiterChars = { '{', '}', ',', ':' };
 			string[] postParams = data.Split(delimiterChars);
 
-			return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + "\n" + postParams[4] );
+			return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + "\n" + postParams[3] );
 		}
 			
 	}
