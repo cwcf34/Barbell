@@ -60,25 +60,32 @@ namespace BBAPI.Controllers
 			var plainPassword = postParams[2];
 
 			//var userData = redisCache.getUserData("user:" + email).Split(delimiterChars);
-			userData = redisCache.getUserData("user:" + email);
+			userData = redisCache.getUserData(email);
 
-			//get SALT from DB,
-			var salt = userData[0];
-
-			//add salt to pass
-			var saltedPass = plainPassword + salt;
-
-			//512HASH it with the saltedPass 
-			var hashSaltPassword = redisCache.GetSha512Hash(SHA512.Create(), saltedPass);
-
-			//compare to hashedpassword in DB
-			if (hashSaltPassword == userData[1])
+			if (userData.Length > 1)
 			{
-				
+				//get SALT from DB,
+				var salt = userData[0];
+
+				//add salt to pass
+				var saltedPass = plainPassword + salt;
+
+				//512HASH it with the saltedPass 
+				var hashSaltPassword = redisCache.GetSha512Hash(SHA512.Create(), saltedPass);
+
+				//compare to hashedpassword in DB
+				if (hashSaltPassword == userData[1])
+				{
+
+				}
+
+				return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + " \n 0 " + userData[0] + " \n 1 " + userData[1] + " \n 2 " + userData[2] + " \n 3 " + userData[3]);
+
 			}
-
-			return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + " \n 0 " + userData[0] + " \n 1 " + userData[1] + " \n 2 " + userData[2] + " \n 3 " + userData[3] );
-
+			else
+			{
+				return Ok(userData[0]);
+			}
 		}
 	}
 }
