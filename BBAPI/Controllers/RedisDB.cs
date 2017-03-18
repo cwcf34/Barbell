@@ -225,7 +225,7 @@ namespace BBAPI.Controllers
 
 		public string[] createSecurePass(string pword)
 		{
-			SHA512 hash512 = SHA512.Create();
+			SHA512 hash512 = SHA512.Create(pword);
 			string salt = Guid.NewGuid().ToString();
 			string saltedPassword = pword + salt;
 
