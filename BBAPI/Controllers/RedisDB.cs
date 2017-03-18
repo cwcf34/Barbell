@@ -112,24 +112,22 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-        public string[] getUserData(string email)
+        public string getUserData(string email)
 		{
-			var dataArray = new String[10];
-			var returnString = new String[1];
 
 			int emailVerifyResponse = emailVerify(email);
 
 			switch (emailVerifyResponse)
 			{
 				case 1: //means no key exists
-					returnString.SetValue("User not found.", 0);
-					return returnString;
+					return "User not found.";
+
 				case -1: //empty email
-					returnString.SetValue("Email field empty.", 0);
-					return returnString;
+					return "Email field empty.";
+
 				case -2: //incorrect format
-					returnString.SetValue("Email not formatted correctly.", 0);
-					return returnString;
+					return "Email not formatted correctly.";
+
 				case -3: //means key exists
 					var key = "user:" + email;
 					var data = new HashEntry[] { };
@@ -137,15 +135,15 @@ namespace BBAPI.Controllers
 					string getResponse = String.Empty;
 					for (int i = 0; i < data.Length; i++)
 					{
-						dataArray.SetValue(data[i], i);
+						
 						getResponse = getResponse + data[i] + ",";
 					}
-					return dataArray;
+					return getResponse;
 
 				case -4:
 				default:
-					returnString.SetValue("try/catch error", 0);
-					return returnString;
+					return "try/catch error";
+
 			}
 		}
 
