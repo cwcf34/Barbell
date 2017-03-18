@@ -3,7 +3,8 @@ using System.Web;
 using System.Text;
 using System.Net.Mail;
 using StackExchange.Redis;
-using System.Collections.Generic;
+using BBAPI.Controllers;
+
 // to hash and salt pword: 
 using System.Security.Cryptography;
 
@@ -42,10 +43,9 @@ namespace BBAPI.Controllers
         public void createUserHash(string key, string name, string email, string password)
         {
 			//no need to check email here, check in controller
+			var securePassword = AuthController.ComputeHash(password, "SHA512", null);
 
-			var saltedPassword = createSecurePass(password);
-
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword[0]), new HashEntry("salt", saltedPassword[1]) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword) });
         }
 
 		public string validateUserPass(string key)
@@ -225,7 +225,7 @@ namespace BBAPI.Controllers
 
 		public string[] createSecurePass(string pword)
 		{
-			SHA512 hash512 = SHA512.Create(pword);
+			SHA512 hash512 = SHA512.Create();
 			string salt = Guid.NewGuid().ToString();
 			string saltedPassword = pword + salt;
 

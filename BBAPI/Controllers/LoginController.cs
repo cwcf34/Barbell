@@ -65,25 +65,15 @@ namespace BBAPI.Controllers
 
 			if (parsedData.Length > 1)
 			{
-
-
-				//get SALT from DB,
-				var salt = parsedData[3];
-
-				//add salt to pass
-				var saltedPass = plainPassword + salt;
-
 				//512HASH it with the saltedPass 
-				var hashSaltPassword = redisCache.GetSha512Hash(SHA512.Create(), saltedPass);
+				var verifyedUser = AuthController.VerifyHash(plainPassword, "SHA512", parsedData[1]);
 
 				//compare to hashedpassword in DB
-				if (hashSaltPassword == parsedData[1])
+				if (verifyedUser == true)
 				{
-
+					return Ok(" You posted this to me: lilululluulululu " + parsedData[1]);
 				}
-
-				return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + " \n 0 " + parsedData[0] + hashSaltPassword +  " \n 1 " + parsedData[1] + " \n 2 " + parsedData[2] + " \n 3 " + parsedData[3]);
-
+				return Ok("You are not verifyed!");
 			}
 			else
 			{
