@@ -2,6 +2,7 @@
 using BBAPI.Models;
 using System.Web.Http;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 
 namespace BBAPI.Controllers
@@ -237,7 +238,8 @@ namespace BBAPI.Controllers
 				}
 				else
 				{
-					postPassword = redisCache.createSecurePass(postPassword);
+					var sha512 = SHA512.Create();
+					postPassword = redisCache.createSecurePass(sha512,postPassword);
 				}
 
 				//delete old key w old data
@@ -301,7 +303,8 @@ namespace BBAPI.Controllers
 				}
 				else
 				{
-					postPassword = redisCache.createSecurePass(postPassword);
+					var sha512 = SHA512.Create();
+					postPassword = redisCache.createSecurePass(sha512, postPassword);
 				}
 
 				redisCache.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
