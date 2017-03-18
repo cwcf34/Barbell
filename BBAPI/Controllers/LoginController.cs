@@ -59,23 +59,12 @@ namespace BBAPI.Controllers
 			var plainPassword = postParams[2];
 
 			//var userData = redisCache.getUserData("user:" + email).Split(delimiterChars);
-			var currUserData = redisCache.getUserData(email);
+			var currPass = redisCache.validateUserPass("user:" + email);
 
-			var parsedData = currUserData.Split(delimiterChars);
+			//512HASH it with the saltedPass 
+			var verifyedUser = AuthController.VerifyHash(plainPassword, "SHA512", currPass);
 
-			if (parsedData.Length > 1)
-			{
-				//512HASH it with the saltedPass 
-				var verifyedUser = AuthController.VerifyHash(plainPassword, "SHA512", parsedData[1]);
-
-				return Ok(" You posted this to me: lilululluulululu" + verifyedUser + " " + parsedData[1]);
-				
-
-			}
-			else
-			{
-				return Ok(currUserData);
-			}
+			return Ok(" You posted this to me: lilululluulululu::: " + verifyedUser + " " + currPass);
 		}
 	}
 }
