@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace BBAPI.Controllers
@@ -8,6 +9,8 @@ namespace BBAPI.Controllers
 	{
 		//use singleton
 		RedisDB redisCache = RedisDB._instance;
+		string[] passAndSalt = new string[2];
+		string[] userData = new string[10];
 
 		//login is a post request
 		[HttpPost]
@@ -57,22 +60,25 @@ namespace BBAPI.Controllers
 			var plainPassword = postParams[2];
 
 			//var userData = redisCache.getUserData("user:" + email).Split(delimiterChars);
+			userData = redisCache.getUserData("user:" + email);
 
+			//get SALT from DB,
+			var salt = userData[0];
 
-			var userHash = SHA512.Create(plainPassword);
+			//add salt to pass
+			var saltedPass = plainPassword + salt;
 
-			var saltedPass = redisCache.createSecurePass(userHash,plainPassword);
-			var redisPass = redisCache.validateUserPass("user:"+email);
+			//512HASH it with the saltedPass 
+			var hashSaltPassword = redisCache.GetSha512Hash(SHA512.Create(), saltedPass);
 
-
-
-			return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + " \n 0 " + saltedPass + " \n 1 " + redisPass);
-			/*
-			if (saltedPass == redisPass)
+			//compare to hashedpassword in DB
+			if (hashSaltPassword == userData[1])
 			{
-				return Ok("Incorrect Password");
+				
 			}
-			*/
+
+			return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + " \n 0 " + userData[0] + " \n 1 " + userData[1] + " \n 2 " + userData[2] + " \n 3 " + userData[3] );
+
 		}
 	}
 }

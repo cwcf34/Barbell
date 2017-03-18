@@ -43,12 +43,9 @@ namespace BBAPI.Controllers
         {
 			//no need to check email here, check in controller
 
-			//create new hash
-			SHA512 sha512Hash = SHA512.Create(password);
+			var saltedPassword = createSecurePass(password);
 
-			var saltedPassword = createSecurePass(sha512Hash, password);
-
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword[0]), new HashEntry("salt", saltedPassword[1]) });
         }
 
 		public string validateUserPass(string key)
@@ -75,21 +72,24 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-        public string getUserData(string email)
+        public string[] getUserData(string email)
         {
+			var dataArray = new String[10];
+			var returnString = new String[1];
+
 			int emailVerifyResponse = emailVerify(email);
 
 			switch (emailVerifyResponse)
 			{
 				case 1: //means no key exists
-					return "User not found.";
-				
+					returnString.SetValue("User not found.",0);
+					return returnString;
 				case -1: //empty email
-					return "Email field empty.";
-				
+					returnString.SetValue("Email field empty.",0);
+					return returnString;
 				case -2: //incorrect format
-					return "Email not formatted correctly.";
-				
+					returnString.SetValue("Email not formatted correctly.",0);
+					return returnString;
 				case -3: //means key exists
 					var key = "user:" + email;
 					var data = new HashEntry[] {};
@@ -97,13 +97,15 @@ namespace BBAPI.Controllers
 					string getResponse = String.Empty;
 					for (int i = 0; i < data.Length; i++)
 					{
+						dataArray.SetValue(data[i], i);
 						getResponse = getResponse + data[i] + ",";
 					}
-					return getResponse;
+					return dataArray;
 				
 				case -4:
 				default:
-					return "try/catch error";
+					 returnString.SetValue("try/catch error",0);
+					return returnString;
 			}
         }
 
@@ -223,12 +225,19 @@ namespace BBAPI.Controllers
 		/// <returns>The secure pass.</returns>
 		/// <param name="pword">Pword.</param>
 
-		public string createSecurePass(SHA512 hash512, string pword)
+		public string[] createSecurePass(string pword)
 		{
+			SHA512 hash512 = SHA512.Create();
 			string salt = Guid.NewGuid().ToString();
 			string saltedPassword = pword + salt;
 
-			return GetSha512Hash(hash512, saltedPassword);
+			var hashedPass = GetSha512Hash(hash512, saltedPassword);
+			string[] returnArray = new string[2];
+
+			returnArray.SetValue(hashedPass, 0);
+			returnArray.SetValue(salt, 1);
+
+			return returnArray;
 		}
 
         //Compute a hash using the Sha512 algorithm
@@ -239,7 +248,7 @@ namespace BBAPI.Controllers
 		/// <param name="sha512Hash">Sha512 hash.</param>
 		/// <param name="input">Input.</param>
 
-        private string GetSha512Hash(SHA512 sha512Hash, string input)
+        public string GetSha512Hash(SHA512 sha512Hash, string input)
         {
 
             // Convert the input string to a byte array and compute the hash.
