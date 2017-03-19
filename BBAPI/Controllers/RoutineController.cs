@@ -121,8 +121,6 @@ namespace BBAPI.Controllers
 
 			//id is based on day count
 			redisCache.addWorkoutToRoutineDataList(routineKey, idList);
-
-
 		}
 
 		private int getRandomId()
