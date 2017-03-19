@@ -75,6 +75,7 @@
     <Compile Include="Controllers\WorkoutController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Models\Routine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
