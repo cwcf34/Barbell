@@ -15,14 +15,19 @@ namespace BBAPI.Controllers
 			//to get all routines get list of user:[email]:routines list
 			//Routine[] routines = redisCache.getUserRoutines(email);
 
-			Routine[] routinesTest = { new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" },
-									   new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" }
-			};
+			//test routines
+			Routine[] routinesTest = { new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" }, new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" }};
 
 			//return array of routine name and routine id
 			return routinesTest;
 			
 		}
+
+		public Routine GetRoutine(string email, int id)
+		{
+			return redisCache.getRoutineHash(email, id);
+		}
+
 
 		//create new Routine w all empty workouts
 		[HttpPost]
