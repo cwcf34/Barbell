@@ -80,15 +80,14 @@ namespace BBAPI.Controllers
 
 		public void addWorkoutToRoutineDataList(string key, int[] workoutId)
 		{
-			RedisValue[] ids = { };
+			//RedisValue[] ids = { };
 
 
 			for (var i = 0; i < workoutId.Length; i++)
 			{
-				ids.SetValue(workoutId[i].ToString(), i);
-			}
-
-			cache.ListRightPush(key, ids); 
+				//ids.SetValue(workoutId[i].ToString(), i);
+				cache.ListRightPush(key, workoutId[i]);
+			} 
 		}
 
         public void deleteKey(string key)
