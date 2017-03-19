@@ -72,13 +72,16 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
 		}
 
-		public void createRoutineDataList(string key, int workoutIds)
+		public void createWorkoutDataHash(string key, string exercise, string exerciseValue)
 		{
-			for (var i = 0; i < workoutIds; i++)
-			{
-				cache.ListRightPush(key, i);
-			}
+			//routineid Week1 Day1 HASH
+			//user:d123@me.com:routineId:0
+			// - squat : set:reps:weight
+			// - bench : set:reps:weight
+
+			cache.HashSet(key, new HashEntry[] { new HashEntry(exercise, exerciseValue) });
 		}
+
 
         public void deleteKey(string key)
         {
