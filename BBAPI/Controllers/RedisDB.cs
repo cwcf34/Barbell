@@ -1,12 +1,6 @@
 using System;
-using System.Web;
-using System.Text;
 using System.Net.Mail;
 using StackExchange.Redis;
-using BBAPI.Controllers;
-
-// to hash and salt pword: 
-using System.Security.Cryptography;
 
 namespace BBAPI.Controllers
 {
@@ -30,7 +24,7 @@ namespace BBAPI.Controllers
             }
         }
 
-        private static IDatabase cache = Connection.GetDatabase();
+		private readonly static IDatabase cache = Connection.GetDatabase();
 
 		/// <summary>
 		/// Creates the user hash.
@@ -78,7 +72,7 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
 		}
 
-		public void createRoutineDataList(string key, int id)
+		public void createRoutineDataList(string key)
 		{
 			var emptyList = new RedisValue();
 			cache.ListRightPush(key, emptyList);
@@ -132,7 +126,7 @@ namespace BBAPI.Controllers
 					var key = "user:" + email;
 					var data = new HashEntry[] { };
 					data = cache.HashGetAll(key);
-					string getResponse = String.Empty;
+					string getResponse = string.Empty;
 					for (int i = 0; i < data.Length; i++)
 					{
 						
@@ -159,7 +153,7 @@ namespace BBAPI.Controllers
 			var key = "user:" + email;
 			 
             //check if fields are empty
-			if(String.IsNullOrWhiteSpace(email))
+			if(string.IsNullOrWhiteSpace(email))
             {
                 //send error message
                 return -1;

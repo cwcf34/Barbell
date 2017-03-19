@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Web.Http;
-using System.Collections.Generic;
-
 
 namespace BBAPI.Controllers
 {
@@ -18,7 +16,7 @@ namespace BBAPI.Controllers
 		{
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
 				var resp2 = "\"{name:routineName,weeks:numberOfweeks,public:0/1,creator:email}\"";
@@ -89,11 +87,8 @@ namespace BBAPI.Controllers
 			 */
 			key = key + ":routineData";
 
-			//get unique id for workout\\
-			var workoutId = getRandomId();
-
 			//create routineData list to hold workout days
-			redisCache.createRoutineDataList(key, workoutId);
+			redisCache.createRoutineDataList(key);
 
 			/*
 			 * create (7*numWeeks) number of blank workouts
@@ -101,7 +96,7 @@ namespace BBAPI.Controllers
 			 * workouts for a week, all populated with ids 
 			 */
 
-			createEmptyWorkouts(routineId, Int16.Parse(routineWeeks), email);
+			createEmptyWorkouts(routineId, short.Parse(routineWeeks), email);
 		
 
 			//now add routine to users routine list

@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace BBAPI.Controllers
 {
-	public class AuthController
+	public static class AuthController
 	{
 		public static string ComputeHash(string plainText, string hashAlgorithm, byte[] saltBytes)
 		{

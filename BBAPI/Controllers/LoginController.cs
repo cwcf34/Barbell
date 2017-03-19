@@ -1,14 +1,11 @@
-﻿using System;
-using System.Web.Http;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+﻿using System.Web.Http;
 
 namespace BBAPI.Controllers
 {
 	public class LoginController : ApiController
 	{
 		//use singleton
-		RedisDB redisCache = RedisDB._instance;
+		readonly RedisDB redisCache = RedisDB._instance;
 
 
 		//login is a post request
@@ -21,7 +18,7 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("password:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("password:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
 				var resp2 = "\"{password:pw}\"";
