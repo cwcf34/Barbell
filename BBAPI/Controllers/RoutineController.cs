@@ -22,11 +22,6 @@ namespace BBAPI.Controllers
 			
 		}
 
-		public IHttpActionResult GetRoutine(string email, [FromBody]string data)
-		{
-			return Ok();
-		}
-
 		//create new Routine w all empty workouts
 		[HttpPost]
 		public IHttpActionResult PostRoutine(string email, [FromBody]string data)
