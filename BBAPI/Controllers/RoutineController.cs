@@ -18,7 +18,7 @@ namespace BBAPI.Controllers
 			Routine[] routinesTest = { new Routine {Name = "HITEST", Id = "1234" } };
 
 			//return array of routine name and routine id
-			return Ok(routinesTest);
+			return Ok("hi routines");
 			
 		}
 
