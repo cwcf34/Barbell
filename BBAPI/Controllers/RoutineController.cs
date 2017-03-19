@@ -10,7 +10,7 @@ namespace BBAPI.Controllers
 		RedisDB redisCache = RedisDB._instance;
 
 		[HttpGet]
-		public IEnumerable<Routine> GetRoutine(string email)
+		public IHttpActionResult GetAllRoutines(string email)
 		{
 			//to get all routines get list of user:[email]:routines list
 			//Routine[] routines = redisCache.getUserRoutines(email);
@@ -18,7 +18,7 @@ namespace BBAPI.Controllers
 			Routine[] routinesTest = { new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" } };
 
 			//return array of routine name and routine id
-			return routinesTest;
+			return Ok("are you working?");
 			
 		}
 
