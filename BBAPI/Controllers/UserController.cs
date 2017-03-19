@@ -113,8 +113,6 @@ namespace BBAPI.Controllers
 
 			//user registered 200 OK HTTP response
 			return Ok(returnString);
-
-			//store relation "hash" in SQLite
 		}
 
 
@@ -149,8 +147,6 @@ namespace BBAPI.Controllers
 			var postName = postParams[2];
 			var postPassword = postParams[6];
 
-			string[] passAndSalt = new string[2];
-
 
 			if (String.IsNullOrWhiteSpace(newEmail) && String.IsNullOrWhiteSpace(postName) && String.IsNullOrWhiteSpace(postPassword))
 			{
@@ -159,7 +155,7 @@ namespace BBAPI.Controllers
 
 			//grab old user Hash data
 			var currData = redisCache.getUserData(currEmail);
-			//var currRedisData = currData.Split(delimiterChars);
+			var currRedisData = currData.Split(delimiterChars);
 
 			//if sending Put request and email field has data
 			//user wants to change email address
@@ -216,7 +212,7 @@ namespace BBAPI.Controllers
 				//if null, user keeps curr name
 				if (String.IsNullOrWhiteSpace(postName))
 				{
-					/*
+					
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
 						if (currRedisData[i] == "name")
@@ -224,16 +220,13 @@ namespace BBAPI.Controllers
 							//grab curr name
 							postName = currRedisData[i + 2];
 						}
-					}
-					*/
-
-					  
+					}	  
 				}
+
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{	
-					/*
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
 						if (currRedisData[i] == "password")
@@ -242,18 +235,17 @@ namespace BBAPI.Controllers
 							postPassword = currRedisData[i+2];
 						}
 					}
-					*/
 				}
 				else
 				{
-					passAndSalt = redisCache.createSecurePass(postPassword);
+					postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 				}
 
 				//delete old key w old data
 				redisCache.deleteKey("user:" + currEmail);
 
 				//create new key, and update hash
-				redisCache.updateUserHash("user:" + newEmail, postName, newEmail, passAndSalt[0]);
+				redisCache.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
 
 				return Ok("Successfully updated your profile with new email!");
 			}
@@ -286,7 +278,6 @@ namespace BBAPI.Controllers
 				//if null, user keeps curr name
 				if (String.IsNullOrWhiteSpace(postName))
 				{
-					/*
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
 						if (currRedisData[i] == "name")
@@ -295,13 +286,11 @@ namespace BBAPI.Controllers
 							postName = currRedisData[i + 2];
 						}
 					}
-					*/
 				}
 
 				//if null, user keeps curr password
 				if (String.IsNullOrWhiteSpace(postPassword))
 				{
-					/*
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
 						if (currRedisData[i] == "password")
@@ -310,20 +299,16 @@ namespace BBAPI.Controllers
 							postPassword = currRedisData[i + 2];
 						}
 					}
-					*/
 				}
 				else
 				{
-					
-					passAndSalt = redisCache.createSecurePass(postPassword);
+					postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 				}
 
-				redisCache.updateUserHash("user:" + currEmail, postName, currEmail, passAndSalt[0]);
+				redisCache.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
 
 				return Ok("Successfully Updated your profile");
 			}
 		}
-
-
 	}
 }

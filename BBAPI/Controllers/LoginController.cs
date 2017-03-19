@@ -64,7 +64,14 @@ namespace BBAPI.Controllers
 			//512HASH it with the saltedPass 
 			var verifyedUser = AuthController.VerifyHash(plainPassword, "SHA512", currPass);
 
-			return Ok(" You posted this to me: lilululluulululu::: " + verifyedUser + " " + currPass);
+			if (verifyedUser == true)
+			{
+				return Ok("Successful Login");
+			}
+			else
+			{
+				return Ok("Wrong Username / Incorrect Password");
+			}
 		}
 	}
 }

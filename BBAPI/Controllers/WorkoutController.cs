@@ -6,7 +6,7 @@ namespace BBAPI.Controllers
 	public class WorkoutController : ApiController
 	{
 		//use singleton
-		RedisDB redisCache = RedisDB._instance;
+		//RedisDB redisCache = RedisDB._instance;
 
 		//create new Workout
 		[HttpPost]

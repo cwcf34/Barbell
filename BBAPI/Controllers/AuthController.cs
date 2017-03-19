@@ -89,7 +89,7 @@ namespace BBAPI.Controllers
 			return hashValue;
 		}
 
-		public static string VerifyHash(string plainText, string hashAlgorithm, string hashValue)
+		public static bool VerifyHash(string plainText, string hashAlgorithm, string hashValue)
 		{
 
 			// Convert base64-encoded hash value into a byte array.
@@ -124,7 +124,7 @@ namespace BBAPI.Controllers
 
 			// Make sure that the specified hash value is long enough.
 			if (hashWithSaltBytes.Length < hashSizeInBytes)
-				return "";
+				return false;
 
 			// Allocate array to hold original salt bytes retrieved from hash.
 			byte[] saltBytes = new byte[hashWithSaltBytes.Length - hashSizeInBytes];
@@ -138,7 +138,7 @@ namespace BBAPI.Controllers
 
 			// If the computed hash matches the specified hash,
 			// the plain text value must be correct.
-			return expectedHashString;
+			return (hashValue == expectedHashString);
 		}
 	}
 }

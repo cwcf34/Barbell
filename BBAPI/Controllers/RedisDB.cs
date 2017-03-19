@@ -217,12 +217,7 @@ namespace BBAPI.Controllers
 		}
 
 
-		/// <summary>
-		/// Creates the secure pass.
-		/// </summary>
-		/// <returns>The secure pass.</returns>
-		/// <param name="pword">Pword.</param>
-
+		/*
 		public string[] createSecurePass(string pword)
 		{
 			SHA512 hash512 = SHA512.Create();
@@ -237,14 +232,6 @@ namespace BBAPI.Controllers
 
 			return returnArray;
 		}
-
-        //Compute a hash using the Sha512 algorithm
-		/// <summary>
-		/// Gets the sha512 hash.
-		/// </summary>
-		/// <returns>The sha512 hash.</returns>
-		/// <param name="sha512Hash">Sha512 hash.</param>
-		/// <param name="input">Input.</param>
 
         public string GetSha512Hash(SHA512 sha512Hash, string input)
         {
@@ -266,5 +253,6 @@ namespace BBAPI.Controllers
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
+		*/
     }
 }
