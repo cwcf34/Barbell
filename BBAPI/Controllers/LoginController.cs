@@ -1,12 +1,12 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace BBAPI.Controllers
 {
 	public class LoginController : ApiController
 	{
 		//use singleton
-		RedisDB redisCache = RedisDB._instance;
+		readonly RedisDB redisCache = RedisDB._instance;
+
 
 		//login is a post request
 		[HttpPost]
@@ -18,7 +18,7 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("password:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("password:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
 				var resp2 = "\"{password:pw}\"";
@@ -53,8 +53,22 @@ namespace BBAPI.Controllers
 			char[] delimiterChars = { '{', '}', ',', ':' };
 			string[] postParams = data.Split(delimiterChars);
 
-			return Ok("You posted this to me: " + postParams[0] + "\n" + postParams[1] + "\n" + postParams[2] + "\n" + postParams[4] );
+			var plainPassword = postParams[2];
+
+			//var userData = redisCache.getUserData("user:" + email).Split(delimiterChars);
+			var currPass = redisCache.validateUserPass("user:" + email);
+
+			//512HASH it with the saltedPass 
+			var verifyedUser = AuthController.VerifyHash(plainPassword, "SHA512", currPass);
+
+			if (verifyedUser == true)
+			{
+				return Ok("Successful Login");
+			}
+			else
+			{
+				return Ok("Wrong Username / Incorrect Password");
+			}
 		}
-			
 	}
 }

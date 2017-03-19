@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Web.Http;
-using System.Collections.Generic;
-
 
 namespace BBAPI.Controllers
 {
@@ -18,7 +16,7 @@ namespace BBAPI.Controllers
 		{
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
 				var resp2 = "\"{name:routineName,weeks:numberOfweeks,public:0/1,creator:email}\"";
@@ -89,45 +87,11 @@ namespace BBAPI.Controllers
 			 */
 			key = key + ":routineData";
 
-			//get unique id for workout\\
-			var workoutId = getRandomId();
-
-			//create routineData list to hold workout days
-			redisCache.createRoutineDataList(key, workoutId);
-
-			/*
-			 * create (7*numWeeks) number of blank workouts
-			 * so the app can function even with 7 empty
-			 * workouts for a week, all populated with ids 
-			 */
-
-			createEmptyWorkouts(routineId, Int16.Parse(routineWeeks), email);
-		
-
 			//now add routine to users routine list
 			redisCache.addRoutineToUserList("user:" + email + ":routines", routineId);
 			          
 			return Ok("Created " + routineName + " successfully!");
 					
-		}
-
-		public void createEmptyWorkouts(int routineId, int weeks, string email)
-		{
-			int[] idList = { };
-
-			var routineKey = "user:" + email + ":" + routineId + ":routineData";
-			//create ids and empty lists for 7*weeks
-			var count = 7 * weeks;
-
-			for (var i = 0; i < count; i++)
-			{
-				idList.SetValue(i, i);
-			}
-
-			//id is based on day count
-			redisCache.addWorkoutToRoutineDataList(routineKey, idList);
-
-
 		}
 
 		private int getRandomId()

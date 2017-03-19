@@ -1,11 +1,6 @@
 using System;
-using System.Web;
-using System.Text;
 using System.Net.Mail;
 using StackExchange.Redis;
-using System.Collections.Generic;
-// to hash and salt pword: 
-using System.Security.Cryptography;
 
 namespace BBAPI.Controllers
 {
@@ -29,7 +24,7 @@ namespace BBAPI.Controllers
             }
         }
 
-        private static IDatabase cache = Connection.GetDatabase();
+		private readonly static IDatabase cache = Connection.GetDatabase();
 
 		/// <summary>
 		/// Creates the user hash.
@@ -42,10 +37,15 @@ namespace BBAPI.Controllers
         public void createUserHash(string key, string name, string email, string password)
         {
 			//no need to check email here, check in controller
-			var saltedPassword = createSecurePass(password);
+			var securePassword = AuthController.ComputeHash(password, "SHA512", null);
 
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", saltedPassword) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword) });
         }
+
+		public string validateUserPass(string key)
+		{
+			return cache.HashGet(key, "password");
+		}
 
 
 		/// <summary>
@@ -59,44 +59,6 @@ namespace BBAPI.Controllers
 		{
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", password) });
 		}
-        
-		/// <summary>
-		/// Gets the user data.
-		/// </summary>
-		/// <returns>The user data.</returns>
-		/// <param name="email">Email.</param>
-
-        public string getUserData(string email)
-        {
-			int emailVerifyResponse = emailVerify(email);
-
-			switch (emailVerifyResponse)
-			{
-				case 1: //means no key exists
-					return "User not found.";
-				
-				case -1: //empty email
-					return "Email field empty.";
-				
-				case -2: //incorrect format
-					return "Email not formatted correctly.";
-				
-				case -3: //means key exists
-					var key = "user:" + email;
-					var data = new HashEntry[] {};
-					data = cache.HashGetAll(key);
-					string getResponse = String.Empty;
-					for (int i = 0; i < data.Length; i++)
-					{
-						getResponse = getResponse + data[i] + ",";
-					}
-					return getResponse;
-				
-				case -4:
-				default:
-					return "try/catch error";
-			}
-        }
 
 		public void addRoutineToUserList(string key, int routineId)
 		{
@@ -110,25 +72,16 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
 		}
 
-		public void createRoutineDataList(string key, int id)
+		public void createWorkoutDataHash(string key, string exercise, string exerciseValue)
 		{
-			var emptyList = new RedisValue();
-			cache.ListRightPush(key, emptyList);
+			//routineid Week1 Day1 HASH
+			//user:d123@me.com:routineId:0
+			// - squat : set:reps:weight
+			// - bench : set:reps:weight
 
+			cache.HashSet(key, new HashEntry[] { new HashEntry(exercise, exerciseValue) });
 		}
 
-		public void addWorkoutToRoutineDataList(string key, int[] workoutId)
-		{
-			RedisValue[] ids = { };
-
-
-			for (var i = 0; i < workoutId.Length; i++)
-			{
-				ids.SetValue(workoutId[i].ToString(), i);
-			}
-
-			cache.ListRightPush(key, ids); 
-		}
 
         public void deleteKey(string key)
         {
@@ -137,6 +90,47 @@ namespace BBAPI.Controllers
 
 
         //close connection needed
+
+		/// <summary>
+		/// Gets the user data.
+		/// </summary>
+		/// <returns>The user data.</returns>
+		/// <param name="email">Email.</param>
+
+        public string getUserData(string email)
+		{
+
+			int emailVerifyResponse = emailVerify(email);
+
+			switch (emailVerifyResponse)
+			{
+				case 1: //means no key exists
+					return "User not found.";
+
+				case -1: //empty email
+					return "Email field empty.";
+
+				case -2: //incorrect format
+					return "Email not formatted correctly.";
+
+				case -3: //means key exists
+					var key = "user:" + email;
+					var data = new HashEntry[] { };
+					data = cache.HashGetAll(key);
+					string getResponse = string.Empty;
+					for (int i = 0; i < data.Length; i++)
+					{
+						
+						getResponse = getResponse + data[i] + ",";
+					}
+					return getResponse;
+
+				case -4:
+				default:
+					return "try/catch error";
+
+			}
+		}
 
         //check email validation
 		/// <summary>
@@ -150,7 +144,7 @@ namespace BBAPI.Controllers
 			var key = "user:" + email;
 			 
             //check if fields are empty
-			if(String.IsNullOrWhiteSpace(email))
+			if(string.IsNullOrWhiteSpace(email))
             {
                 //send error message
                 return -1;
@@ -208,30 +202,23 @@ namespace BBAPI.Controllers
 		}
 
 
-		/// <summary>
-		/// Creates the secure pass.
-		/// </summary>
-		/// <returns>The secure pass.</returns>
-		/// <param name="pword">Pword.</param>
-
-		public string createSecurePass(string pword)
+		/*
+		public string[] createSecurePass(string pword)
 		{
-			SHA512 sha512Hash = SHA512.Create();
+			SHA512 hash512 = SHA512.Create();
 			string salt = Guid.NewGuid().ToString();
 			string saltedPassword = pword + salt;
 
-			return GetSha512Hash(sha512Hash, saltedPassword);
+			var hashedPass = GetSha512Hash(hash512, saltedPassword);
+			string[] returnArray = new string[2];
+
+			returnArray.SetValue(hashedPass, 0);
+			returnArray.SetValue(salt, 1);
+
+			return returnArray;
 		}
 
-        //Compute a hash using the Sha512 algorithm
-		/// <summary>
-		/// Gets the sha512 hash.
-		/// </summary>
-		/// <returns>The sha512 hash.</returns>
-		/// <param name="sha512Hash">Sha512 hash.</param>
-		/// <param name="input">Input.</param>
-
-        private string GetSha512Hash(SHA512 sha512Hash, string input)
+        public string GetSha512Hash(SHA512 sha512Hash, string input)
         {
 
             // Convert the input string to a byte array and compute the hash.
@@ -251,5 +238,6 @@ namespace BBAPI.Controllers
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
+		*/
     }
 }

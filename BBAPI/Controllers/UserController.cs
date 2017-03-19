@@ -1,21 +1,20 @@
-﻿using System;
+﻿
 using BBAPI.Models;
 using System.Web.Http;
 using System.Collections.Generic;
-
 
 namespace BBAPI.Controllers
 {
 	public class UserController : ApiController
 	{
-		User[] users = new User[]{
+		User[] users = {
 			new User {Email = "dlopez@me.com", Name = "me", Gender = "male", Age = 22},
 			new User {Email = "d@me.com", Name = "you", Gender = "male", Age = 57},
 			new User {Email = "dl@me.com", Name = "us", Gender = "male", Age = 100}
 		};
 
 		//use singleton
-		RedisDB redisCache = RedisDB._instance;
+		readonly RedisDB redisCache = RedisDB._instance;
 
 		/// <summary>
 		/// Gets all users.
@@ -58,7 +57,7 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("password:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("password:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
 				var resp2 = "\"{name:name, password:pw}\"";
@@ -97,7 +96,7 @@ namespace BBAPI.Controllers
 			string[] postParams = data.Split(delimiterChars);
 
 			//if name or password fields are empty
-			if (String.IsNullOrWhiteSpace(postParams[2]) || String.IsNullOrWhiteSpace(postParams[4]))
+			if (string.IsNullOrWhiteSpace(postParams[2]) || string.IsNullOrWhiteSpace(postParams[4]))
 			{
 				string postError = "user=" + postParams[2] + "pss=" + postParams[3];
 				return Ok(postError);
@@ -112,8 +111,6 @@ namespace BBAPI.Controllers
 
 			//user registered 200 OK HTTP response
 			return Ok(returnString);
-
-			//store relation "hash" in SQLite
 		}
 
 
@@ -129,7 +126,7 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (String.IsNullOrWhiteSpace(data) || String.Equals("{}", data) || !data.Contains("name:") || !data.Contains("email:") || !data.Contains("password:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("email:") || !data.Contains("password:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
 				var resp2 = "\"{name:name, email:email, password:pw}\"";
@@ -149,7 +146,7 @@ namespace BBAPI.Controllers
 			var postPassword = postParams[6];
 
 
-			if (String.IsNullOrWhiteSpace(newEmail) && String.IsNullOrWhiteSpace(postName) && String.IsNullOrWhiteSpace(postPassword))
+			if (string.IsNullOrWhiteSpace(newEmail) && string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
 			{
 				return Ok("All fields are null! Send Data.");
 			}
@@ -161,7 +158,7 @@ namespace BBAPI.Controllers
 			//if sending Put request and email field has data
 			//user wants to change email address
 			//old user hash is deleted in the process / new hash key is created
-			if (!(String.IsNullOrWhiteSpace(newEmail)))
+			if (!(string.IsNullOrWhiteSpace(newEmail)))
 			{
 				//before any logic, make sure email is formatted and exists
 				var emailVerfiyResponse = redisCache.emailVerify(currEmail);
@@ -211,8 +208,9 @@ namespace BBAPI.Controllers
 				//user is registerd and now allowed to change currEmail to a new unique Email
 
 				//if null, user keeps curr name
-				if (String.IsNullOrWhiteSpace(postName))
+				if (string.IsNullOrWhiteSpace(postName))
 				{
+					
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
 						if (currRedisData[i] == "name")
@@ -220,12 +218,13 @@ namespace BBAPI.Controllers
 							//grab curr name
 							postName = currRedisData[i + 2];
 						}
-					}
+					}	  
 				}
 
+
 				//if null, user keeps curr password
-				if (String.IsNullOrWhiteSpace(postPassword))
-				{
+				if (string.IsNullOrWhiteSpace(postPassword))
+				{	
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
 						if (currRedisData[i] == "password")
@@ -237,7 +236,7 @@ namespace BBAPI.Controllers
 				}
 				else
 				{
-					postPassword = redisCache.createSecurePass(postPassword);
+					postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 				}
 
 				//delete old key w old data
@@ -275,7 +274,7 @@ namespace BBAPI.Controllers
 				//check if post data is null
 
 				//if null, user keeps curr name
-				if (String.IsNullOrWhiteSpace(postName))
+				if (string.IsNullOrWhiteSpace(postName))
 				{
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
@@ -288,7 +287,7 @@ namespace BBAPI.Controllers
 				}
 
 				//if null, user keeps curr password
-				if (String.IsNullOrWhiteSpace(postPassword))
+				if (string.IsNullOrWhiteSpace(postPassword))
 				{
 					for (int i = 0; i < currRedisData.Length; i++)
 					{
@@ -301,7 +300,7 @@ namespace BBAPI.Controllers
 				}
 				else
 				{
-					postPassword = redisCache.createSecurePass(postPassword);
+					postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 				}
 
 				redisCache.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
@@ -309,7 +308,5 @@ namespace BBAPI.Controllers
 				return Ok("Successfully Updated your profile");
 			}
 		}
-
-
 	}
 }
