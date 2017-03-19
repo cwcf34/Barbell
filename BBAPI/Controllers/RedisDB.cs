@@ -76,9 +76,8 @@ namespace BBAPI.Controllers
 		{
 			for (var i = 0; i < workoutIds; i++)
 			{
-				cache.ListSetByIndex(key, i, i);
+				cache.ListRightPush(key, i);
 			}
-
 		}
 
         public void deleteKey(string key)
