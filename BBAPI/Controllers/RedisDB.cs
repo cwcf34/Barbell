@@ -85,7 +85,7 @@ namespace BBAPI.Controllers
 
 		public int getUserRoutines(string email)
 		{
-			Routine[] routineList = { };
+			var routineList = new Routine[50];
 
 			//get user routine list
 			RedisValue[] data = cache.ListRange("user:" + email + ":routines", 0, -1);
