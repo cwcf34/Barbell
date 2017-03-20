@@ -100,8 +100,8 @@ namespace BBAPI.Controllers
 			*/
 
 			var id = int.Parse(data[0]);
-			Routine newRoutine = getRoutineHash(email, id);
-			routineList.SetValue(newRoutine, 0);
+			//Routine newRoutine = getRoutineHash(email, id);
+			//routineList.SetValue(newRoutine, 0);
 
 			return id;
 
