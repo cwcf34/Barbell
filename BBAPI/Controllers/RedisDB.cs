@@ -103,7 +103,7 @@ namespace BBAPI.Controllers
 			Routine newRoutine = getRoutineHash(email, id);
 			routineList.SetValue(newRoutine, 0);
 
-			return int.Parse(routineList[0].Id);
+			return routineList.Length;
 
 
 		}
