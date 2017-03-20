@@ -98,7 +98,7 @@ namespace BBAPI.Controllers
 			*/
 
 
-			return short.Parse(data.GetValue(0).ToString());
+			return data.Length;
 
 
 		}
