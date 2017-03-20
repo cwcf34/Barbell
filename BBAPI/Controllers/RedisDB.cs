@@ -103,7 +103,7 @@ namespace BBAPI.Controllers
 
 		}
 
-		public Routine getRoutineHash(string email, long routineId)
+		public Routine getRoutineHash(string email, int routineId)
 		{
 			var data = new HashEntry[] { };
 
