@@ -13,13 +13,13 @@ namespace BBAPI.Controllers
 		public IEnumerable<Routine> GetAllRoutines(string email)
 		{
 			//to get all routines get list of user:[email]:routines list
-			int routines = redisCache.getUserRoutines(email);
+			Routine[] routines = redisCache.getUserRoutines(email);
 
 			//test routines
-			Routine[] routinesTest = { new Routine {Name = "HITEST", Id = "1234", numWeeks = routines.ToString(), isPublic = "1" }, new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" }};
+			//Routine[] routinesTest = { new Routine {Name = "HITEST", Id = "1234", numWeeks = routines.ToString(), isPublic = "1" }, new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" }};
 
 			//return array of routine name and routine id
-			return routinesTest;
+			return routines;
 			
 		}
 
