@@ -15,8 +15,8 @@ namespace BBAPI
 				// api/user
 				//api/user/dl@me.com --> returns only one user entry
 				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{email}/{id}",
-				defaults: new { email = RouteParameter.Optional, id = RouteParameter.Optional}
+				routeTemplate: "api/{controller}/{email}/{id}/{dayIndex}",
+				defaults: new { email = RouteParameter.Optional, id = RouteParameter.Optional, dayIndex = RouteParameter.Optional}
 			);
 
 			/*

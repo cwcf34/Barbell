@@ -20,9 +20,9 @@ namespace BBAPI.Controllers
 
 			//return array of routine name and routine id
 			return routines;
-			
 		}
 
+		[HttpGet]
 		public Routine GetRoutine(string email, int id)
 		{
 			return redisCache.getRoutineHash(email, id);

@@ -1,20 +1,16 @@
 ﻿<Properties StartupConfiguration="{B6E4B045-34F2-48C8-8AC2-63FC17130676}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/RoutineController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="App_Start/WebApiConfig.cs">
     <Files>
       <File FileName="Controllers/UserController.cs" Line="4" Column="1" />
-      <File FileName="Controllers/WorkoutController.cs" Line="1" Column="1" />
-      <File FileName="Controllers/RoutineController.cs" Line="26" Column="40" />
-      <File FileName="Controllers/RedisDB.cs" Line="106" Column="29" />
-      <File FileName="App_Start/WebApiConfig.cs" Line="18" Column="52" />
+      <File FileName="Controllers/WorkoutController.cs" Line="54" Column="4" />
+      <File FileName="Controllers/RoutineController.cs" Line="22" Column="20" />
+      <File FileName="Controllers/RedisDB.cs" Line="95" Column="5" />
+      <File FileName="App_Start/WebApiConfig.cs" Line="18" Column="61" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/Controllers/RedisDB.cs" relfile="Controllers/RedisDB.cs" line="103" column="1" />
-      <Breakpoint file="/Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/Controllers/RedisDB.cs" relfile="Controllers/RedisDB.cs" line="104" column="1" />
-      <Breakpoint file="/Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/Controllers/RedisDB.cs" relfile="Controllers/RedisDB.cs" line="102" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.BBAPI PreferredExecutionTarget="MonoDevelop.Default" />

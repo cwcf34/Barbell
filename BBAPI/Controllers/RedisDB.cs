@@ -156,6 +156,11 @@ namespace BBAPI.Controllers
 			}
 		}
 
+		public HashEntry[] getWorkoutHashData(string key)
+		{
+			return cache.HashGetAll(key);
+		}
+
         //check email validation
 		/// <summary>
 		/// verify the email.
