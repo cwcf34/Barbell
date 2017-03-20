@@ -42,11 +42,21 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword) });
         }
 
-		public string validateUserPass(string key)
+		public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
 		{
-			return cache.HashGet(key, "password");
+			//creates hash data for routine
+			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
 		}
 
+		public void createWorkoutDataHash(string key, string exercise, string exerciseValue)
+		{
+			//routineid Week1 Day1 HASH
+			//user:d123@me.com:routineId:0
+			// - squat : set:reps:weight
+			// - bench : set:reps:weight
+
+			cache.HashSet(key, new HashEntry[] { new HashEntry(exercise, exerciseValue) });
+		}
 
 		/// <summary>
 		/// Updates the user hash.
@@ -66,30 +76,44 @@ namespace BBAPI.Controllers
 			cache.ListLeftPush(key, routineId);
 		}
 
-        public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
-        {
-			//creates hash data for routine
-			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
-		}
-
-		public void createWorkoutDataHash(string key, string exercise, string exerciseValue)
+		public string validateUserPass(string key)
 		{
-			//routineid Week1 Day1 HASH
-			//user:d123@me.com:routineId:0
-			// - squat : set:reps:weight
-			// - bench : set:reps:weight
-
-			cache.HashSet(key, new HashEntry[] { new HashEntry(exercise, exerciseValue) });
+			return cache.HashGet(key, "password");
 		}
 
+		//close connection needed
 
-        public void deleteKey(string key)
-        {
-            cache.KeyDelete(key);
-        }
+		public Routine[] getUserRoutines(string email)
+		{
+			//get user routine list
+			RedisValue[] data = cache.ListRange("user:" + email + ":routines", 0, -1);
+
+			var routineList = new Routine[data.Length];
 
 
-        //close connection needed
+			for (var i = 0; i < data.Length; i++)
+			{
+				var id = int.Parse(data[i]);
+				Routine newRoutine = getRoutineHash(email, id);
+				routineList.SetValue(newRoutine, i);
+			}
+
+			return routineList;
+		}
+
+		public Routine getRoutineHash(string email, int routineId)
+		{
+			var data = new HashEntry[] { };
+
+			var key = "user:" + email + ":" + routineId;
+
+			data = cache.HashGetAll(key);
+
+			var searchedRoutine = new Routine {Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value};
+
+			return searchedRoutine;
+				
+		}
 
 		/// <summary>
 		/// Gets the user data.
@@ -97,7 +121,7 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-        public string getUserData(string email)
+        public string getUserHashData(string email)
 		{
 
 			int emailVerifyResponse = emailVerify(email);
@@ -130,6 +154,11 @@ namespace BBAPI.Controllers
 					return "try/catch error";
 
 			}
+		}
+
+		public HashEntry[] getWorkoutHashData(string key)
+		{
+			return cache.HashGetAll(key);
 		}
 
         //check email validation
@@ -199,6 +228,11 @@ namespace BBAPI.Controllers
 				//key available 
 				return 0;
 			}
+		}
+
+		public void deleteKey(string key)
+		{
+			cache.KeyDelete(key);
 		}
 
 

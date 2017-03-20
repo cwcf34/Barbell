@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using System.Collections.Generic;
 
 namespace BBAPI.Controllers
 {
@@ -8,9 +9,27 @@ namespace BBAPI.Controllers
 		//use singleton
 		RedisDB redisCache = RedisDB._instance;
 
-		//create a new Routine with mulitple workouts
+		[HttpGet]
+		public IEnumerable<Routine> GetAllRoutines(string email)
+		{
+			//to get all routines get list of user:[email]:routines list
+			Routine[] routines = redisCache.getUserRoutines(email);
 
-		//create new Routine
+			//test routines
+			//Routine[] routinesTest = { new Routine {Name = "HITEST", Id = "1234", numWeeks = routines.ToString(), isPublic = "1" }, new Routine {Name = "HITEST", Id = "1234", numWeeks = "1", isPublic = "1" }};
+
+			//return array of routine name and routine id
+			return routines;
+		}
+
+		[HttpGet]
+		public Routine GetRoutine(string email, int id)
+		{
+			return redisCache.getRoutineHash(email, id);
+		}
+
+
+		//create new Routine w all empty workouts
 		[HttpPost]
 		public IHttpActionResult PostRoutine(string email, [FromBody]string data)
 		{
@@ -93,6 +112,8 @@ namespace BBAPI.Controllers
 			return Ok("Created " + routineName + " successfully!");
 					
 		}
+
+
 
 		private int getRandomId()
 		{

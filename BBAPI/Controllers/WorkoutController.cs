@@ -48,9 +48,12 @@ namespace BBAPI.Controllers
 
 		//create new Workout
 		[HttpGet]
-		public IHttpActionResult GetWorkout(string email, [FromBody]string data)
+		public IHttpActionResult GetWorkout(string email, int id, int dayIndex)
 		{
-			return Ok();
+			//get the dayIndex workout hash for specific routine
+			var key = "user:" + email + ":" + id + ":" + dayIndex;
+
+			return Ok(redisCache.getWorkoutHashData(key));
 		}
 
 		//update old Workout

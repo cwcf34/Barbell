@@ -37,7 +37,7 @@ namespace BBAPI.Controllers
 		public IHttpActionResult GetUser(string email)
 		{
 			//search for user hash w key in cache
-			return Ok(redisCache.getUserData(email));
+			return Ok(redisCache.getUserHashData(email));
 		}
 
 
@@ -152,7 +152,7 @@ namespace BBAPI.Controllers
 			}
 
 			//grab old user Hash data
-			var currData = redisCache.getUserData(currEmail);
+			var currData = redisCache.getUserHashData(currEmail);
 			var currRedisData = currData.Split(delimiterChars);
 
 			//if sending Put request and email field has data
