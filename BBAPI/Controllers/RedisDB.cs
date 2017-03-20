@@ -83,7 +83,7 @@ namespace BBAPI.Controllers
 
 		//close connection needed
 
-		public string getUserRoutines(string email)
+		public long getUserRoutines(string email)
 		{
 			Routine[] routineList = { };
 
@@ -98,7 +98,7 @@ namespace BBAPI.Controllers
 			*/
 
 
-			return data[0].ToString();
+			return long.Parse(data[0]);
 
 
 		}
