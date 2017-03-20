@@ -93,13 +93,12 @@ namespace BBAPI.Controllers
 			/*
 			for (var i = 0; i < data.Length; i ++)
 			{
-				var newRoutine = getRoutineHash(email, short.Parse(data[i].ToString()));
-				routineList.SetValue(newRoutine, i);
+				routineList.SetValue(getRoutineHash(email,short.Parse(data[i])), i);
 			}
 			*/
 
 
-			return data.Length;
+			return short.Parse(data[0]);
 
 
 		}
