@@ -83,22 +83,27 @@ namespace BBAPI.Controllers
 
 		//close connection needed
 
-		public Routine[] getUserRoutines(string email)
+		public int getUserRoutines(string email)
 		{
-			Routine[] routineList = { };
+			Routine[] routineList = null;
 
 			//get user routine list
 			RedisValue[] data = cache.ListRange("user:" + email + ":routines", 0, -1);
 
-
+			/*
 			for (var i = 0; i < data.Length; i++)
 			{
-				int id = (int)(data[i]);
-				var newRoutine = getRoutineHash(email, id);
+				var id = (int)(data[i]);
+				Routine newRoutine = getRoutineHash(email, id);
 				routineList.SetValue(newRoutine, i);
 			}
+			*/
 
-			return routineList;
+			var id = (int)(data[0]);
+			Routine newRoutine = getRoutineHash(email, id);
+			routineList.SetValue(newRoutine, 0);
+
+			return int.Parse(routineList[0].Id);
 
 
 		}
