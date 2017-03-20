@@ -91,9 +91,11 @@ namespace BBAPI.Controllers
 			RedisValue[] data = cache.ListRange("user:" + email + ":routines", 0, -1);
 
 
-			for (var i = 0; i < data.Length; i ++)
+			for (var i = 0; i < data.Length; i++)
 			{
-				routineList.SetValue(getRoutineHash(email,long.Parse(data[i])), i);
+				int id = (int)long.Parse(data[i]);
+				var newRoutine = getRoutineHash(email, id);
+				routineList.SetValue(newRoutine, i);
 			}
 
 			return routineList;
