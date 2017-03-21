@@ -1,5 +1,5 @@
---temp-output:C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\obj\Debug\netcoreapp1.0\
---out:C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\bin\Debug\netcoreapp1.0\OAuth.dll
+--temp-output:C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\obj\Debug\netcoreapp1.0\
+--out:C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\bin\Debug\netcoreapp1.0\OAuth.dll
 --define:DEBUG
 --define:TRACE
 --define:NETCOREAPP1_0
@@ -150,10 +150,11 @@
 --reference:C:\Users\Daniel\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll
 --reference:C:\Users\Daniel\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\Daniel\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll
---resource:"C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\obj\Debug\netcoreapp1.0\OAuthdotnet-compile.deps.json",OAuth.deps.json
-C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\Config.cs
-C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\DBModel.cs
-C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\PasswordValidator.cs
-C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\Program.cs
-C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\Startup.cs
-C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\OAuth\src\OAuth\User.cs
+--resource:"C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\obj\Debug\netcoreapp1.0\OAuthdotnet-compile.deps.json",OAuth.deps.json
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\Config.cs
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\DBModel.cs
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\PasswordValidator.cs
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\Program.cs
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\Settings.cs
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\Startup.cs
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\OAuth\src\OAuth\User.cs
