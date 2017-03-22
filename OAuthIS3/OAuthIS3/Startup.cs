@@ -5,6 +5,7 @@ using Owin;
 using IdentityServer3.Core.Configuration;
 using System.Security.Cryptography.X509Certificates;
 using System.Configuration;
+using IdentityServer3.Core.Services;
 
 [assembly: OwinStartup(typeof(OAuthIS3.Startup))]
 
@@ -17,8 +18,10 @@ namespace OAuthIS3
             var inMemoryManager = new InMemoryManager();
             var factory = new IdentityServerServiceFactory()
                 .UseInMemoryUsers(inMemoryManager.GetUsers())
-                .UseInMemoryScopes(inMemoryManager.GetScopes())
-                .UseInMemoryClients(inMemoryManager.GetClients());
+                .UseInMemoryScopes(inMemoryManager.GetScopes());
+
+            factory.UserService = new Registration<IUserService>(
+                typeof(UserService));
 
             var certificate = Convert.FromBase64String(ConfigurationManager.AppSettings["SigningCertificate"]);
 
