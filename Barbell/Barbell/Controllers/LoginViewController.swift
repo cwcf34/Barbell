@@ -39,7 +39,7 @@ class LoginViewController: UIViewController {
             let loginInfo = LoginInfo.init(email: email.text!, password: password.text!)
             
             //print(loginInfo.email)
-            let dbResponse = DataAccess.login(loginInfo: loginInfo)
+            let dbResponse = true //DataAccess.login(loginInfo: loginInfo)
             
             if(dbResponse == false){
                 self.present(invalidLogin, animated: true, completion: nil)
@@ -54,7 +54,7 @@ class LoginViewController: UIViewController {
 //                user.lname = lastNameField.text
 //                user.email = emailField.text
                 
-                CoreDataController.saveContext()
+                //CoreDataController.saveContext()
             }
             
 
