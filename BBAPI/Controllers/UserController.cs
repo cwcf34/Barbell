@@ -70,6 +70,7 @@ namespace BBAPI.Controllers
 
 			if (emailVerfiyResponse != 1)
 			{
+				/*
 				//send error code
 				switch (emailVerfiyResponse)
 				{
@@ -85,6 +86,8 @@ namespace BBAPI.Controllers
 					case -4:
 						return Ok("some try catch error");
 				}
+				*/
+				Ok("false");
 			}
 
 			//email is now verified as avail in cache
@@ -109,8 +112,11 @@ namespace BBAPI.Controllers
 
 			var returnString = "user:" + postParams[2] + "pss:" + postParams[4];
 
+			/*
 			//user registered 200 OK HTTP response
 			return Ok(returnString);
+			*/
+			return Ok("true");
 		}
 
 
@@ -165,6 +171,7 @@ namespace BBAPI.Controllers
 
 				if (emailVerfiyResponse != -3)
 				{
+					/*
 					//send error code
 					switch (emailVerfiyResponse)
 					{
@@ -180,6 +187,8 @@ namespace BBAPI.Controllers
 						case -4:
 							return Ok("some try catch error");
 					}
+					*/
+					return Ok("false");
 				}
 
 
@@ -188,6 +197,7 @@ namespace BBAPI.Controllers
 
 				if (newEmailVerfiyResponse != 1)
 				{
+					/*
 					//send error code
 					switch (newEmailVerfiyResponse)
 					{
@@ -203,6 +213,9 @@ namespace BBAPI.Controllers
 						case -4:
 							return Ok("Some New try catch error");
 					}
+					*/
+
+					return Ok("false");
 				}
 
 				//user is registerd and now allowed to change currEmail to a new unique Email
@@ -245,7 +258,9 @@ namespace BBAPI.Controllers
 				//create new key, and update hash
 				redisCache.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
 
-				return Ok("Successfully updated your profile with new email!");
+
+				//return Ok("Successfully updated your profile with new email!");
+				return Ok("true");
 			}
 			else 
 			{
@@ -254,6 +269,7 @@ namespace BBAPI.Controllers
 
 				if (emailVerfiyResponse != -3)
 				{
+					/*
 					//send error code
 					switch (emailVerfiyResponse)
 					{
@@ -269,6 +285,8 @@ namespace BBAPI.Controllers
 						case -4:
 							return Ok("some try catch error");
 					}
+					*/
+					return Ok("false");
 				}
 
 				//check if post data is null
@@ -305,7 +323,8 @@ namespace BBAPI.Controllers
 
 				redisCache.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
 
-				return Ok("Successfully Updated your profile");
+				//return Ok("Successfully Updated your profile");
+				return Ok("true");
 			}
 		}
 	}
