@@ -16,12 +16,12 @@ public class DataAccess {
     class func register(registerInfo: RegisterInfo) -> Bool {
         var request = URLRequest(url: URL(string: apiURL + "user/\(registerInfo.email)/")!)
         request.httpMethod = "POST"
+        var x : Int = -1
         
-        var responseString = "false"
+        var result = false
         
-        print("Request STRING \(request)")
         
-        let postString = "\"{name:\(registerInfo.firstName)" + ", " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
+        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
@@ -31,29 +31,37 @@ public class DataAccess {
             "content-type": "application/json"
         ]
         
+
+        
         request.allHTTPHeaderFields = headers
+        let sem = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
+                    guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                    print("error=\(error)")
+                    return
+                }
+                
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("response = \(response)")
+                }
+                
+                let responseString = String(data: data, encoding: .utf8)!
+                
+                if(responseString == "\"true\""){
+                    result = true
+                } else{
+                    result = false
+                }
+                
+                sem.signal()
             }
             
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
-            }
-            
-            responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
-        }
         task.resume()
+        sem.wait()
         
-        if(responseString == "true"){
-            return true
-        } else{
-            return false
-        }
+        return result
     }
     
     class func createWorkout(workoutModel: WorkoutModel) -> Bool {
@@ -65,7 +73,6 @@ public class DataAccess {
         print("Request STRING \(request)")
         
         let putString = "\"{id:\(workoutModel.id)" + "," + "name:\(workoutModel.name)" + "," + "weight:\(workoutModel.weight)}\" "
-        print("PUT STRING::\(putString)")
         
         do {
             let putData = try JSONSerialization.data(withJSONObject: putString, options: [])
