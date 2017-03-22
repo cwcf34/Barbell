@@ -49,6 +49,7 @@ namespace BBAPI.Controllers
 			//if email is registered  
 			if (emailVerfiyResponse != -3)
 			{
+				/*
 				//send error code
 				switch (emailVerfiyResponse)
 				{
@@ -64,6 +65,8 @@ namespace BBAPI.Controllers
 					case -4:
 						return Ok("some try catch error");
 				}
+				*/
+				return Ok("false");
 			}
 
 			//parse email and body data for routine
@@ -109,7 +112,8 @@ namespace BBAPI.Controllers
 			//now add routine to users routine list
 			redisCache.addRoutineToUserList("user:" + email + ":routines", routineId);
 			          
-			return Ok("Created " + routineName + " successfully!");
+			//return Ok("Created " + routineName + " successfully!");
+			return Ok("true");
 					
 		}
 

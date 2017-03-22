@@ -32,6 +32,7 @@ namespace BBAPI.Controllers
 			//if email is registered  
 			if (emailVerfiyResponse != -3)
 			{
+				/*
 				//send error code
 				switch (emailVerfiyResponse)
 				{
@@ -47,6 +48,8 @@ namespace BBAPI.Controllers
 					case -4:
 						return Ok("some try catch error");
 				}
+				*/
+				return Ok("false");
 			}
 
 			//parse email and body data for routine
@@ -63,11 +66,11 @@ namespace BBAPI.Controllers
 
 			if (verifyedUser == true)
 			{
-				return Ok("Successful Login");
+				return Ok("true");
 			}
 			else
 			{
-				return Ok("Wrong Username / Incorrect Password");
+				return Ok("false");
 			}
 		}
 	}
