@@ -25,7 +25,7 @@ class addWorkOutViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        user = CoreDataController.getUser()
+        //user = CoreDataController.getUser()
         
         realTableView.delegate = self
         realTableView.dataSource = self
@@ -97,6 +97,11 @@ class addWorkOutViewController: UIViewController, UITableViewDataSource, UITable
         cell.nameLabel.text = weeks[indexPath.row]
         cell.myTableViewController = self
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //self.performSegueWithIdentifier("showQuestionnaire", sender: indexPath);
+        self.performSegue(withIdentifier: "showWeekSegue", sender: self)
     }
     
     func deleteCell() {
