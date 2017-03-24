@@ -13,3 +13,19 @@
 /Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/bin/Newtonsoft.Json.xml
 /Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/bin/StackExchange.Redis.xml
 /Users/Mr_Lopez/Desktop/BarbellCapstone/BarbellCapstone/BBAPI/obj/Debug/BBAPI.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\BBAPI.dll.config
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\BBAPI.dll
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\BBAPI.pdb
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\Newtonsoft.Json.dll
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\StackExchange.Redis.dll
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\System.Net.Http.Formatting.dll
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\System.Web.Http.dll
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\System.Web.Http.WebHost.dll
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\System.Net.Http.Formatting.xml
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\System.Web.Http.xml
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\System.Web.Http.WebHost.xml
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\Newtonsoft.Json.xml
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\bin\StackExchange.Redis.xml
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\obj\Debug\BBAPI.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\obj\Debug\BBAPI.dll
+C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\obj\Debug\BBAPI.pdb
