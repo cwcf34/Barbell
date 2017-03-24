@@ -18,7 +18,8 @@ namespace OAuthIS3
             var inMemoryManager = new InMemoryManager();
             var factory = new IdentityServerServiceFactory()
                 .UseInMemoryUsers(inMemoryManager.GetUsers())
-                .UseInMemoryScopes(inMemoryManager.GetScopes());
+                .UseInMemoryScopes(inMemoryManager.GetScopes())
+                .UseInMemoryClients(inMemoryManager.GetClients());
 
             factory.UserService = new Registration<IUserService>(
                 typeof(UserService));
