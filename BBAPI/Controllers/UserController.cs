@@ -98,7 +98,7 @@ namespace BBAPI.Controllers
 			char[] delimiterChars = { '{', '}', ',', ':', ' ' };
 			string[] postParams = data.Split(delimiterChars);
 
-			var postName = postParams[2] + postParams[3];
+			var postName = postParams[2] + " " + postParams[3];
 			var postPass = postParams[5];
 
 			//if name or password fields are empty
