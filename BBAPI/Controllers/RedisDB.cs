@@ -1,6 +1,7 @@
 using System;
 using System.Net.Mail;
 using StackExchange.Redis;
+using BBAPI.Models;
 
 namespace BBAPI.Controllers
 {
@@ -39,7 +40,7 @@ namespace BBAPI.Controllers
 			//no need to check email here, check in controller
 			var securePassword = AuthController.ComputeHash(password, "SHA512", null);
 
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword), new HashEntry("age", 0), new HashEntry("weight", 0), new HashEntry("squat", 0), new HashEntry("bench", 0), new HashEntry("deadlift", 0), new HashEntry("snatch", 0), new HashEntry("cleanjerk", 0), new HashEntry("workoutsCompleted", 0) });
         }
 
 		public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
@@ -65,9 +66,9 @@ namespace BBAPI.Controllers
 		/// <param name="name">Name.</param>
 		/// <param name="email">Email.</param>
 		/// <param name="password">Password.</param>
-        public void updateUserHash(string key, string name, string email, string password)
+        public void updateUserHash(string key, string name, string password, string age, string weight, string bench, string squat, string deadlift, string snatch, string cleanjerk)
 		{
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", password) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("age", age), new HashEntry("weight", weight), new HashEntry("bench", bench), new HashEntry("squat", squat), new HashEntry("deadlift", deadlift), new HashEntry("snatch", snatch), new HashEntry("cleanjerk", cleanjerk)  });
 		}
 
 		public void addRoutineToUserList(string key, int routineId)
@@ -121,7 +122,7 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-        public string getUserHashData(string email)
+		public string getUserHashData(string email)
 		{
 
 			int emailVerifyResponse = emailVerify(email);
@@ -142,10 +143,11 @@ namespace BBAPI.Controllers
 					var data = new HashEntry[] { };
 					data = cache.HashGetAll(key);
 					string getResponse = string.Empty;
+
 					for (int i = 0; i < data.Length; i++)
 					{
 						
-						getResponse = getResponse + data[i] + ",";
+						getResponse = getResponse + i + ": "+ data[i] + ",";
 					}
 					return getResponse;
 

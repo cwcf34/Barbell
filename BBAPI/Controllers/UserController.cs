@@ -98,6 +98,9 @@ namespace BBAPI.Controllers
 			char[] delimiterChars = { '{', '}', ',', ':' };
 			string[] postParams = data.Split(delimiterChars);
 
+			var postName = postParams[2];
+			var postPass = postParams[4];
+
 			//if name or password fields are empty
 			if (string.IsNullOrWhiteSpace(postParams[2]) || string.IsNullOrWhiteSpace(postParams[4]))
 			{
@@ -108,9 +111,9 @@ namespace BBAPI.Controllers
 			//create hash for new user
 			//store hash in Redis
 			//send to RedisDB
-			redisCache.createUserHash(key, postParams[2], email, postParams[4]);
+			redisCache.createUserHash(key, postName, email, postPass);
 
-			var returnString = "user:" + postParams[2] + "pss:" + postParams[4];
+			//var returnString = "user:" + postParams[2] + "pss:" + postParams[4];
 
 			/*
 			//user registered 200 OK HTTP response
@@ -132,10 +135,10 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("email:") || !data.Contains("password:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "\"{name:name, email:email, password:pw}\"";
+				var resp2 = "\"{name:name password:pw, age:age, weight:wt, squat:0, bench:0, deadlift:0, snatch:0, cleanjerk:0}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -145,14 +148,19 @@ namespace BBAPI.Controllers
 			char[] delimiterChars = { '{', '}', ',', ':', ' '};
 			string[] postParams = data.Split(delimiterChars);
 
-			//get new email
-			var newEmail = postParams[4];
 			//grab any other data that is to be changed
 			var postName = postParams[2];
-			var postPassword = postParams[6];
+			var postPassword = postParams[4];
+			var postAge = postParams[6];
+			var postWeight = postParams[8];
+			var postSquat = postParams[10];
+			var postBench = postParams[12];
+			var postDeadlift = postParams[14];
+			var postSnatch = postParams[16];
+			var postCleanjerk = postParams[18];
 
 
-			if (string.IsNullOrWhiteSpace(newEmail) && string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
+			if ( string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
 			{
 				return Ok("All fields are null! Send Data.");
 			}
@@ -161,171 +169,155 @@ namespace BBAPI.Controllers
 			var currData = redisCache.getUserHashData(currEmail);
 			var currRedisData = currData.Split(delimiterChars);
 
-			//if sending Put request and email field has data
-			//user wants to change email address
-			//old user hash is deleted in the process / new hash key is created
-			if (!(string.IsNullOrWhiteSpace(newEmail)))
+			//before any logic, make sure email is formatted and exists
+			var emailVerfiyResponse = redisCache.emailVerify(currEmail);
+
+			if (emailVerfiyResponse != -3)
 			{
-				//before any logic, make sure email is formatted and exists
-				var emailVerfiyResponse = redisCache.emailVerify(currEmail);
-
-				if (emailVerfiyResponse != -3)
+				//send error code
+				switch (emailVerfiyResponse)
 				{
-					/*
-					//send error code
-					switch (emailVerfiyResponse)
-					{
-						case -1:
-							return Ok("email is empty");
+					case -1:
+						return Ok("email is empty");
 
-						case -2:
-							return Ok("email is not vaild format");
+					case -2:
+						return Ok("email is not vaild format");
 
-						case 1:
-							return Ok("email doesnt exist");
+					case 1:
+						return Ok("email doesnt exist");
 
-						case -4:
-							return Ok("some try catch error");
-					}
-					*/
-					return Ok("false");
+					case -4:
+						return Ok("some try catch error");
 				}
-
-
-				//before any logic, make sure New Email is formatted and unique
-				var newEmailVerfiyResponse = redisCache.emailVerify(newEmail);
-
-				if (newEmailVerfiyResponse != 1)
-				{
-					/*
-					//send error code
-					switch (newEmailVerfiyResponse)
-					{
-						case -1:
-							return Ok("New email is empty.");
-
-						case -2:
-							return Ok("New email is not vaild format.");
-
-						case -3:
-							return Ok("New email is already registered.");
-
-						case -4:
-							return Ok("Some New try catch error");
-					}
-					*/
-
-					return Ok("false");
-				}
-
-				//user is registerd and now allowed to change currEmail to a new unique Email
-
-				//if null, user keeps curr name
-				if (string.IsNullOrWhiteSpace(postName))
-				{
-					
-					for (int i = 0; i < currRedisData.Length; i++)
-					{
-						if (currRedisData[i] == "name")
-						{
-							//grab curr name
-							postName = currRedisData[i + 2];
-						}
-					}	  
-				}
-
-
-				//if null, user keeps curr password
-				if (string.IsNullOrWhiteSpace(postPassword))
-				{	
-					for (int i = 0; i < currRedisData.Length; i++)
-					{
-						if (currRedisData[i] == "password")
-						{
-							//grab curr password
-							postPassword = currRedisData[i+2];
-						}
-					}
-				}
-				else
-				{
-					postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
-				}
-
-				//delete old key w old data
-				redisCache.deleteKey("user:" + currEmail);
-
-				//create new key, and update hash
-				redisCache.updateUserHash("user:" + newEmail, postName, newEmail, postPassword);
-
-
-				//return Ok("Successfully updated your profile with new email!");
-				return Ok("true");
 			}
-			else 
+
+			//check if post data is null
+
+
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postName))
 			{
-				//before any logic, make sure email is formatted and exists
-				var emailVerfiyResponse = redisCache.emailVerify(currEmail);
-
-				if (emailVerfiyResponse != -3)
+				for (int i = 0; i < currRedisData.Length; i++)
 				{
-					/*
-					//send error code
-					switch (emailVerfiyResponse)
+					if (currRedisData[i] == "name")
 					{
-						case -1:
-							return Ok("email is empty");
-
-						case -2:
-							return Ok("email is not vaild format");
-
-						case 1:
-							return Ok("email doesnt exist");
-
-						case -4:
-							return Ok("some try catch error");
-					}
-					*/
-					return Ok("false");
-				}
-
-				//check if post data is null
-
-				//if null, user keeps curr name
-				if (string.IsNullOrWhiteSpace(postName))
-				{
-					for (int i = 0; i < currRedisData.Length; i++)
-					{
-						if (currRedisData[i] == "name")
-						{
-							//grab curr name
-							postName = currRedisData[i + 2];
-						}
+						//grab curr name
+						postName = currRedisData[i + 2];
 					}
 				}
-
-				//if null, user keeps curr password
-				if (string.IsNullOrWhiteSpace(postPassword))
-				{
-					for (int i = 0; i < currRedisData.Length; i++)
-					{
-						if (currRedisData[i] == "password")
-						{
-							//grab curr password
-							postPassword = currRedisData[i + 2];
-						}
-					}
-				}
-				else
-				{
-					postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
-				}
-
-				redisCache.updateUserHash("user:" + currEmail, postName, currEmail, postPassword);
-
-				//return Ok("Successfully Updated your profile");
-				return Ok("true");
 			}
+
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postAge))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "age")
+					{
+						//grab curr name
+						postAge = currRedisData[i + 2];
+					}
+				}
+			}
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postWeight))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "weight")
+					{
+						//grab curr name
+						postWeight = currRedisData[i + 2];
+					}
+				}
+			}
+
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postSquat))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "squat")
+					{
+						//grab curr name
+						postSquat = currRedisData[i + 2];
+					}
+				}
+			}
+
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postBench))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "bench")
+					{
+						//grab curr name
+						postBench = currRedisData[i + 2];
+					}
+				}
+			}
+
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postDeadlift))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "deadlift")
+					{
+						//grab curr name
+						postDeadlift = currRedisData[i + 2];
+					}
+				}
+			}
+
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postSnatch))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "snatch")
+					{
+						//grab curr name
+						postSnatch = currRedisData[i + 2];
+					}
+				}
+			}
+
+			//if null, user keeps curr name
+			if (string.IsNullOrWhiteSpace(postCleanjerk))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "cleanjerk")
+					{
+						//grab curr name
+						postCleanjerk = currRedisData[i + 2];
+					}
+				}
+			}
+
+			//if null, user keeps curr password
+			if (string.IsNullOrWhiteSpace(postPassword))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "password")
+					{
+						//grab curr password
+						postPassword = currRedisData[i + 2];
+					}
+				}
+			}
+			else
+			{
+				postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
+			}
+
+			redisCache.updateUserHash("user:" + currEmail, postName, postAge, postWeight, postWeight, postBench,postSquat, postDeadlift, postSnatch, postCleanjerk);
+
+			//return Ok("Successfully Updated your profile");
+			return Ok("true");
 		}
 	}
 }
