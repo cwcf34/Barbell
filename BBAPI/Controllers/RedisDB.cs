@@ -150,8 +150,10 @@ namespace BBAPI.Controllers
 						{
 							getResponse = getResponse + data[i];
 						}
-						getResponse = getResponse + data[i] + ",";
-
+						else
+						{
+							getResponse = getResponse + data[i] + ",";
+						}
 					}
 					return getResponse;
 
