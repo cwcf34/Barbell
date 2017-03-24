@@ -146,8 +146,12 @@ namespace BBAPI.Controllers
 
 					for (int i = 0; i < data.Length; i++)
 					{
-						
-						getResponse = getResponse + i + ": "+ data[i] + ",";
+						if (i == data.Length - 1)
+						{
+							getResponse = getResponse + data[i];
+						}
+						getResponse = getResponse + data[i] + ",";
+
 					}
 					return getResponse;
 
