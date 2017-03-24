@@ -1,6 +1,7 @@
 using System;
 using System.Net.Mail;
 using StackExchange.Redis;
+using BBAPI.Models;
 
 namespace BBAPI.Controllers
 {
@@ -121,7 +122,7 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-        public string getUserHashData(string email)
+		public object getUserHashData(string email)
 		{
 
 			int emailVerifyResponse = emailVerify(email);
@@ -141,11 +142,14 @@ namespace BBAPI.Controllers
 					var key = "user:" + email;
 					var data = new HashEntry[] { };
 					data = cache.HashGetAll(key);
+
+
 					string getResponse = string.Empty;
+
 					for (int i = 0; i < data.Length; i++)
 					{
 						
-						getResponse = getResponse + data[i] + ",";
+						getResponse = getResponse + i + ": "+ data[i] + ",";
 					}
 					return getResponse;
 
