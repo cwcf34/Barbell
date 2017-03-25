@@ -95,16 +95,16 @@ namespace BBAPI.Controllers
 			var key = "user:" + email;
 
 			//parse email and body data
-			char[] delimiterChars = { '{', '}', ',', ':' };
+			char[] delimiterChars = { '{', '}', ',', ':', ' ' };
 			string[] postParams = data.Split(delimiterChars);
 
-			var postName = postParams[2];
-			var postPass = postParams[4];
+			var postName = postParams[2] + " " + postParams[3];
+			var postPass = postParams[5];
 
 			//if name or password fields are empty
-			if (string.IsNullOrWhiteSpace(postParams[2]) || string.IsNullOrWhiteSpace(postParams[4]))
+			if (string.IsNullOrWhiteSpace(postParams[2]) || string.IsNullOrWhiteSpace(postParams[5]))
 			{
-				string postError = "user=" + postParams[2] + "pss=" + postParams[3];
+				string postError = "user=" + postParams[2] + " " + postParams[3] + "pss=" + postParams[5];
 				return Ok(postError);
 			}
 
