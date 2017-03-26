@@ -51,13 +51,16 @@ class RegistrationViewController: UIViewController {
             
             if(dbResponse == true){
                 
-//                //Add user info to persistent Database
-//                let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
-//                user.fname = firstNameField.text
-//                user.lname = lastNameField.text
-//                user.email = emailField.text
-//                
-//                CoreDataController.saveContext()
+                // Nuke existing Core Data
+                //Add user info to persistent Database
+                CoreDataController.clearData()
+
+                let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
+                user.fname = firstNameField.text
+                user.lname = lastNameField.text
+                user.email = emailField.text
+                
+                CoreDataController.saveContext()
             }
             
         } else if(!emailField.hasText || !passwordField.hasText || !firstNameField.hasText || !lastNameField.hasText) {

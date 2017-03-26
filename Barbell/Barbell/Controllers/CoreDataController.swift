@@ -63,4 +63,20 @@ class CoreDataController{
         }
         return [User]()
     }
+    
+    class func clearData() {
+        let context = getContext()
+        
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+        let request = NSBatchDeleteRequest(fetchRequest: fetch)
+        var result : NSPersistentStoreResult?
+        do {
+            result = try context.execute(request)
+        }
+        catch{
+            print(result?.description)
+        }
+        saveContext()
+        
+    }
 }

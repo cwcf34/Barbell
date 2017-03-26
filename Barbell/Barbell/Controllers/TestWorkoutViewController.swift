@@ -36,8 +36,8 @@ class TestWorkoutViewController: UIViewController {
             let workoutModel = WorkoutModel.init(id: Int(idTextField.text!)!, name: nameTextField.text!, weight: Int(weightTextField.text!)!)
             
             print(workoutModel.name)
-            let dbResponse = DataAccess.createWorkout(workoutModel: workoutModel);
-            print(dbResponse)
+            //let dbResponse = DataAccess.createWorkout(workoutModel: workoutModel);
+            //print(dbResponse)
         }
     
 

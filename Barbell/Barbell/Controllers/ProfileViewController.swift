@@ -127,9 +127,11 @@ class ProfileViewController: UIViewController {
                 
             }
             
+            
         }
         
         CoreDataController.saveContext()
+        DataAccess.setUser(user: (user.first)!)
     }
 
     /*

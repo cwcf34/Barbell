@@ -8,7 +8,7 @@
 
 import UIKit
 import Foundation
-
+import CoreData
 
 public class DataAccess {
     
@@ -64,24 +64,21 @@ public class DataAccess {
         return result
     }
     
-    class func createWorkout(workoutModel: WorkoutModel) -> Bool {
-        var request = URLRequest(url: URL(string: apiURL + "user/c@me.com/")!)
+    class func setUser(user: User) -> Bool {
+        var request = URLRequest(url: URL(string: apiURL + "user/" + user.email! + "/")!)
         request.httpMethod = "PUT"
         
         var responseString  = "false"
         
         print("Request STRING \(request)")
         
-        let putString = "\"{id:\(workoutModel.id)" + "," + "name:\(workoutModel.name)" + "," + "weight:\(workoutModel.weight)}\" "
+        //let putString = "\"{id:\(workoutModel.id)" + "," + "name:\(workoutModel.name)" + "," + "weight:\(workoutModel.weight)}\" "
+        let putString = "\"{name:\(user.fname!)" + " " + "\(user.lname!)" + "," + "email:" + "," + "password:" + "," + "age:\(user.age)" + "," + "weight:\(user.weight)" + "," + "squat:\(user.squat)" + "," + "bench:\(user.bench)" + "," + "deadlift:\(user.deadlift)" + "," + "snatch:\(user.snatch)" + "," + "cleanjerk:\(user.cleanAndJerk)}\" "
         
-        do {
-            let putData = try JSONSerialization.data(withJSONObject: putString, options: [])
-            print ("\n\(putData)\n\n\n")
-        } catch {
-            let err = error as NSError
-            print("ERROR IS \(err)")
-        }
+        let postDATA:Data = putString.data(using: String.Encoding.utf8)!
         
+        request.httpBody = postDATA
+    
         let headers = [
             "content-type": "application/json"
         ]
@@ -115,7 +112,7 @@ public class DataAccess {
         var request = URLRequest(url: URL(string: apiURL + "login/\(loginInfo.email)/")!)
         
         var responseString  = "false"
-        
+        var result = false
         request.httpMethod = "POST"
         
         let postString = "\"{password:\(loginInfo.password)}\" "
@@ -130,6 +127,8 @@ public class DataAccess {
         
         request.allHTTPHeaderFields = headers
         
+        let sem = DispatchSemaphore(value: 0)
+        
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {                                                 // check for fundamental networking error
                 print("error=\(error)")
@@ -142,14 +141,87 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
+            
+            if(responseString == "\"true\""){
+                result = true
+            } else{
+                result = false
+            }
+            
+            sem.signal()
         }
-        task.resume()
         
-        if(responseString == "true"){
-            return true
-        } else{
-            return false
+        task.resume()
+        sem.wait()
+        
+        return result
+        
+
+    }
+    
+    class func getUserfromRedis(email : String){
+        var request = URLRequest(url: URL(string: apiURL + "user/\(email)/")!)
+        let user : User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
+        request.httpMethod = "GET"
+        var responseString = ""
+        
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print(responseString)
+            
+           
+            sem.signal()
         }
+        
+        task.resume()
+        sem.wait()
+        
+        var tokensA = responseString.components(separatedBy: ",")
+        var tokensNames = tokensA[4].components(separatedBy: " ")
+        var tokensEmail = tokensA[1].components(separatedBy: " ")
+        var tokensAge = tokensA[3].components(separatedBy: " ")
+        var tokensWeight = tokensA[2].components(separatedBy: " ")
+        var tokensSquat = tokensA[0].components(separatedBy: " ")
+        var tokensBench = tokensA[8].components(separatedBy: " ")
+        var tokensDeadlift = tokensA[9].components(separatedBy: " ")
+        var tokensSnatch = tokensA[6].components(separatedBy: " ")
+        var tokensCJ = tokensA[7].components(separatedBy: " ")
+        var tokensWO = tokensA[10].components(separatedBy: " ")
+        
+        user.fname = tokensNames[1]
+        user.lname = tokensNames[2]
+        user.email = tokensEmail[1]
+        user.age = Int16(tokensAge[1])!
+        user.weight = Int16(tokensWeight[1])!
+        user.squat = Int16(tokensSquat[1])!
+        user.bench = Int16(tokensBench[1])!
+        user.deadlift = Int16(tokensDeadlift[1])!
+        user.snatch = Int16(tokensSnatch[1])!
+        user.cleanAndJerk = Int16(tokensCJ[1])!
+        user.workoutsCompleted = Int16(tokensWO[1])!
+        
+        
+        CoreDataController.saveContext()
+        return
+
     }
 }

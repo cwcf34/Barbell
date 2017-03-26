@@ -39,22 +39,21 @@ class LoginViewController: UIViewController {
             let loginInfo = LoginInfo.init(email: email.text!, password: password.text!)
             
             //print(loginInfo.email)
-            let dbResponse = true //DataAccess.login(loginInfo: loginInfo)
+            let dbResponse = DataAccess.login(loginInfo: loginInfo)
             
             if(dbResponse == false){
                 self.present(invalidLogin, animated: true, completion: nil)
                 
             }
             if(dbResponse == true){
-                //CoreDataController.clearData()
+                CoreDataController.clearData()
                 
-                //Add user info to persistent Database
-//                let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
-//                user.fname = firstNameField.text
-//                user.lname = lastNameField.text
-//                user.email = emailField.text
+                //Load all existing user info for provided email from redis into Core data
+                //DataAccess.getUserfromRedis(email: email.text!)
+                
                 
                 //CoreDataController.saveContext()
+                print("it worked")
             }
             
 
