@@ -31,6 +31,12 @@ class RegistrationViewController: UIViewController {
     
     //Handle register button clicked
     @IBAction func register(_ sender: Any) {
+        let alert = UIAlertController(title: "Attention!", message: "Please provide all of the feilds in order to register", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
+        
+        let usernameTaken = UIAlertController(title: "Attention!", message: "The email that you provided is already taken", preferredStyle: UIAlertControllerStyle.alert)
+        usernameTaken.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
+        
         if(emailField.hasText && passwordField.hasText && firstNameField.hasText && lastNameField.hasText) {
             
             let registerInfo = RegisterInfo.init(email: emailField.text!, password: passwordField.text!, firstName: firstNameField.text!, lastName: lastNameField.text!)
@@ -39,31 +45,23 @@ class RegistrationViewController: UIViewController {
             let dbResponse = DataAccess.register(registerInfo: registerInfo)
             print(dbResponse)
             
-            //Add user info to persistent Database
-            let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
-            user.fname = firstNameField.text
-            user.lname = lastNameField.text
-            user.email = emailField.text
+            if(dbResponse == false){
+                self.present(usernameTaken, animated: true, completion: nil)
+            }
             
-            CoreDataController.saveContext()
+            if(dbResponse == true){
+                
+//                //Add user info to persistent Database
+//                let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
+//                user.fname = firstNameField.text
+//                user.lname = lastNameField.text
+//                user.email = emailField.text
+//                
+//                CoreDataController.saveContext()
+            }
             
-        } else {
-            if(!emailField.hasText) {
-                emailField.text = "Please enter an email."
-                emailField.textColor = UIColor.red
-            }
-            if(!passwordField.hasText) {
-                passwordField.text = "Please enter a password."
-                passwordField.textColor = UIColor.red
-            }
-            if(!firstNameField.hasText) {
-                firstNameField.text = "Please enter a first name."
-                firstNameField.textColor = UIColor.red
-            }
-            if(!lastNameField.hasText) {
-                lastNameField.text = "Please enter a last name."
-                lastNameField.textColor = UIColor.red
-            }
+        } else if(!emailField.hasText || !passwordField.hasText || !firstNameField.hasText || !lastNameField.hasText) {
+            self.present(alert, animated: true, completion: nil)
         }
     }
 

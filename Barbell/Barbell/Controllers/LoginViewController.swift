@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class LoginViewController: UIViewController {
     
@@ -25,31 +26,41 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func login(_ sender: Any) {
+        let notAllFormsFilled = UIAlertController(title: "Attention!", message: "Please provide all the fields in order to login", preferredStyle: UIAlertControllerStyle.alert)
+        notAllFormsFilled.addAction(UIAlertAction(title: "Click here to complete registration", style: UIAlertActionStyle.default, handler: nil))
+        
+        let invalidLogin = UIAlertController(title: "Attention!", message: "You entered either the wrong username or password", preferredStyle: UIAlertControllerStyle.alert)
+        invalidLogin.addAction(UIAlertAction(title: "Click here to complete registration", style: UIAlertActionStyle.default, handler: nil))
+
+
+        
         if(email.hasText && password.hasText) {
             
             let loginInfo = LoginInfo.init(email: email.text!, password: password.text!)
             
             //print(loginInfo.email)
-            let dbResponse = DataAccess.login(loginInfo: loginInfo)
-            print(dbResponse)
+            let dbResponse = true //DataAccess.login(loginInfo: loginInfo)
             
-            //Add user info to persistent Database
-            //let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
-            //user.fname = firstNameField.text
-            //user.lname = lastNameField.text
-            //user.email = emailField.text
-            
-            //CoreDataController.saveContext()
-            
-        } else {
-            if(!email.hasText) {
-                email.text = "Please enter an email."
-                email.textColor = UIColor.red
+            if(dbResponse == false){
+                self.present(invalidLogin, animated: true, completion: nil)
+                
             }
-            if(!password.hasText) {
-                password.text = "Please enter a password."
-                password.textColor = UIColor.red
+            if(dbResponse == true){
+                //CoreDataController.clearData()
+                
+                //Add user info to persistent Database
+//                let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
+//                user.fname = firstNameField.text
+//                user.lname = lastNameField.text
+//                user.email = emailField.text
+                
+                //CoreDataController.saveContext()
             }
+            
+
+            
+        } else if(!email.hasText || !password.hasText) {
+            self.present(notAllFormsFilled, animated: true, completion: nil)
         }
     }
 

@@ -39,7 +39,7 @@ class WeekTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Test")
-        self.performSegue(withIdentifier: "showExercisesSegue", sender: self)
+        self.performSegue(withIdentifier: "addExercisesSegue", sender: self)
     }
 
     /*

@@ -16,13 +16,12 @@ public class DataAccess {
     class func register(registerInfo: RegisterInfo) -> Bool {
         var request = URLRequest(url: URL(string: apiURL + "user/\(registerInfo.email)/")!)
         request.httpMethod = "POST"
+        var x : Int = -1
+        
+        var result = false
         
         
-        print("Request STRING \(request)")
-        
-        //"{name:hi ads, password:kj}"\\
-        let postString = "\"{name:\(registerInfo.firstName)" + ", " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
-        //print("POST STRING::\(postString)")
+        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
@@ -32,36 +31,48 @@ public class DataAccess {
             "content-type": "application/json"
         ]
         
+
+        
         request.allHTTPHeaderFields = headers
+        let sem = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
+                    guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                    print("error=\(error)")
+                    return
+                }
+                
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("response = \(response)")
+                }
+                
+                let responseString = String(data: data, encoding: .utf8)!
+                
+                if(responseString == "\"true\""){
+                    result = true
+                } else{
+                    result = false
+                }
+                
+                sem.signal()
             }
             
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
-            }
-            
-            let responseString = String(data: data, encoding: .utf8)
-            print("responseString = \(responseString)")
-        }
         task.resume()
+        sem.wait()
         
-        return true
+        return result
     }
     
     class func createWorkout(workoutModel: WorkoutModel) -> Bool {
         var request = URLRequest(url: URL(string: apiURL + "user/c@me.com/")!)
         request.httpMethod = "PUT"
         
+        var responseString  = "false"
+        
         print("Request STRING \(request)")
         
-        //"{name:hi ads, password:kj}"\\
         let putString = "\"{id:\(workoutModel.id)" + "," + "name:\(workoutModel.name)" + "," + "weight:\(workoutModel.weight)}\" "
-        print("PUT STRING::\(putString)")
         
         do {
             let putData = try JSONSerialization.data(withJSONObject: putString, options: [])
@@ -71,16 +82,6 @@ public class DataAccess {
             print("ERROR IS \(err)")
         }
         
-        /*
-         if let postData = try JSONSerialization.jsonObject(with: (postString as? Data)!, options: []) {
-         
-         }catch{
-         
-         }
-         */
-        
-        
-        
         let headers = [
             "content-type": "application/json"
         ]
@@ -98,24 +99,26 @@ public class DataAccess {
                 print("response = \(response)")
             }
             
-            let responseString = String(data: data, encoding: .utf8)
+            responseString = String(data: data, encoding: .utf8)!
             print("responseString = \(responseString)")
         }
         task.resume()
         
-        return true
+        if(responseString == "true"){
+            return true
+        } else{
+            return false
+        }
     }
     
     class func login (loginInfo: LoginInfo ) -> Bool{
-        var request = URLRequest(url: URL(string: apiURL + "user/\(loginInfo.email)/")!)
+        var request = URLRequest(url: URL(string: apiURL + "login/\(loginInfo.email)/")!)
+        
+        var responseString  = "false"
+        
         request.httpMethod = "POST"
         
-        
-        //print("Request STRING \(request)")
-        
-        //"{name:hi ads, password:kj}"\\
         let postString = "\"{password:\(loginInfo.password)}\" "
-        //print("POST STRING::\(postString)")
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
@@ -138,11 +141,15 @@ public class DataAccess {
                 print("response = \(response)")
             }
             
-            let responseString = String(data: data, encoding: .utf8)
+            responseString = String(data: data, encoding: .utf8)!
             print("responseString = \(responseString)")
         }
         task.resume()
         
-        return true
+        if(responseString == "true"){
+            return true
+        } else{
+            return false
+        }
     }
 }
