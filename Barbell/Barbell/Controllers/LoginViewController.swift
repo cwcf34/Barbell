@@ -55,30 +55,8 @@ class LoginViewController: UIViewController {
                 print(CoreDataController.getUser().first?.email!)
                 
                 
-                //CoreDataController.saveContext()
-                
-                /*var user = [User]()
-                user = CoreDataController.getUser()
-                CoreDataController.clearData()
-                let user1:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
-                user1.email = email.text
-                user1.fname = user.first?.fname
-                user1.lname = user.first?.lname
-                user1.age = (user.first?.age)!
-                user1.weight = (user.first?.weight)!
-                user1.squat = (user.first?.squat)!
-                user1.bench = (user.first?.bench)!
-                user1.deadlift = (user.first?.deadlift)!
-                user1.cleanAndJerk = (user.first?.cleanAndJerk)!
-                user1.snatch = (user.first?.snatch)!
-                user1.workoutsCompleted = (user.first?.workoutsCompleted)!
-                
-                
-                CoreDataController.saveContext()
-                //DataAccess.setUser(user: (user.first)!)*/
             }
             
-
             
         } else if(!email.hasText || !password.hasText) {
             self.present(notAllFormsFilled, animated: true, completion: nil)
