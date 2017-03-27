@@ -212,7 +212,7 @@ public class DataAccess {
         var tokensWO = tokensA[10].components(separatedBy: " ")
         
         user.fname = tokensNames[1]
-        user.lname = tokensNames[2]
+        //user.lname = tokensNames[2]
         user.email = tokensEmail[1]
         user.age = Int16(tokensAge[1])!
         user.weight = Int16(tokensWeight[1])!

@@ -30,7 +30,7 @@ class CoreDataController{
      * The store could not be migrated to the current model version.
      Check the error message to determine what the actual problem was.
      */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                return
             }
         })
         return container
@@ -65,18 +65,48 @@ class CoreDataController{
     }
     
     class func clearData() {
-        let context = getContext()
-        
+        //let context = getContext()
+        let isEmpty = entityIsEmpty(entity: "User")
+        if isEmpty {
+            return
+        }
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
         let request = NSBatchDeleteRequest(fetchRequest: fetch)
         var result : NSPersistentStoreResult?
-        do {
-            result = try context.execute(request)
+        /*do {
+            result = try request.execute
         }
         catch{
             print(result?.description)
-        }
-        saveContext()
+        }*/
+        //saveContext()
         
+    }
+    
+    class func entityIsEmpty(entity: String) -> Bool{
+        //var appDel:AppDelegate = UIApplication.sharedApplication().delegae as! AppDelegate
+        //let context = NSManagedObjectContext()
+        let context = getContext()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        var results : NSArray?
+        var count = 0
+       
+        do {
+            count = try context.count(for: request)
+            if count == 0{
+                return true
+            }
+            else{
+                return false
+            }
+            /*print("isempty results" + (results?.description)!)
+            if results?.count == 0{*/
+
+        } catch {
+            print("error")
+            return true
+        }
+        
+       
     }
 }
