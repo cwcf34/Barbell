@@ -199,8 +199,45 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
-        var tokensA = responseString.components(separatedBy: ",")
-        var tokensNames = tokensA[0].components(separatedBy: " ")
+        var tokens = responseString.components(separatedBy: ",")
+        //var token = [String]()
+        for i in tokens{
+            var token = i.components(separatedBy: ":")
+                if token[0] == "name"{
+                    let nameTokens = token[1].components(separatedBy: " ")
+                    user.fname = nameTokens[0]
+                    user.lname = nameTokens[1]
+                if token[0] == "email"{
+                    user.email = token[1]
+                }
+                if token[0] == "age"{
+                    user.age = Int16(token[1])!
+                }
+                if token[0] == "weight"{
+                    user.weight = Int16(token[1])!
+                }
+                if token[0] == "squat"{
+                    user.squat = Int16(token[1])!
+                }
+                if token[0] == "bench"{
+                    user.bench = Int16(token[1])!
+                }
+                if token[0] == "deadlift"{
+                    user.deadlift = Int16(token[1])!
+                }
+                if token[0] == "cleanjerk"{
+                    user.cleanAndJerk = Int16(token[1])!
+                }
+                if token[0] == "snatch"{
+                    user.snatch = Int16(token[1])!
+                }
+                if token[0] == "workoutsCompleted"{
+                    user.workoutsCompleted = Int16(token[1])!
+                }
+            }
+        
+        }
+        /*var tokensNames = tokensA[0].components(separatedBy: " ")
         var tokensEmail = tokensA[2].components(separatedBy: " ")
         var tokensAge = tokensA[4].components(separatedBy: " ")
         var tokensWeight = tokensA[9].components(separatedBy: " ")
@@ -221,7 +258,7 @@ public class DataAccess {
         user.deadlift = Int16(tokensDeadlift[1])!
         user.snatch = Int16(tokensSnatch[1])!
         user.cleanAndJerk = Int16(tokensCJ[1])!
-        user.workoutsCompleted = 0//Int16(tokensWO[1])!
+        user.workoutsCompleted = 0//Int16(tokensWO[1])!*/
         
         
         CoreDataController.saveContext()
