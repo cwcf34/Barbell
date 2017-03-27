@@ -1,16 +1,16 @@
-﻿
-using BBAPI.Models;
+﻿using BBAPI.Models;
 using System.Web.Http;
 using System.Collections.Generic;
+
 
 namespace BBAPI.Controllers
 {
 	public class UserController : ApiController
 	{
 		User[] users = {
-			new User {Email = "dlopez@me.com", Name = "me", Gender = "male", Age = 22},
-			new User {Email = "d@me.com", Name = "you", Gender = "male", Age = 57},
-			new User {Email = "dl@me.com", Name = "us", Gender = "male", Age = 100}
+			new User {Email = "dlopez@me.com", Name = "me", Age = 22},
+			new User {Email = "d@me.com", Name = "you", Age = 57},
+			new User {Email = "dl@me.com", Name = "us", Age = 100}
 		};
 
 		//use singleton
@@ -36,8 +36,25 @@ namespace BBAPI.Controllers
 		[HttpGet]
 		public IHttpActionResult GetUser(string email)
 		{
-			//search for user hash w key in cache
-			return Ok(redisCache.getUserHashData(email));
+
+			var data = redisCache.getUserHashData(email);
+
+
+			if (data[0].Name == "data")
+			{
+				//parse email and body data
+				char[] delimiterChars = { '{', '}', ',', ':', ' ' };
+				string[] postParams = data[0].Value.ToString().Split(delimiterChars);
+
+
+				var returnedUser = new User { };
+
+				return Ok(data[0].Value.ToString());
+			}
+			else
+			{
+				return Ok(data[0].Value.ToString());
+			}
 		}
 
 
@@ -145,7 +162,7 @@ namespace BBAPI.Controllers
 
 			var currEmail = email;
 			//parse email and body data
-			char[] delimiterChars = { '{', '}', ',', ':', ' '};
+			char[] delimiterChars = { '{', '}', ',', ':', ' ' };
 			string[] postParams = data.Split(delimiterChars);
 
 			//grab any other data that is to be changed
@@ -160,43 +177,93 @@ namespace BBAPI.Controllers
 			var postCleanjerk = postParams[18];
 
 
-			if ( string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
+			if (string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
 			{
 				return Ok("All fields are null! Send Data.");
 			}
 
-			//grab old user Hash data
-			var currData = redisCache.getUserHashData(currEmail);
-			var currRedisData = currData.Split(delimiterChars);
+			//grab curr user Hash data
+			var returnData = redisCache.getUserHashData(currEmail);
 
-			//before any logic, make sure email is formatted and exists
-			var emailVerfiyResponse = redisCache.emailVerify(currEmail);
-
-			if (emailVerfiyResponse != -3)
+			if (returnData[0].Name == "error")
 			{
-				//send error code
-				switch (emailVerfiyResponse)
-				{
-					case -1:
-						return Ok("email is empty");
 
-					case -2:
-						return Ok("email is not vaild format");
-
-					case 1:
-						return Ok("email doesnt exist");
-
-					case -4:
-						return Ok("some try catch error");
-				}
+				return Ok("false");
 			}
 
-			//check if post data is null
+			var currData = returnData[0].Value.ToString();
+			var currRedisData = currData.Split(delimiterChars);
 
+			/*
+			//verifying email exists when grabbing current user hash
+			HashEntry[] userHash = redisCache.getUserHashData(currEmail);
 
-			//if null, user keeps curr name
+			if (userHash.Length == 1)
+			{
+				return Ok("false");
+				//return Ok(userHash[0].Value);
+
+			}
+			else
+			{
+
+				/*
+				for (int i = 0; i < userHash.Length; i++)
+				{
+					if (string.IsNullOrWhiteSpace(postName) && userHash[i].Name == "name")
+					{
+						postName = userHash[i].Value;
+					}
+					if (string.IsNullOrWhiteSpace(postAge) && userHash[i].Name == "age")
+					{
+						postAge = userHash[i].Value;
+					}
+					if (string.IsNullOrWhiteSpace(postWeight) && userHash[i].Name == "weight")
+					{
+						postWeight = userHash[i].Value;
+					}
+					if (string.IsNullOrWhiteSpace(postBench) && userHash[i].Name == "bench")
+					{
+						postBench = userHash[i].Value;
+					}
+					if (string.IsNullOrWhiteSpace(postSquat) && userHash[i].Name == "squat")
+					{
+						postSquat = userHash[i].Value;
+					}
+					if (string.IsNullOrWhiteSpace(postDeadlift) && userHash[i].Name == "deadlift")
+					{
+						postDeadlift = userHash[i].Value;
+					}
+					if (string.IsNullOrWhiteSpace(postSnatch) && userHash[i].Name == "snatch")
+					{
+						postSnatch = userHash[i].Value;
+					}
+					if (string.IsNullOrWhiteSpace(postCleanjerk) && userHash[i].Name == "cleanjerk")
+					{
+						postCleanjerk = userHash[i].Value;
+					}
+
+					if (string.IsNullOrWhiteSpace(postPassword) && userHash[i].Name == "password")
+					{
+						postPassword = userHash[i].Value;
+					}
+					else
+					{
+						postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
+					}
+
+					redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight, postBench, postSquat, postDeadlift, postSnatch, postCleanjerk);
+
+					//return Ok("Successfully Updated your profile");
+					return Ok("true");
+				}
+
+			}
+			*/
+			//if null, user keeps curr value at key
 			if (string.IsNullOrWhiteSpace(postName))
 			{
+
 				for (int i = 0; i < currRedisData.Length; i++)
 				{
 					if (currRedisData[i] == "name")
@@ -314,10 +381,11 @@ namespace BBAPI.Controllers
 				postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 			}
 
-			redisCache.updateUserHash("user:" + currEmail, postName, postAge, postWeight, postWeight, postBench,postSquat, postDeadlift, postSnatch, postCleanjerk);
+			redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight, postBench, postSquat, postDeadlift, postSnatch, postCleanjerk);
 
 			//return Ok("Successfully Updated your profile");
 			return Ok("true");
+
 		}
 	}
 }
