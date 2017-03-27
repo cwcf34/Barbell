@@ -59,6 +59,14 @@ class RegistrationViewController: UIViewController {
                 user.fname = firstNameField.text
                 user.lname = lastNameField.text
                 user.email = emailField.text
+                user.age = 0
+                user.weight = 0
+                user.squat = 0
+                user.bench = 0
+                user.deadlift = 0
+                user.cleanAndJerk = 0
+                user.snatch = 0
+                user.workoutsCompleted = 0
                 
                 CoreDataController.saveContext()
             }

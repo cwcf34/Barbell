@@ -13,6 +13,7 @@ import CoreData
 public class DataAccess {
     
     private static var apiURL = "http://bbapi.eastus.cloudapp.azure.com/api/"
+    
     class func register(registerInfo: RegisterInfo) -> Bool {
         var request = URLRequest(url: URL(string: apiURL + "user/\(registerInfo.email)/")!)
         request.httpMethod = "POST"
@@ -21,7 +22,8 @@ public class DataAccess {
         var result = false
         
         
-        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
+        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + "," + "password:\(registerInfo.password)}\" "
+        print("this is register postString" + postString)
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
@@ -48,6 +50,7 @@ public class DataAccess {
                 }
                 
                 let responseString = String(data: data, encoding: .utf8)!
+                print("this is register reponse string: " + responseString )
                 
                 if(responseString == "\"true\""){
                     result = true
@@ -116,6 +119,7 @@ public class DataAccess {
         request.httpMethod = "POST"
         
         let postString = "\"{password:\(loginInfo.password)}\" "
+        print("this is postString: " + postString)
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
@@ -141,7 +145,7 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            
+            print("this is login response string: " + responseString)
             if(responseString == "\"true\""){
                 result = true
             } else{
@@ -186,7 +190,7 @@ public class DataAccess {
             
             responseString = String(data: data, encoding: .utf8)!
             
-            print(responseString)
+            print("Get user response " + responseString)
             
            
             sem.signal()
@@ -196,15 +200,15 @@ public class DataAccess {
         sem.wait()
         
         var tokensA = responseString.components(separatedBy: ",")
-        var tokensNames = tokensA[4].components(separatedBy: " ")
-        var tokensEmail = tokensA[1].components(separatedBy: " ")
-        var tokensAge = tokensA[3].components(separatedBy: " ")
-        var tokensWeight = tokensA[2].components(separatedBy: " ")
-        var tokensSquat = tokensA[0].components(separatedBy: " ")
-        var tokensBench = tokensA[8].components(separatedBy: " ")
-        var tokensDeadlift = tokensA[9].components(separatedBy: " ")
+        var tokensNames = tokensA[0].components(separatedBy: " ")
+        var tokensEmail = tokensA[2].components(separatedBy: " ")
+        var tokensAge = tokensA[4].components(separatedBy: " ")
+        var tokensWeight = tokensA[9].components(separatedBy: " ")
+        var tokensSquat = tokensA[3].components(separatedBy: " ")
+        var tokensBench = tokensA[7].components(separatedBy: " ")
+        var tokensDeadlift = tokensA[1].components(separatedBy: " ")
         var tokensSnatch = tokensA[6].components(separatedBy: " ")
-        var tokensCJ = tokensA[7].components(separatedBy: " ")
+        var tokensCJ = tokensA[5].components(separatedBy: " ")
         var tokensWO = tokensA[10].components(separatedBy: " ")
         
         user.fname = tokensNames[1]
@@ -217,11 +221,11 @@ public class DataAccess {
         user.deadlift = Int16(tokensDeadlift[1])!
         user.snatch = Int16(tokensSnatch[1])!
         user.cleanAndJerk = Int16(tokensCJ[1])!
-        user.workoutsCompleted = Int16(tokensWO[1])!
+        user.workoutsCompleted = 0//Int16(tokensWO[1])!
         
         
         CoreDataController.saveContext()
-        return
+        return 
 
     }
 }

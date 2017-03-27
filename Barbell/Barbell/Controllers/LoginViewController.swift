@@ -40,6 +40,7 @@ class LoginViewController: UIViewController {
             
             //print(loginInfo.email)
             let dbResponse = DataAccess.login(loginInfo: loginInfo)
+            print("this is db Response:" + dbResponse.description)
             
             if(dbResponse == false){
                 self.present(invalidLogin, animated: true, completion: nil)
@@ -48,12 +49,33 @@ class LoginViewController: UIViewController {
             if(dbResponse == true){
                 CoreDataController.clearData()
                 
+                
                 //Load all existing user info for provided email from redis into Core data
-                //DataAccess.getUserfromRedis(email: email.text!)
+                DataAccess.getUserfromRedis(email: email.text!)
+                print(CoreDataController.getUser().first?.email!)
                 
                 
                 //CoreDataController.saveContext()
-                print("it worked")
+                
+                /*var user = [User]()
+                user = CoreDataController.getUser()
+                CoreDataController.clearData()
+                let user1:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
+                user1.email = email.text
+                user1.fname = user.first?.fname
+                user1.lname = user.first?.lname
+                user1.age = (user.first?.age)!
+                user1.weight = (user.first?.weight)!
+                user1.squat = (user.first?.squat)!
+                user1.bench = (user.first?.bench)!
+                user1.deadlift = (user.first?.deadlift)!
+                user1.cleanAndJerk = (user.first?.cleanAndJerk)!
+                user1.snatch = (user.first?.snatch)!
+                user1.workoutsCompleted = (user.first?.workoutsCompleted)!
+                
+                
+                CoreDataController.saveContext()
+                //DataAccess.setUser(user: (user.first)!)*/
             }
             
 

@@ -30,6 +30,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         user = CoreDataController.getUser()
+        print("profile users email is " + (user.first?.email)!)
         
         
         if let user = user as? [User] {
