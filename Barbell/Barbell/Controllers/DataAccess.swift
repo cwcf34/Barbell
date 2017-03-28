@@ -237,32 +237,7 @@ public class DataAccess {
             }
         
         }
-        /*var tokensNames = tokensA[0].components(separatedBy: " ")
-        var tokensEmail = tokensA[2].components(separatedBy: " ")
-        var tokensAge = tokensA[4].components(separatedBy: " ")
-        var tokensWeight = tokensA[9].components(separatedBy: " ")
-        var tokensSquat = tokensA[3].components(separatedBy: " ")
-        var tokensBench = tokensA[7].components(separatedBy: " ")
-        var tokensDeadlift = tokensA[1].components(separatedBy: " ")
-        var tokensSnatch = tokensA[6].components(separatedBy: " ")
-        var tokensCJ = tokensA[5].components(separatedBy: " ")
-        var tokensWO = tokensA[10].components(separatedBy: " ")
-        
-        user.fname = tokensNames[1]
-        //user.lname = tokensNames[2]
-        user.email = tokensEmail[1]
-        user.age = Int16(tokensAge[1])!
-        user.weight = Int16(tokensWeight[1])!
-        user.squat = Int16(tokensSquat[1])!
-        user.bench = Int16(tokensBench[1])!
-        user.deadlift = Int16(tokensDeadlift[1])!
-        user.snatch = Int16(tokensSnatch[1])!
-        user.cleanAndJerk = Int16(tokensCJ[1])!
-        user.workoutsCompleted = 0//Int16(tokensWO[1])!*/
-        
-        
         CoreDataController.saveContext()
         return 
-
     }
 }
