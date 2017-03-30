@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class CreateWorkoutTableViewController: UITableViewController {
+class RoutineTableViewController: UITableViewController {
     
     //var routines = [Routine]()
 
@@ -49,6 +49,15 @@ class CreateWorkoutTableViewController: UITableViewController {
         return cell
     }
  
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(indexPath.row == 0) {
+            self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
+        } else {
+            self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
+        }
+        
+    }
+    
     /*func loadRoutines() -> [Routine]{
         
         
