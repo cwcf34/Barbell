@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class addWorkOutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class addRoutineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var routine: UITextField!
@@ -125,7 +125,7 @@ class addWorkOutViewController: UIViewController, UITableViewDataSource, UITable
 class CustomCell: UITableViewCell {
     
     
-    var myTableViewController: addWorkOutViewController?
+    var myTableViewController: addRoutineViewController?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
