@@ -56,7 +56,7 @@ class RegistrationViewController: UIViewController {
                 let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
                 user.fname = firstNameField.text
                 user.lname = lastNameField.text
-                user.email = emailField.text
+                user.email = emailField.text!
                 user.age = 0
                 user.squat = 0
                 user.bench = 0

@@ -251,12 +251,13 @@ public class DataAccess {
         }
     }
 
-    class func saveUserToRedis(){
+    class func saveUserToRedis(email : String){
         let user = CoreDataController.getUser()
+        print(email)
         //var request = URLRequest(url: URL(string: apiURL + "user/\(user.first?.email)/")!)
-        var request = URLRequest(url: URL(string: apiURL + "user/\(user.first?.email)/")!)
+        var request = URLRequest(url: URL(string: apiURL + "user/\(email)/")!)
         request.httpMethod = "PUT"
-        let putString = "\"{name:\(String(describing: user.first?.fname)) " + "\(String(describing: user.first?.lname))" + "," + "age:\(String(describing: user.first?.age))" + "," + "weight:\(String(describing: user.first?.weight))" + "," + "squat:\(String(describing: user.first?.squat))" + "," + "bench:\(String(describing: user.first?.bench))" + "," + "deadlift:\(String(describing: user.first?.deadlift))" + "," + "cleanjerk:\(String(describing: user.first?.cleanAndJerk))" + "," + "snatch:\(String(describing: user.first?.snatch))" + "," + "workoutsCompleted:\(String(describing: user.first?.workoutsCompleted))" + "," + "password:}\" "
+        let putString = "\"{name:\(String(describing: user.first?.fname)) " + "\(String(describing: user.first?.lname))" + "," + "password:" + "," + "age:\(String(describing: user.first?.age))" + "," + "weight:\(String(describing: user.first?.weight))" + "," + "squat:\(String(describing: user.first?.squat))" + "," + "bench:\(String(describing: user.first?.bench))" + "," + "deadlift:\(String(describing: user.first?.deadlift))" + "," + "snatch:\(String(describing: user.first?.snatch))" + "," + "cleanjerk:\(String(describing: user.first?.cleanAndJerk))" + "," + "workoutsCompleted:\(String(describing: user.first?.workoutsCompleted))}\" "
         var responseString = ""
         let headers = [
             "content-type": "application/json"
