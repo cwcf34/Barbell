@@ -146,7 +146,7 @@ namespace BBAPI.Controllers
 			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "\"{name:new Name,password:pw,age:age,weight:wt,squat:0,bench:0,deadlift:0,snatch:0,cleanjerk:0}\"";
+				var resp2 = "\"{name:new Name,password:pw,age:age,weight:wt,squat:0,bench:0,deadlift:0,snatch:0,cleanjerk:0,workoutsCompleted:0}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -166,6 +166,7 @@ namespace BBAPI.Controllers
 			var postDeadlift = postParams[15];
 			var postSnatch = postParams[17];
 			var postCleanjerk = postParams[19];
+			var postWorkouts = postParams[21];
 
 
 			if ( string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
@@ -310,6 +311,19 @@ namespace BBAPI.Controllers
 				}
 			}
 
+			//if null, user keeps curr workouts
+			if (string.IsNullOrWhiteSpace(postWorkouts))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "workoutsCompleted")
+					{
+						//grab curr name
+						postWorkouts = currRedisData[i + 2];
+					}
+				}
+			}
+
 			//if null, user keeps curr password
 			if (string.IsNullOrWhiteSpace(postPassword))
 			{
@@ -327,7 +341,7 @@ namespace BBAPI.Controllers
 				postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 			}
 
-			redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight, postBench, postSquat, postDeadlift, postSnatch, postCleanjerk);
+			redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight, postBench, postSquat, postDeadlift, postSnatch, postCleanjerk, postWorkouts);
 
 			//return Ok("Successfully Updated your profile");
 			return Ok("true");

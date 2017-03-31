@@ -61,9 +61,9 @@ namespace BBAPI.Controllers
 		/// <summary>
 		/// Updates the user hash.
 		/// </summary>
-		public void updateUserHash(string key, string name, string password, string age, string weight, string bench, string squat, string deadlift, string snatch, string cleanjerk)
+		public void updateUserHash(string key, string name, string password, string age, string weight, string bench, string squat, string deadlift, string snatch, string cleanjerk, string workouts)
 		{
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("password", password), new HashEntry("age", age), new HashEntry("weight", weight), new HashEntry("bench", bench), new HashEntry("squat", squat), new HashEntry("deadlift", deadlift), new HashEntry("snatch", snatch), new HashEntry("cleanjerk", cleanjerk) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("password", password), new HashEntry("age", age), new HashEntry("weight", weight), new HashEntry("bench", bench), new HashEntry("squat", squat), new HashEntry("deadlift", deadlift), new HashEntry("snatch", snatch), new HashEntry("cleanjerk", cleanjerk), new HashEntry("workoutsCompleted", workouts) });
 		}
 
 		public void addRoutineToUserList(string key, int routineId)
