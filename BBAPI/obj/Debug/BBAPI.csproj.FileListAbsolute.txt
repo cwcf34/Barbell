@@ -29,3 +29,19 @@ C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Ba
 C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\obj\Debug\BBAPI.csprojResolveAssemblyReference.cache
 C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\obj\Debug\BBAPI.dll
 C:\Users\Daniel\Google Drive\Classes\CS4980 - Senior Capstone Design 2\GitHub\Barbell\BBAPI\obj\Debug\BBAPI.pdb
+C:\dev\Barbell\BBAPI\bin\BBAPI.dll.config
+C:\dev\Barbell\BBAPI\bin\BBAPI.dll
+C:\dev\Barbell\BBAPI\bin\BBAPI.pdb
+C:\dev\Barbell\BBAPI\bin\Newtonsoft.Json.dll
+C:\dev\Barbell\BBAPI\bin\StackExchange.Redis.dll
+C:\dev\Barbell\BBAPI\bin\System.Net.Http.Formatting.dll
+C:\dev\Barbell\BBAPI\bin\System.Web.Http.dll
+C:\dev\Barbell\BBAPI\bin\System.Web.Http.WebHost.dll
+C:\dev\Barbell\BBAPI\bin\System.Net.Http.Formatting.xml
+C:\dev\Barbell\BBAPI\bin\System.Web.Http.xml
+C:\dev\Barbell\BBAPI\bin\System.Web.Http.WebHost.xml
+C:\dev\Barbell\BBAPI\bin\Newtonsoft.Json.xml
+C:\dev\Barbell\BBAPI\bin\StackExchange.Redis.xml
+C:\dev\Barbell\BBAPI\obj\Debug\BBAPI.csprojResolveAssemblyReference.cache
+C:\dev\Barbell\BBAPI\obj\Debug\BBAPI.dll
+C:\dev\Barbell\BBAPI\obj\Debug\BBAPI.pdb
