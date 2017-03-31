@@ -47,7 +47,7 @@ class LoginViewController: UIViewController {
             }
             if(dbResponse == true){
                 CoreDataController.clearData()
-                CoreDataController.clearData()
+                
                 
                 //Add user info to persistent Database
                 DataAccess.getUserfromRedis(email: email.text!)

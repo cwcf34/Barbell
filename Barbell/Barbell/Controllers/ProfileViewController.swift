@@ -130,6 +130,7 @@ class ProfileViewController: UIViewController {
         }
         
         CoreDataController.saveContext()
+        DataAccess.saveUserToRedis()
     }
 
     /*
