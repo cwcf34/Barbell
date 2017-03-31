@@ -1,7 +1,7 @@
-﻿using BBAPI.Models;
+﻿
+using BBAPI.Models;
 using System.Web.Http;
 using System.Collections.Generic;
-
 
 namespace BBAPI.Controllers
 {
@@ -36,25 +36,8 @@ namespace BBAPI.Controllers
 		[HttpGet]
 		public IHttpActionResult GetUser(string email)
 		{
-
-			var data = redisCache.getUserHashData(email);
-
-
-			if (data[0].Name == "data")
-			{
-				//parse email and body data
-				char[] delimiterChars = { '{', '}', ',', ':', ' ' };
-				string[] postParams = data[0].Value.ToString().Split(delimiterChars);
-
-
-				var returnedUser = new User { };
-
-				return Ok(data[0].Value.ToString());
-			}
-			else
-			{
-				return Ok(data[0].Value.ToString());
-			}
+			//search for user hash w key in cache
+			return Ok(redisCache.getUserHashData(email));
 		}
 
 
@@ -155,115 +138,70 @@ namespace BBAPI.Controllers
 			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "\"{name:name password:pw, age:age, weight:wt, squat:0, bench:0, deadlift:0, snatch:0, cleanjerk:0}\"";
+				var resp2 = "\"{name:new Name,password:pw,age:age,weight:wt,squat:0,bench:0,deadlift:0,snatch:0,cleanjerk:0}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
 
 			var currEmail = email;
 			//parse email and body data
-			char[] delimiterChars = { '{', '}', ',', ':', ' ' };
+			char[] delimiterChars = { '{', '}', ',', ':', ' '};
 			string[] postParams = data.Split(delimiterChars);
 
 			//grab any other data that is to be changed
-			var postName = postParams[2];
-			var postPassword = postParams[4];
-			var postAge = postParams[6];
-			var postWeight = postParams[8];
-			var postSquat = postParams[10];
-			var postBench = postParams[12];
-			var postDeadlift = postParams[14];
-			var postSnatch = postParams[16];
-			var postCleanjerk = postParams[18];
+			var postName = postParams[2] + " " + postParams[3];
+			var postPassword = postParams[5];
+			var postAge = postParams[7];
+			var postWeight = postParams[9];
+			var postSquat = postParams[11];
+			var postBench = postParams[13];
+			var postDeadlift = postParams[15];
+			var postSnatch = postParams[17];
+			var postCleanjerk = postParams[19];
 
 
-			if (string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
+			if ( string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
 			{
 				return Ok("All fields are null! Send Data.");
 			}
 
-			//grab curr user Hash data
-			var returnData = redisCache.getUserHashData(currEmail);
-
-			if (returnData[0].Name == "error")
+			//grab old user Hash data
+			var returnedUser = redisCache.getUserHashData(currEmail);
+			var currData = string.Empty;
+			if (returnedUser[0].Name == "data")
 			{
-
-				return Ok("false");
+				currData = returnedUser[0].Value.ToString();
 			}
-
-			var currData = returnData[0].Value.ToString();
 			var currRedisData = currData.Split(delimiterChars);
 
-			/*
-			//verifying email exists when grabbing current user hash
-			HashEntry[] userHash = redisCache.getUserHashData(currEmail);
+			//before any logic, make sure email is formatted and exists
+			var emailVerfiyResponse = redisCache.emailVerify(currEmail);
 
-			if (userHash.Length == 1)
+			if (emailVerfiyResponse != -3)
 			{
-				return Ok("false");
-				//return Ok(userHash[0].Value);
-
-			}
-			else
-			{
-
-				/*
-				for (int i = 0; i < userHash.Length; i++)
+				//send error code
+				switch (emailVerfiyResponse)
 				{
-					if (string.IsNullOrWhiteSpace(postName) && userHash[i].Name == "name")
-					{
-						postName = userHash[i].Value;
-					}
-					if (string.IsNullOrWhiteSpace(postAge) && userHash[i].Name == "age")
-					{
-						postAge = userHash[i].Value;
-					}
-					if (string.IsNullOrWhiteSpace(postWeight) && userHash[i].Name == "weight")
-					{
-						postWeight = userHash[i].Value;
-					}
-					if (string.IsNullOrWhiteSpace(postBench) && userHash[i].Name == "bench")
-					{
-						postBench = userHash[i].Value;
-					}
-					if (string.IsNullOrWhiteSpace(postSquat) && userHash[i].Name == "squat")
-					{
-						postSquat = userHash[i].Value;
-					}
-					if (string.IsNullOrWhiteSpace(postDeadlift) && userHash[i].Name == "deadlift")
-					{
-						postDeadlift = userHash[i].Value;
-					}
-					if (string.IsNullOrWhiteSpace(postSnatch) && userHash[i].Name == "snatch")
-					{
-						postSnatch = userHash[i].Value;
-					}
-					if (string.IsNullOrWhiteSpace(postCleanjerk) && userHash[i].Name == "cleanjerk")
-					{
-						postCleanjerk = userHash[i].Value;
-					}
+					case -1:
+						return Ok("email is empty");
 
-					if (string.IsNullOrWhiteSpace(postPassword) && userHash[i].Name == "password")
-					{
-						postPassword = userHash[i].Value;
-					}
-					else
-					{
-						postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
-					}
+					case -2:
+						return Ok("email is not vaild format");
 
-					redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight, postBench, postSquat, postDeadlift, postSnatch, postCleanjerk);
+					case 1:
+						return Ok("email doesnt exist");
 
-					//return Ok("Successfully Updated your profile");
-					return Ok("true");
+					case -4:
+						return Ok("some try catch error");
 				}
-
 			}
-			*/
-			//if null, user keeps curr value at key
+
+			//check if post data is null
+
+
+			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postName))
 			{
-
 				for (int i = 0; i < currRedisData.Length; i++)
 				{
 					if (currRedisData[i] == "name")
@@ -381,11 +319,10 @@ namespace BBAPI.Controllers
 				postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 			}
 
-			redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight, postBench, postSquat, postDeadlift, postSnatch, postCleanjerk);
+			redisCache.updateUserHash("user:" + currEmail, postName, postAge, postWeight, postWeight, postBench,postSquat, postDeadlift, postSnatch, postCleanjerk);
 
 			//return Ok("Successfully Updated your profile");
 			return Ok("true");
-
 		}
 	}
 }
