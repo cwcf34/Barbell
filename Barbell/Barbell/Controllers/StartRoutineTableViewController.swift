@@ -1,14 +1,14 @@
 //
-//  WeekTableViewController.swift
+//  StartRoutineTableViewController.swift
 //  Barbell
 //
-//  Created by Cody Cameron on 3/21/17.
+//  Created by Cody Cameron on 3/30/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
 import UIKit
 
-class WeekTableViewController: UITableViewController {
+class StartRoutineTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,20 +26,6 @@ class WeekTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 7
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "addExercisesSegue", sender: self)
-    }
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
