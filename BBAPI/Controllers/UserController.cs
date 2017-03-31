@@ -327,7 +327,7 @@ namespace BBAPI.Controllers
 				postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 			}
 
-			redisCache.updateUserHash("user:" + currEmail, postName, postAge, postWeight, postWeight, postBench,postSquat, postDeadlift, postSnatch, postCleanjerk);
+			redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight, postBench, postSquat, postDeadlift, postSnatch, postCleanjerk);
 
 			//return Ok("Successfully Updated your profile");
 			return Ok("true");
