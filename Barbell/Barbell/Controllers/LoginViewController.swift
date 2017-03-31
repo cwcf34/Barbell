@@ -46,13 +46,14 @@ class LoginViewController: UIViewController {
                 
             }
             if(dbResponse == true){
-                //CoreDataController.clearData()
+                CoreDataController.clearData()
+                CoreDataController.clearData()
                 
-                //Add user info to persistent Database
-//                let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
-//                user.fname = firstNameField.text
-//                user.lname = lastNameField.text
-//                user.email = emailField.text
+                Add user info to persistent Database
+                let user:User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.persistentContainer.viewContext) as! User
+                user.fname = firstNameField.text
+                user.lname = lastNameField.text
+                user.email = emailField.text
                 
                 //CoreDataController.saveContext()
             }
