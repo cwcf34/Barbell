@@ -22,7 +22,7 @@ public class DataAccess {
         var result = false
         
         
-        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
+        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + "," + "password:\(registerInfo.password)}\" "
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
@@ -104,6 +104,7 @@ public class DataAccess {
             print("responseString = \(responseString)")
         }
         task.resume()
+        //sem.wait()
         
         if(responseString == "true"){
             return true
@@ -130,6 +131,7 @@ public class DataAccess {
         ]
         
         request.allHTTPHeaderFields = headers
+        let sem = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {                                                 // check for fundamental networking error
@@ -139,15 +141,17 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
+                print("login response = \(response)")
             }
             
             responseString = String(data: data, encoding: .utf8)!
             print("responseString = \(responseString)")
+            sem.signal()
         }
         task.resume()
+        sem.wait()
         
-        if(responseString == "true"){
+        if(responseString == "\"true\""){
             return true
         } else{
             return false
@@ -196,8 +200,8 @@ public class DataAccess {
             var token = i.components(separatedBy: ":")
             if token[0] == "name"{
                 let nameTokens = token[1].components(separatedBy: " ")
-                user.fname = nameTokens[0]
-                user.lname = nameTokens[1]
+                user.fname = nameTokens[1]
+                user.lname = nameTokens[2]
                 if token[0] == "email"{
                     user.email = token[1]
                 }
