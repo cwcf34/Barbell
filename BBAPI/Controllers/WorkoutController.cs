@@ -56,12 +56,8 @@ namespace BBAPI.Controllers
 			return Ok(redisCache.getWorkoutHashData(key));
 		}
 
-		//update old Workout
-		[HttpPut]
-		public IHttpActionResult PutWorkout(string email, [FromBody]string data)
-		{
-			return Ok();
-		}
+
+
 
 		private int getRandomId()
 		{

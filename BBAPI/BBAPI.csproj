@@ -76,6 +76,7 @@
     <Content Include="index.html" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ExerciseController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -108,7 +109,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:49851/</IISUrl>
+          <IISUrl>http://localhost:64746/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
