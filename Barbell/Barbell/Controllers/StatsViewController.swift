@@ -7,13 +7,26 @@
 //
 
 import UIKit
+import CoreData
 
 class StatsViewController: UIViewController {
 
+    @IBOutlet weak var setsTextArea: UITextField!
+    @IBOutlet weak var repsTextArea: UITextField!
+    @IBOutlet weak var weightTextArea: UITextField!
+    @IBOutlet weak var muscleGroup: UILabel!
+    @IBOutlet weak var exerciseName: UILabel!
+    
+    
+    var muscle : String!
+    var exercise : String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        muscleGroup.text = muscle
+        exerciseName.text = exercise
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,6 +35,25 @@ class StatsViewController: UIViewController {
     }
     
     @IBAction func saveStats(_ sender: Any) {
+        
+        do{
+           let exercise : Exercises = try NSEntityDescription.insertNewObject(forEntityName: "Exercises", into: CoreDataController.getContext()) as! Exercises
+        
+            exercise.muscleGroup = muscle
+            exercise.name = self.exercise
+            exercise.sets = Int16(setsTextArea.text!)!
+            exercise.reps = Int16(repsTextArea.text!)!
+            exercise.weight = Int16(weightTextArea.text!)!
+        }catch let error as NSError{
+            print("\n\n\n\n\n\n\n\n")
+            print(error)
+        }
+        
+        
+
+        
+        CoreDataController.saveContext()
+        
         self.dismiss(animated: true, completion: nil)
     }
 
