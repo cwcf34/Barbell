@@ -11,12 +11,16 @@ using System.Text;
 
 namespace OAuthIS3
 {
-    //Handles authentication logic
+    /// <summary>
+    /// Handles authentication logic
+    /// </summary>
     public class UserService : UserServiceBase
     {
-        //Description: Performs authentication logic based 
-        //Input: LocalAuthenticationContext object
-        //Output: LocalAuthenticationContext.AuthenticateResult
+        /// <summary>
+        /// Performs authentication logic
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override async Task AuthenticateLocalAsync(LocalAuthenticationContext context)
         {
             User user = DBController.findUser(context.UserName);
@@ -40,6 +44,13 @@ namespace OAuthIS3
         }
 
 
+        /// <summary>
+        /// Computes a hash from a string
+        /// </summary>
+        /// <param name="plainText">the plain text to be hashed </param>
+        /// <param name="hashAlgorithm">the hashing algorithm to be used</param>
+        /// <param name="saltBytes">the bytes used to salt (optional</param>
+        /// <returns>the value of the hash as a string</returns>
         private static string ComputeHash(string plainText, string hashAlgorithm, byte[] saltBytes)
         {
             // If salt is not specified, generate it.
@@ -123,7 +134,13 @@ namespace OAuthIS3
             return hashValue;
         }
 
-
+        /// <summary>
+        /// Verifies a hash
+        /// </summary>
+        /// <param name="plainText">the plain text to be hashed</param>
+        /// <param name="hashAlgorithm">the hashing algorithm to be used</param>
+        /// <param name="hashValue">the value of the hash stored the database</param>
+        /// <returns>true if they match, else false</returns>
         private static bool VerifyHash(string plainText, string hashAlgorithm, string hashValue)
         {
 
