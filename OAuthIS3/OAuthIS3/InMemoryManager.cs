@@ -28,6 +28,7 @@ namespace OAuthIS3
             };
         }
 
+        //The scopes that clients can have access to
         public IEnumerable<Scope> GetScopes()
         {
             return new[]
@@ -43,10 +44,12 @@ namespace OAuthIS3
             };
         }
 
+        //Returns the clients (applications) that we're granting tokens to
         public IEnumerable<Client> GetClients()
         {
             return new[]
             {
+                //The only client we're using
                 new Client
                 {
                     ClientId = "iOS",

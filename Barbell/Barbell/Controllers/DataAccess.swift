@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import CoreData
 
 
 public class DataAccess {
@@ -21,7 +22,7 @@ public class DataAccess {
         var result = false
         
         
-        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + ", " + "password:\(registerInfo.password)}\" "
+        let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + "," + "password:\(registerInfo.password)}\" "
         
         let postDATA:Data = postString.data(using: String.Encoding.utf8)!
         
@@ -103,6 +104,7 @@ public class DataAccess {
             print("responseString = \(responseString)")
         }
         task.resume()
+        //sem.wait()
         
         if(responseString == "true"){
             return true
@@ -129,6 +131,47 @@ public class DataAccess {
         ]
         
         request.allHTTPHeaderFields = headers
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("login response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            print("responseString = \(responseString)")
+            sem.signal()
+        }
+        task.resume()
+        sem.wait()
+        
+        if(responseString == "\"true\""){
+            return true
+        } else{
+            return false
+        }
+    }
+
+    
+    class func getUserfromRedis(email : String){
+        var request = URLRequest(url: URL(string: apiURL + "user/\(email)/")!)
+        let user : User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
+        request.httpMethod = "GET"
+        var responseString = ""
+        
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {                                                 // check for fundamental networking error
@@ -142,14 +185,132 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
+            
+            print("Get user response " + responseString)
+            
+            
+            sem.signal()
         }
-        task.resume()
         
-        if(responseString == "true"){
-            return true
-        } else{
-            return false
+        task.resume()
+        sem.wait()
+        
+        let tokens = responseString.components(separatedBy: ",")
+        //var token = [String]()
+        if let user = user as? User {
+            for i in tokens{
+                var token = i.components(separatedBy: ":")
+                if token[0] == "\"name"{
+                    token[0].remove(at: token[0].startIndex)
+                    let nameTokens = token[1].components(separatedBy: " ")
+                    user.fname = nameTokens[1]
+                    user.lname = nameTokens[2]
+                }
+                if token[0] == "email"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.email = token[1]
+                }
+                if token[0] == "age"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.age = Int16(token[1])!
+                }
+                if token[0] == "weight"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.weight = Int16(token[1])!
+                }
+                if token[0] == "squat"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.squat = Int16(token[1])!
+                }
+                if token[0] == "bench"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.bench = Int16(token[1])!
+                }
+                if token[0] == "deadlift"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.deadlift = Int16(token[1])!
+                    
+                }
+                if token[0] == "cleanjerk"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.cleanAndJerk = Int16(token[1])!
+                }
+                if token[0] == "snatch"{
+                    token[1].remove(at: token[1].startIndex)
+                    user.snatch = Int16(token[1])!
+                }
+                if token[0] == "workoutsCompleted"{
+                    var woTokens = token[1].components(separatedBy: "\"")
+                    //token[1].remove(at: token[1].endIndex)
+                    woTokens[0].remove(at: woTokens[0].startIndex)
+                    user.workoutsCompleted = Int16(woTokens[0])!
+                }
+            }
+            CoreDataController.saveContext()
+            return
         }
+    }
+
+    class func saveUserToRedis(email : String){
+        let user = CoreDataController.getUser()
+        print(email)
+        //var request = URLRequest(url: URL(string: apiURL + "user/\(user.first?.email)/")!)
+        var request = URLRequest(url: URL(string: apiURL + "user/\(email)/")!)
+        request.httpMethod = "PUT"
+        var putString = ""
+        if let user = user as? User,
+            let fname = user.fname,
+            let lname = user.lname,
+            let age = String(user.age) as? String,
+            let weight = String(user.weight) as? String,
+            let squat = String(user.squat) as? String,
+            let bench = String(user.bench) as? String,
+            let deadlift = String(user.deadlift) as? String,
+            let snatch = String(user.snatch) as? String,
+            let cleanAndJerk = String(user.cleanAndJerk) as? String,
+            let workoutsCompleted = String(user.workoutsCompleted) as? String{
+        
+
+        putString = "\"{name:\(fname) " + "\(lname)" + "," + "password:" + "," + "age:\(age)" + "," + "weight:\(weight)" + "," + "squat:\(squat)" + "," + "bench:\(bench)" + "," + "deadlift:\(deadlift)" + "," + "snatch:\(snatch)" + "," + "cleanjerk:\(cleanAndJerk)" + "," + "workoutsCompleted:\(workoutsCompleted)}\" "
+        }
+        //let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + "," + "password:\(registerInfo.password)}\" "
+        
+        
+        var responseString = ""
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        print(putString)
+    
+        let postDATA:Data = putString.data(using: String.Encoding.utf8)!
+        
+        request.httpBody = postDATA
+        request.allHTTPHeaderFields = headers
+
+        let sem = DispatchSemaphore(value: 0)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Save user to redis response " + responseString)
+            
+            
+            sem.signal()
+        }
+
+        task.resume()
+        sem.wait()
+        return
     }
 }

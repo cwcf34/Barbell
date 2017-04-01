@@ -53,14 +53,65 @@ class CoreDataController{
     }
     //Since there should only ever be one User entity in coredata at a time, this funcion will return that user
     
-    class func getUser() -> [User]{
+    class func getUser() -> User{
         let fetchRequest = NSFetchRequest<User>(entityName: "User")
+        var foundUser = [User] ()
         do{
-            let foundUser = try getContext().fetch(fetchRequest)
-            return foundUser
+            foundUser = try getContext().fetch(fetchRequest)
+            return (foundUser.first)!
         }catch{
             print("we messed this up")
         }
-        return [User]()
+        return (foundUser.first)!
+    }
+    
+    class func clearData() {
+        let context = getContext()
+        let isEmpty = entityIsEmpty(entity: "User")
+        if isEmpty {
+            return
+        }
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+        let request = NSBatchDeleteRequest(fetchRequest: fetch)
+        var result : NSPersistentStoreResult?
+        do {
+            result = try context.execute(request)
+        }
+        catch{
+            print(result?.description)
+        }
+        saveContext()
+        
+    }
+    
+    class func entityIsEmpty(entity: String) -> Bool{
+        //var appDel:AppDelegate = UIApplication.sharedApplication().delegae as! AppDelegate
+        //let context = NSManagedObjectContext()
+        let context = getContext()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        //let error = NSError?.self
+        
+        
+        
+        do {
+            let results:NSArray? = try context.fetch(request) as NSArray
+            if let res = results {
+                if res.count == 0{
+                    return true
+                }
+            
+                else{
+                    return false
+                }
+            }
+            /*print("isempty results" + (results?.description)!)
+             if results?.count == 0{*/
+            
+        } catch {
+            print("error")
+            return true
+        }
+        
+        
     }
 }

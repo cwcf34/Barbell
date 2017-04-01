@@ -77,7 +77,37 @@ namespace BBAPI.Controllers
 			cache.ListLeftPush(key, routineId);
 		}
 
-		public string validateUserPass(string key)
+        /// <summary>
+        /// Add a completed exercise to the hash for that user's exercise.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="date"></param>
+        /// <param name="exerciseData"></param>
+        /// <returns>True if the operation succeeded, else false</returns>
+        public bool addExercise(string key, string date, string exerciseData)
+        {
+
+            if(key.Length > 0 && date.Length > 0 && exerciseData.Length > 0)
+            {
+                try
+                {
+                    //Add a field to the hash for that exercise with the key as the current date and the data as the data from the completed exercise
+                    cache.HashSet(key, new HashEntry[] { new HashEntry(date, exerciseData) });
+                }
+                catch
+                {
+                    //An exception occured
+                    return false;
+                }
+                //Success
+                return true;
+            }
+
+            //parameter checking failed
+            return false;
+        }
+
+        public string validateUserPass(string key)
 		{
 			return cache.HashGet(key, "password");
 		}
