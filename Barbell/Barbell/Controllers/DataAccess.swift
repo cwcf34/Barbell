@@ -257,11 +257,31 @@ public class DataAccess {
         //var request = URLRequest(url: URL(string: apiURL + "user/\(user.first?.email)/")!)
         var request = URLRequest(url: URL(string: apiURL + "user/\(email)/")!)
         request.httpMethod = "PUT"
-        let putString = "\"{name:\(String(describing: user.first?.fname)) " + "\(String(describing: user.first?.lname))" + "," + "password:" + "," + "age:\(String(describing: user.first?.age))" + "," + "weight:\(String(describing: user.first?.weight))" + "," + "squat:\(String(describing: user.first?.squat))" + "," + "bench:\(String(describing: user.first?.bench))" + "," + "deadlift:\(String(describing: user.first?.deadlift))" + "," + "snatch:\(String(describing: user.first?.snatch))" + "," + "cleanjerk:\(String(describing: user.first?.cleanAndJerk))" + "," + "workoutsCompleted:\(String(describing: user.first?.workoutsCompleted))}\" "
+        var putString = ""
+        if let user = user as? User,
+            let fname = user.fname,
+            let lname = user.lname,
+            let age = String(user.age) as? String,
+            let weight = String(user.weight) as? String,
+            let squat = String(user.squat) as? String,
+            let bench = String(user.bench) as? String,
+            let deadlift = String(user.deadlift) as? String,
+            let snatch = String(user.snatch) as? String,
+            let cleanAndJerk = String(user.cleanAndJerk) as? String,
+            let workoutsCompleted = String(user.workoutsCompleted) as? String{
+        
+
+        putString = "\"{name:\(fname) " + "\(lname)" + "," + "password:" + "," + "age:\(age)" + "," + "weight:\(weight)" + "," + "squat:\(squat)" + "," + "bench:\(bench)" + "," + "deadlift:\(deadlift)" + "," + "snatch:\(snatch)" + "," + "cleanjerk:\(cleanAndJerk)" + "," + "workoutsCompleted:\(workoutsCompleted)}\" "
+        }
+        //let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + "," + "password:\(registerInfo.password)}\" "
+        
+        
         var responseString = ""
         let headers = [
             "content-type": "application/json"
         ]
+        
+        print(putString)
     
         let postDATA:Data = putString.data(using: String.Encoding.utf8)!
         
