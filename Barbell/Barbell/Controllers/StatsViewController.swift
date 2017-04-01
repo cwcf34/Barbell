@@ -36,23 +36,23 @@ class StatsViewController: UIViewController {
     
     @IBAction func saveStats(_ sender: Any) {
         
-        do{
-           let exercise : Exercises = try NSEntityDescription.insertNewObject(forEntityName: "Exercises", into: CoreDataController.getContext()) as! Exercises
-        
-            exercise.muscleGroup = muscle
-            exercise.name = self.exercise
-            exercise.sets = Int16(setsTextArea.text!)!
-            exercise.reps = Int16(repsTextArea.text!)!
-            exercise.weight = Int16(weightTextArea.text!)!
-        }catch let error as NSError{
-            print("\n\n\n\n\n\n\n\n")
-            print(error)
-        }
+//        do{
+//           let exercise : Exercises = try NSEntityDescription.insertNewObject(forEntityName: "Exercises", into: CoreDataController.getContext()) as! Exercises
+//        
+//            exercise.muscleGroup = muscle
+//            exercise.name = self.exercise
+//            exercise.sets = Int16(setsTextArea.text!)!
+//            exercise.reps = Int16(repsTextArea.text!)!
+//            exercise.weight = Int16(weightTextArea.text!)!
+//        }catch let error as NSError{
+//            print("\n\n\n\n\n\n\n\n")
+//            print(error)
+//        }
         
         
 
         
-        CoreDataController.saveContext()
+        //CoreDataController.saveContext()
         
         self.dismiss(animated: true, completion: nil)
     }
