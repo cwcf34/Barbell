@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BBAPI.Models
+﻿namespace BBAPI.Models
 {
 	public class User
 	{
