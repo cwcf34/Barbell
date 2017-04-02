@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Product App</title>
+</head>
+<body>
+
+  <div>
+    <h2>All Users</h2>
+    <ul id="products" />
+  </div>
+  <div>
+    <h2>Search by email</h2>
+    <input type="text" id="prodId" />
+    <input type="button" value="Search" onclick="findName();" />
+    <p id="product" />
+  </div>
+  <div>
+    <h2>Create acct by email</h2>
+    <input type="text" id="prodNewId" />
+	<input type="text" id="prodName" />
+	<input type="text" id="prodPassword" />
+    <input type="button" value="Search" onclick="create();" />
+
+  </div>
+		
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+  <script>
+    var uri = 'api/user';
+
+    $(document).ready(function () {
+      // Send an AJAX request
+      $.getJSON(uri)
+          .done(function (data) {
+            // On success, 'data' contains a list of products.
+            $.each(data, function (key, item) {
+              // Add a list item for the product.
+              $('<li>', { text: formatItem(item) }).appendTo($('#products'));
+            });
+          });
+    });
+
+    function formatItem(item) {
+      return item.Name + ': $' + item.Email;
+    }
+
+    function findName() {
+      var email = $('#prodId').val();
+      $.getJSON(uri + '/' + email + '/')
+          .done(function (data) {
+            $('#product').text(formatItem(data));
+          })
+          .fail(function (jqXHR, textStatus, err) {
+            $('#product').text('Error: ' + err);
+          });
+    }
+
+	function create() {
+      var email = $('#prodNewId').val();
+	  var name = $('#prodName').val();
+	  var pw = $('#prodPassword').val();
+	  //var data = '{"name":' +'"'+name+'",' +'"pw":'+ '"'+pw+'"}';
+
+	  //JSON format should be within " " 
+	  //"anything within quotes "name:darryl,Age:22,"
+	  var data = '"{name:' + name + ', password:' + pw + '}"';
+	  console.log(data);
+
+	  var settings = {
+  		"async": true,
+  		"crossDomain": true,
+  		"url": uri + '/' + email + '/',
+  		"method": "POST",
+		"headers": {
+			"content-type": "application/json",
+			"cache-control": "no-cache"
+		},
+		"processData": false,
+		"data":data
+	  }
+
+	  $.ajax(settings).done(function (response) {
+	  	console.log(response);
+	  });
+			 
+    }
+  </script>
+</body>
+</html>
