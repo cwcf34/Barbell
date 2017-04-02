@@ -58,8 +58,8 @@ namespace BBAPI.Controllers
 			string[] dataArr = data.Split(delimiterChars);
 
 			//extract data from the data given
-			string date = dataArr[1];
-			string exerciseName = dataArr[3];
+			string date = dataArr[2];
+			string exerciseName = dataArr[4];
 			string exerciseData = dataArr[6] + ":" + dataArr[8] + ":" + dataArr[10];
 
 			string key = "user:" + email + ":" + exerciseName + "Data";
