@@ -139,19 +139,19 @@
 		C384A1C71E5D1FAA0026FD99 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				63FA5E121E722A1800DEE65D /* addRoutineViewController.swift */,
-				C3AB29631E8865BF006D97A4 /* AllExercisesTableViewController.swift */,
 				6F0E3CE11E6A038900357004 /* CoreDataController.swift */,
-				C384A1CB1E5D26AC0026FD99 /* DataAccess.swift */,
-				639BC8251E820210008FD198 /* ExercisesViewController.swift */,
 				6F0E3CE21E6A038900357004 /* LoginViewController.swift */,
-				6328E9141E78BE25005A5E3D /* ProfileViewController.swift */,
 				C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */,
-				C3E32C3A1E6F8E4800800545 /* RoutineTableViewController.swift */,
-				C33A5DB91E8D69A900936AA4 /* StartRoutineTableViewController.swift */,
-				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
+				C384A1CB1E5D26AC0026FD99 /* DataAccess.swift */,
 				6F0E3CE51E6A0C3000357004 /* TestWorkoutViewController.swift */,
+				C3E32C3A1E6F8E4800800545 /* RoutineTableViewController.swift */,
+				63FA5E121E722A1800DEE65D /* addRoutineViewController.swift */,
+				6328E9141E78BE25005A5E3D /* ProfileViewController.swift */,
 				C3FCF3E61E81EF7300E7BB0E /* WeekTableViewController.swift */,
+				639BC8251E820210008FD198 /* ExercisesViewController.swift */,
+				C3AB29631E8865BF006D97A4 /* AllExercisesTableViewController.swift */,
+				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
+				C33A5DB91E8D69A900936AA4 /* StartRoutineTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

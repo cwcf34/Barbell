@@ -116,7 +116,6 @@
                         <outlet property="firstNameField" destination="vMY-Jo-QfS" id="cPa-sS-sEh"/>
                         <outlet property="lastNameField" destination="dMV-EW-1hB" id="vEn-DQ-z7a"/>
                         <outlet property="passwordField" destination="vOf-zv-AMv" id="f2i-IO-PPG"/>
-                        <segue destination="wSQ-Bk-HAY" kind="show" identifier="registerSegue" id="cha-Y0-p8d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BEO-4g-hio" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -588,9 +587,6 @@
                             <rect key="frame" x="0.0" y="176" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Next"/>
-                            <connections>
-                                <action selector="nextExercise:" destination="w1U-63-aIH" eventType="touchUpInside" id="YY7-UP-Fyq"/>
-                            </connections>
                         </button>
                         <sections>
                             <tableViewSection id="mmn-UB-CT2">
@@ -793,22 +789,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Routine" id="U1o-0d-8zN">
-                        <barButtonItem key="rightBarButtonItem" title="Finished" id="Rwj-b5-LMw">
-                            <connections>
-                                <action selector="finishedWorkout:" destination="w1U-63-aIH" id="cTz-1q-d1L"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Finished" id="Rwj-b5-LMw"/>
                     </navigationItem>
-                    <connections>
-                        <outlet property="CompletedExerciseLabel" destination="hmK-lp-ClE" id="mhR-V3-65i"/>
-                        <outlet property="CompletedRepsTextArea" destination="44g-Js-ZNd" id="vcV-F3-3w7"/>
-                        <outlet property="CompletedSetsTextArea" destination="eFC-h9-u3e" id="xTq-lX-gdw"/>
-                        <outlet property="CompletedWeightTextArea" destination="fah-gd-Mrl" id="czy-zY-CmE"/>
-                        <outlet property="RountineExerciseLabel" destination="h11-Sf-zhp" id="ku4-26-Iyb"/>
-                        <outlet property="RountineRepsLabel" destination="nj0-KA-QrC" id="Tf1-YP-S5f"/>
-                        <outlet property="RountineSetsLabel" destination="BlO-UY-Anu" id="9F6-TW-caW"/>
-                        <outlet property="RountineWeightLabel" destination="qEK-e9-TSC" id="ol9-UF-eOt"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JDb-gq-Pgg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1439,7 +1421,10 @@
         <image name="first" width="30" height="30"/>
         <image name="second" width="30" height="30"/>
     </resources>
+<<<<<<< HEAD
     <inferredMetricsTieBreakers>
         <segue reference="hTW-Zn-CHp"/>
     </inferredMetricsTieBreakers>
+=======
+>>>>>>> parent of 082de66... Added some ui logic
 </document>
