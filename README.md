@@ -1,2 +1,0 @@
-# Barbell
-Capstone II Project
