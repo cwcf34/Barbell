@@ -37,7 +37,15 @@ namespace BBAPI.Controllers
 		public IHttpActionResult GetUser(string email)
 		{
 			//search for user hash w key in cache
-			return Ok(redisCache.getUserHashData(email));
+			var returnString = redisCache.getUserHashData(email);
+			if (returnString[0].Name == "data")
+			{
+				return Ok(returnString[0].Value.ToString());
+			}
+			else
+			{
+				return Ok(false);
+			}
 		}
 
 
