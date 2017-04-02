@@ -12,6 +12,7 @@ import CoreData
 class RoutineTableViewController: UITableViewController {
     
     //var routines = [Routine]()
+    var routine : Routine!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,11 +52,21 @@ class RoutineTableViewController: UITableViewController {
  
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(indexPath.row == 0) {
+            let routineObject : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
+            routine = routineObject
+            
             self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
         } else {
             self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
         }
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "addRoutineSegue"){
+            var viewController = segue.destination as! addRoutineViewController
+            viewController.routinePassed = routine
+        }
     }
     
     /*func loadRoutines() -> [Routine]{

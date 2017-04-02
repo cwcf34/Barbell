@@ -14,6 +14,7 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     var week : Int16!
     var day : String!
     var workout : Workout!
+    var routinePassed : Routine!
 
     override func viewDidLoad() {
         super.viewDidLoad()

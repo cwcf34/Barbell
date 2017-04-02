@@ -11,6 +11,7 @@ import UIKit
 class WeekTableViewController: UITableViewController {
     var week : Int16!
     var valueToPass : String!
+    var routinePassed : Routine!
     
     override func viewDidLoad() {
         print(week)
@@ -51,6 +52,7 @@ class WeekTableViewController: UITableViewController {
             var viewController = segue.destination as! ExercisesViewController
             viewController.week = week
             viewController.day = valueToPass
+            viewController.routinePassed = routinePassed!
         }
     }
     /*

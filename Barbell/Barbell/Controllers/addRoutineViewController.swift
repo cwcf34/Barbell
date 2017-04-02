@@ -22,6 +22,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     var user = [User]()
     var thisRoutine = Routine()
     var valueToPass : Int16!
+    var routinePassed : Routine!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,6 +111,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         if (segue.identifier == "showWeekSegue"){
             var viewController = segue.destination as! WeekTableViewController
             viewController.week = valueToPass
+            viewController.routinePassed = routinePassed
         }
     }
     
