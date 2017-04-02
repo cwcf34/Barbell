@@ -16,6 +16,7 @@ class AllExercisesTableViewController: UITableViewController {
     var exerciseToPass : String = ""
     
     var workout : Workout!
+    var routinePassed: Routine!
 
     func readJSONObject(object: [String: AnyObject]) {
         var exerciseNames = [String]()
@@ -107,6 +108,7 @@ class AllExercisesTableViewController: UITableViewController {
             viewController.muscle = valueToPass
             viewController.exercise = exerciseToPass
             viewController.workout = workout
+            viewController.routinePassed = routinePassed
         }
     }
     /*

@@ -9,12 +9,13 @@
 import UIKit
 import CoreData
 
-class ExercisesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ExercisesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, StatsViewControllerDelegate{
     @IBOutlet weak var exerciseTable: UITableView!
     var week : Int16!
     var day : String!
     var workout : Workout!
     var routinePassed : Routine!
+    var foundLifts = [Lift]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +26,6 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
         self.workout = workout
         workout.weekday = day
         workout.weeknumber = week
-        
-        
         
         exerciseTable.delegate = self
         exerciseTable.dataSource = self
@@ -43,24 +42,47 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
 //        // #warning Incomplete implementation, return the number of sections
 //        return 1
 //    }
+    override func viewWillAppear(_ animated: Bool) {
+        let context = CoreDataController.getContext()
+        
+        let fetchRequest = NSFetchRequest<Lift>(entityName: "Lift")
+        do{
+            foundLifts = try context.fetch(fetchRequest)
+            
+        }catch{
+            print("Bad getExercise query")
+        }
+        for lift in foundLifts{
+            print(lift.muscleGroup)
+        }
+        
+        exerciseTable.reloadData()
+        return
+    }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 1 + foundLifts.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "addExercise", for: indexPath)
+        var cell : UITableViewCell?
         
-        // Configure the cell...
+        if(indexPath.row == 0) {
+            cell = tableView.dequeueReusableCell(withIdentifier: "addExercise", for: indexPath)
+        } else {
+            cell = tableView.dequeueReusableCell(withIdentifier: "exerciseCell", for: indexPath)
+            cell?.textLabel?.text = foundLifts[indexPath.row-1].name
+        }
         
-        return cell
+        return cell!
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "loadExercisesSegue"){
             let viewController = segue.destination as! AllExercisesTableViewController
             viewController.workout = workout
+            viewController.routinePassed = routinePassed
         }
     }
     
@@ -71,6 +93,15 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
             routinePassed.addToWorkouts(workout)
             print("backing up")
         }
+    }
+    
+    func sendDataBackToHomePageViewController(routinePassed: Routine?, workoutPassed: Workout?) { //Custom delegate function which was defined inside child class to get the data and do the other stuffs.
+        
+        print(workout.weekday)
+        print(routinePassed?.description)
+        
+        self.routinePassed = routinePassed
+        self.workout = workoutPassed
     }
 
     /*

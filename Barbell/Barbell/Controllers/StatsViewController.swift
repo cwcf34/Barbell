@@ -9,6 +9,10 @@
 import UIKit
 import CoreData
 
+protocol StatsViewControllerDelegate: class { //Setting up a Custom delegate for this class. I am using `class` here to make it weak.
+    func sendDataBackToHomePageViewController(routinePassed: Routine?, workoutPassed: Workout?) //This function will send the data back to origin viewcontroller.
+}
+
 class StatsViewController: UIViewController {
 
     @IBOutlet weak var setsTextArea: UITextField!
@@ -17,10 +21,13 @@ class StatsViewController: UIViewController {
     @IBOutlet weak var muscleGroup: UILabel!
     @IBOutlet weak var exerciseName: UILabel!
     
+    weak var customDelegateForDataReturn: StatsViewControllerDelegate?
+    
     
     var muscle : String!
     var exercise : String!
     var workout : Workout!
+    var routinePassed : Routine!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,8 +61,40 @@ class StatsViewController: UIViewController {
         
         CoreDataController.saveContext()
         
-        self.dismiss(animated: true, completion: nil)
+//        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as! [UIViewController];
+//        for aViewController in viewControllers {
+//            if(aViewController is ExercisesViewController){
+//                let aVC = aViewController as! ExercisesViewController
+//                aVC.day = workout.weekday
+//                aVC.week = workout.weeknumber
+//                self.navigationController!.popToViewController(aViewController, animated: true);
+//            }
+//        }
+        
+        print(workout.weekday)
+        customDelegateForDataReturn?.sendDataBackToHomePageViewController(routinePassed: routinePassed, workoutPassed: self.workout)
+        
+        let viewControllers = self.navigationController!.viewControllers
+        for var aViewController in viewControllers
+        {
+            if aViewController is ExercisesViewController
+            {
+                _ = self.navigationController?.popToViewController(aViewController, animated: true)
+            }
+        }
+        
+        
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if (segue.identifier == "addExercisesSegue"){
+//            var viewController = segue.destination as! ExercisesViewController
+//            viewController.week = workout.weeknumber
+//            viewController.day = workout.weekday
+//            viewController.workout = workout
+//        }
+//    }
+    
 
     /*
     // MARK: - Navigation

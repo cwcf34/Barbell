@@ -10,6 +10,7 @@ import UIKit
 
 class StartRoutineTableViewController: UITableViewController {
 
+    @IBOutlet weak var DayOfTheWeek: UILabel!
     @IBOutlet weak var RountineExerciseLabel: UILabel!
     @IBOutlet weak var RountineSetsLabel: UILabel!
     @IBOutlet weak var RountineRepsLabel: UILabel!
@@ -48,9 +49,12 @@ class StartRoutineTableViewController: UITableViewController {
     
     @IBAction func nextExercise(_ sender: Any) {
         //TODO
+        //this should take us to the next exercise for that workout
     }
     @IBAction func finishedWorkout(_ sender: Any) {
         //TODO
+        //this needs to calculate the time that it took for a workout to finish
+        //should segue back to the routine view
     }
 
     /*

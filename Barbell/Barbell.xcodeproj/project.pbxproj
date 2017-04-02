@@ -159,21 +159,21 @@
 		C384A1C81E5D1FAA0026FD99 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				636FB9D11E90AC920035B7D2 /* Lift+CoreDataClass.swift */,
-				636FB9D21E90AC920035B7D2 /* Lift+CoreDataProperties.swift */,
 				6F0E3CCD1E6A032800357004 /* Achievement+CoreDataClass.swift */,
 				6F0E3CCE1E6A032800357004 /* Achievement+CoreDataProperties.swift */,
 				6F0E3CCF1E6A032800357004 /* CoreDataModel.xcdatamodeld */,
+				C3AB29671E88698C006D97A4 /* JSONExercises.swift */,
+				636FB9D11E90AC920035B7D2 /* Lift+CoreDataClass.swift */,
+				636FB9D21E90AC920035B7D2 /* Lift+CoreDataProperties.swift */,
+				6328E9121E78A4DC005A5E3D /* LoginInfo.swift */,
+				C384A1C91E5D202D0026FD99 /* RegisterInfo.swift */,
 				6F0E3CD11E6A032800357004 /* Routine+CoreDataClass.swift */,
 				6F0E3CD21E6A032800357004 /* Routine+CoreDataProperties.swift */,
 				6F0E3CD31E6A032800357004 /* User+CoreDataClass.swift */,
 				6F0E3CD41E6A032800357004 /* User+CoreDataProperties.swift */,
 				6F0E3CD51E6A032800357004 /* Workout+CoreDataClass.swift */,
 				6F0E3CD61E6A032800357004 /* Workout+CoreDataProperties.swift */,
-				C384A1C91E5D202D0026FD99 /* RegisterInfo.swift */,
 				6F0E3CE71E6A0FF600357004 /* WorkoutModel.swift */,
-				6328E9121E78A4DC005A5E3D /* LoginInfo.swift */,
-				C3AB29671E88698C006D97A4 /* JSONExercises.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

@@ -11,7 +11,7 @@ import CoreData
 
 class RoutineTableViewController: UITableViewController {
     
-    //var routines = [Routine]()
+    var foundRoutines = [Routine]()
     var routine : Routine!
 
     override func viewDidLoad() {
@@ -22,6 +22,24 @@ class RoutineTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let context = CoreDataController.getContext()
+        
+        let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
+        do{
+            foundRoutines = try context.fetch(fetchRequest)
+            
+        }catch{
+            print("Bad getExercise query")
+        }
+        for routine in foundRoutines{
+            print(routine.name)
+        }
+        
+        self.tableView.reloadData()
+        return
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,16 +56,20 @@ class RoutineTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 1
+        return 1 + foundRoutines.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "addWorkout", for: indexPath) 
+        var cell : UITableViewCell?
         
-        // Configure the cell...
+        if(indexPath.row == 0) {
+            cell = tableView.dequeueReusableCell(withIdentifier: "addWorkout", for: indexPath)
+        } else {
+            cell = tableView.dequeueReusableCell(withIdentifier: "workoutCell", for: indexPath)
+            cell?.textLabel?.text = foundRoutines[indexPath.row-1].name
+        }
         
-        return cell
+        return cell!
     }
  
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
