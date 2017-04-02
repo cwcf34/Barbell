@@ -11,12 +11,51 @@ namespace BBAPI.Controllers
         //use singleton
         readonly RedisDB redisCache = RedisDB._instance;
 
-        //update old Workout
+        /// <summary>
+        /// Gets exercises for a user when given their email and the name of the exercise
+        /// </summary>
+        /// <param name="email">The email for this user</param>
+        /// <param name="data">Should contain the name of the exercise that is being requested</param>
+        /// <returns>Array of ExerciseData objects or null</returns>
+        [HttpGet]
+        public IHttpActionResult GetExercise(string email, [FromBody]string data)
+        {
+            //Param checking
+            if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("exercise:"))
+            {
+                var resp = "Data is not formatted correctly. Please send formatted data: ";
+                var resp2 = "\"{exercise:exerciseName}\"";
+                string emptyResponse = resp + resp2;
+                return Ok(emptyResponse);
+            }
+
+            //Parse the data given
+            char[] delimiterChars = { '{', '}', ',', ':', ' ' };
+            string[] dataArr = data.Split(delimiterChars);
+
+
+            var key = "user:" + email + ":" + dataArr[1] + "Data";
+
+            //Get the response from the database
+            if (redisCache.doesKeyExist(key) == 1)
+            {
+                return Ok(redisCache.getExercise(key));
+            }
+
+            return Ok("Data does not exist");
+        }
+
+
+
+        /// <summary>
+        /// Inserts data about an exercise with data given about the exercise
+        /// </summary>
+        /// <param name="email">User's email</param>
+        /// <param name="data">date, exercise, sets, reps, weight</param>
+        /// <returns></returns>
         [HttpPut]
         public IHttpActionResult PutExercise(string email, [FromBody]string data)
         {
-            
-
             if(string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("date:") || !data.Contains("exercise:") || !data.Contains("sets:") || !data.Contains("reps:") || !data.Contains("weight"))
             {
                 var resp = "Data is not formatted correctly. Please send formatted data: ";
@@ -41,7 +80,6 @@ namespace BBAPI.Controllers
                 return Ok();
             }
             return Ok("An Error Occurred");
-            
         }
     }
 }
