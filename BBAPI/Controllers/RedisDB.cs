@@ -2,7 +2,6 @@ using System;
 using System.Net.Mail;
 using StackExchange.Redis;
 using BBAPI.Models;
-using System.Collections.Generic;
 
 namespace BBAPI.Controllers
 {
@@ -81,12 +80,13 @@ namespace BBAPI.Controllers
         /// <summary>
         /// Add a completed exercise to the hash for that user's exercise.
         /// </summary>
-        /// <param name="key">The key for the hash for this specific exercise</param>
-        /// <param name="date">The date this exercise was completed. Used as the field name for the new field added to the hash</param>
-        /// <param name="exerciseData">The exercise data to be stored</param>
+        /// <param name="key"></param>
+        /// <param name="date"></param>
+        /// <param name="exerciseData"></param>
         /// <returns>True if the operation succeeded, else false</returns>
         public bool addExercise(string key, string date, string exerciseData)
         {
+
             if(key.Length > 0 && date.Length > 0 && exerciseData.Length > 0)
             {
                 try
@@ -106,44 +106,6 @@ namespace BBAPI.Controllers
             //parameter checking failed
             return false;
         }
-
-        /// <summary>
-        /// Grabs all the exercise data from the key given
-        /// </summary>
-        /// <param name="key">The key for the hash of exercise data</param>
-        /// <returns>Array of the data for that exercise or null</returns>
-        public ExerciseData[] getExercise(string key)
-        {
-            //Call the database to get the data to parse
-            List<HashEntry> unparsedData = new List<HashEntry>(cache.HashGetAll(key));
-            List<ExerciseData> data = new List<ExerciseData>();
-
-            DateTime newDate;
-            try
-            {
-                //Parse the data returned
-                foreach (HashEntry entry in unparsedData)
-                {
-                    //Parse the date
-                    string[] stringDate = entry.Name.ToString().Split('/');
-                    newDate = new DateTime(int.Parse(stringDate[2]), int.Parse(stringDate[0]), int.Parse(stringDate[1]));
-
-                    //Parse the data and set it to a new ExerciseData object
-                    string[] stringData = entry.Value.ToString().Split(':');
-
-                    //Add the new data to the array
-                    data.Add(new ExerciseData(newDate, int.Parse(stringData[0]), int.Parse(stringData[1]), int.Parse(stringData[2])));
-                }
-            }
-            catch
-            {
-                return null;
-            }
-
-            //Return an array of ExerciseData objects
-            return data.ToArray();
-        }
-
 
         public string validateUserPass(string key)
 		{
@@ -169,7 +131,6 @@ namespace BBAPI.Controllers
 
 			return routineList;
 		}
-
 
 		public Routine getRoutineHash(string email, int routineId)
 		{

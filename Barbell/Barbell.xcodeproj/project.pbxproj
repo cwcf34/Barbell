@@ -60,7 +60,6 @@
 		6F0E3CD41E6A032800357004 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6F0E3CD51E6A032800357004 /* Workout+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Workout+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6F0E3CD61E6A032800357004 /* Workout+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Workout+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		6F0E3CE01E6A036800357004 /* Barbell-prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Barbell-prefix.pch"; sourceTree = "<group>"; };
 		6F0E3CE11E6A038900357004 /* CoreDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
 		6F0E3CE21E6A038900357004 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		6F0E3CE51E6A0C3000357004 /* TestWorkoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestWorkoutViewController.swift; sourceTree = "<group>"; };
@@ -128,7 +127,6 @@
 				C384A1C71E5D1FAA0026FD99 /* Controllers */,
 				C384A1C81E5D1FAA0026FD99 /* Models */,
 				C30AE7F71E5CF7F80093507B /* AppDelegate.swift */,
-				6F0E3CE01E6A036800357004 /* Barbell-prefix.pch */,
 				C30AE8001E5CF7F80093507B /* Assets.xcassets */,
 				C3FCF3E21E81ED4600E7BB0E /* Main.storyboard */,
 				C30AE8021E5CF7F80093507B /* LaunchScreen.storyboard */,
@@ -141,19 +139,19 @@
 		C384A1C71E5D1FAA0026FD99 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				6F0E3CE11E6A038900357004 /* CoreDataController.swift */,
-				6F0E3CE21E6A038900357004 /* LoginViewController.swift */,
-				C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */,
-				C384A1CB1E5D26AC0026FD99 /* DataAccess.swift */,
-				6F0E3CE51E6A0C3000357004 /* TestWorkoutViewController.swift */,
-				C3E32C3A1E6F8E4800800545 /* RoutineTableViewController.swift */,
 				63FA5E121E722A1800DEE65D /* addRoutineViewController.swift */,
-				6328E9141E78BE25005A5E3D /* ProfileViewController.swift */,
-				C3FCF3E61E81EF7300E7BB0E /* WeekTableViewController.swift */,
-				639BC8251E820210008FD198 /* ExercisesViewController.swift */,
 				C3AB29631E8865BF006D97A4 /* AllExercisesTableViewController.swift */,
-				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
+				6F0E3CE11E6A038900357004 /* CoreDataController.swift */,
+				C384A1CB1E5D26AC0026FD99 /* DataAccess.swift */,
+				639BC8251E820210008FD198 /* ExercisesViewController.swift */,
+				6F0E3CE21E6A038900357004 /* LoginViewController.swift */,
+				6328E9141E78BE25005A5E3D /* ProfileViewController.swift */,
+				C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */,
+				C3E32C3A1E6F8E4800800545 /* RoutineTableViewController.swift */,
 				C33A5DB91E8D69A900936AA4 /* StartRoutineTableViewController.swift */,
+				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
+				6F0E3CE51E6A0C3000357004 /* TestWorkoutViewController.swift */,
+				C3FCF3E61E81EF7300E7BB0E /* WeekTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

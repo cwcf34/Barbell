@@ -196,7 +196,7 @@ public class DataAccess {
         sem.wait()
         
         let tokens = responseString.components(separatedBy: ",")
-        //var token = [String]()
+        //var token = [String]()B
         if let user = user as? User {
             for i in tokens{
                 var token = i.components(separatedBy: ":")
