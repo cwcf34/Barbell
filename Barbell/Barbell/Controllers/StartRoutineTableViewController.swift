@@ -2,27 +2,42 @@
 //  StartRoutineTableViewController.swift
 //  Barbell
 //
-//  Created by Cody Cameron on 3/30/17.
+//  Created by Curtis Markway on 4/2/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
 import UIKit
+import CoreData
 
 class StartRoutineTableViewController: UITableViewController {
 
-    @IBOutlet weak var DayOfTheWeek: UILabel!
-    @IBOutlet weak var RountineExerciseLabel: UILabel!
-    @IBOutlet weak var RountineSetsLabel: UILabel!
-    @IBOutlet weak var RountineRepsLabel: UILabel!
-    @IBOutlet weak var RountineWeightLabel: UILabel!
-    @IBOutlet weak var CompletedExerciseLabel: UILabel!
-    @IBOutlet weak var CompletedSetsTextArea: UITextField!
-    @IBOutlet weak var CompletedRepsTextArea: UITextField!
-    @IBOutlet weak var CompletedWeightTextArea: UITextField!
+    var routinePassed : Routine!
+    var workoutsInRoutine = [Workout]()
+    var workoutToPass : Workout!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+    
+        print("starting routine " + routinePassed.name!)
+        
+        workoutsInRoutine = routinePassed.workouts?.allObjects as! [Workout]
+        
+        //Sort
+        workoutsInRoutine.sort { Int($0.weekday!)! < Int($1.weekday!)! }
+        workoutsInRoutine.sort { $0.weeknumber < $1.weeknumber }
+        
+        for workout in workoutsInRoutine {
+            print(workout.weeknumber)
+            print(workout.weekday)
+        }
+        
+        //workoutsInRoutine = Workout(context: routinePassed.workouts)
+        //for workout in routinePassed.workouts! {
+        //    print(workout)
+            //print((workout as Workout).weekday)
+            //print((workout as Workout).weeknumber)
+        //    workoutsInRoutine.append(workout as! Workout)
+        //}
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -32,11 +47,82 @@ class StartRoutineTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+       
         // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
 
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return Int(routinePassed.numberOfWeeks)
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        var count : Int = 0
+        
+        for workout in workoutsInRoutine {
+            if(Int(workout.weeknumber) == section+1) {
+                count += 1
+            }
+        }
+        
+        return count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "dataCell", for: indexPath)
+        
+        
+        switch (Int(workoutsInRoutine[indexPath.section+indexPath.row].weekday!)!)
+        {
+        case 1:
+            cell.textLabel?.text = "Sunday Funday"
+            
+        case 2:
+            cell.textLabel?.text = "Messed up Monday"
+            
+        case 3:
+            cell.textLabel?.text = "Tequila Tuesday"
+            
+        case 4:
+            cell.textLabel?.text = "Wasted Wednesday"
+            
+        case 5:
+            cell.textLabel?.text = "Thirsty Thursday"
+            
+        case 6:
+            cell.textLabel?.text = "Fucked up Friday"
+            
+        case 7:
+            cell.textLabel?.text = "Shitfaced Saturday"
+            
+        default:
+            cell.textLabel?.text = "Hump Day"
+        }
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Week " + String(section+1)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        workoutToPass = workoutsInRoutine[indexPath.section+indexPath.row]
+        self.performSegue(withIdentifier: "startWorkoutSegue", sender: self)
+
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "startWorkoutSegue"){
+            var viewController = segue.destination as! StartWorkoutTableViewController
+            viewController.workoutPassed = workoutToPass
+        }
+    }
+    
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
@@ -46,16 +132,6 @@ class StartRoutineTableViewController: UITableViewController {
         return cell
     }
     */
-    
-    @IBAction func nextExercise(_ sender: Any) {
-        //TODO
-        //this should take us to the next exercise for that workout
-    }
-    @IBAction func finishedWorkout(_ sender: Any) {
-        //TODO
-        //this needs to calculate the time that it took for a workout to finish
-        //should segue back to the routine view
-    }
 
     /*
     // Override to support conditional editing of the table view.

@@ -122,7 +122,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCell
-        cell.nameLabel.text = "Weeks " + String(indexPath.row)
+        cell.nameLabel.text = "Weeks " + String(indexPath.row + 1)
         cell.myTableViewController = self
         return cell
     }

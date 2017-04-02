@@ -79,6 +79,8 @@ class RoutineTableViewController: UITableViewController {
             
             self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
         } else {
+            routine = foundRoutines[indexPath.row-1]
+            
             self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
         }
         
@@ -87,6 +89,11 @@ class RoutineTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "addRoutineSegue"){
             var viewController = segue.destination as! addRoutineViewController
+            viewController.routinePassed = routine
+        }
+        
+        if (segue.identifier == "startRoutineSegue"){
+            var viewController = segue.destination as! StartRoutineTableViewController
             viewController.routinePassed = routine
         }
     }

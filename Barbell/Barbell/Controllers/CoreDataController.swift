@@ -102,30 +102,30 @@ class CoreDataController{
             }
         }
         
-        if !isRoutineEmpty {
-            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Routine")
-            let request = NSBatchDeleteRequest(fetchRequest: fetch)
-            var result : NSPersistentStoreResult?
-            do {
-                print("deleted Routines")
-                result = try context.execute(request)
-            }
-            catch{
-                print(result?.description)
-            }
-        }
-        if !isWorkoutEmpty {
-            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
-            let request = NSBatchDeleteRequest(fetchRequest: fetch)
-            var result : NSPersistentStoreResult?
-            do {
-                print("deleted Workout")
-                result = try context.execute(request)
-            }
-            catch{
-                print(result?.description)
-            }
-        }
+//        if !isRoutineEmpty {
+//            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Routine")
+//            let request = NSBatchDeleteRequest(fetchRequest: fetch)
+//            var result : NSPersistentStoreResult?
+//            do {
+//                print("deleted Routines")
+//                result = try context.execute(request)
+//            }
+//            catch{
+//                print(result?.description)
+//            }
+//        }
+//        if !isWorkoutEmpty {
+//            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
+//            let request = NSBatchDeleteRequest(fetchRequest: fetch)
+//            var result : NSPersistentStoreResult?
+//            do {
+//                print("deleted Workout")
+//                result = try context.execute(request)
+//            }
+//            catch{
+//                print(result?.description)
+//            }
+//        }
         saveContext()
         return
     }

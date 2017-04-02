@@ -617,7 +617,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="B3D-9r-X1U" kind="show" identifier="addRoutineSegue" id="FHs-ec-ADO"/>
-                        <segue destination="w1U-63-aIH" kind="show" identifier="startRoutineSegue" id="tR9-IV-QOn"/>
+                        <segue destination="X13-5y-isG" kind="show" identifier="startRoutineSegue" id="nJA-j6-15T"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D8H-YB-vbw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -627,7 +627,7 @@
         <!--Routine-->
         <scene sceneID="KrX-D0-Dxc">
             <objects>
-                <tableViewController id="w1U-63-aIH" customClass="StartRoutineTableViewController" customModule="Barbell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="w1U-63-aIH" customClass="StartWorkoutTableViewController" customModule="Barbell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qLf-iZ-ysS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -861,7 +861,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JDb-gq-Pgg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3496.8000000000002" y="-627.4362818590705"/>
+            <point key="canvasLocation" x="4364" y="-546"/>
         </scene>
         <!--New Routine-->
         <scene sceneID="njP-20-OhI">
@@ -1477,6 +1477,82 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Phv-hc-efF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="466" y="233"/>
+        </scene>
+        <!--Start Routine Table View Controller-->
+        <scene sceneID="c7R-f0-9CP">
+            <objects>
+                <tableViewController id="X13-5y-isG" customClass="StartRoutineTableViewController" customModule="Barbell" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="BWF-h8-FXd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="s1N-fP-Pey">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="X13-5y-isG" id="1s2-kB-fLp"/>
+                            </connections>
+                        </searchBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="headerCell" textLabel="rb2-Qm-NhE" style="IBUITableViewCellStyleDefault" id="oUT-Dd-zi0">
+                                <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oUT-Dd-zi0" id="Ndv-Us-U7b">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rb2-Qm-NhE">
+                                            <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="dataCell" textLabel="Xii-Tn-O1J" style="IBUITableViewCellStyleDefault" id="OXm-jn-j5B">
+                                <rect key="frame" x="0.0" y="116" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OXm-jn-j5B" id="cPg-A0-4XT">
+                                    <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xii-Tn-O1J">
+                                            <rect key="frame" x="15" y="0.0" width="325" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="X13-5y-isG" id="26q-9S-Vyq"/>
+                            <outlet property="delegate" destination="X13-5y-isG" id="d0n-nh-HHg"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="Ik5-CQ-ZCB" id="5nh-AU-4U7"/>
+                        <segue destination="w1U-63-aIH" kind="show" identifier="startWorkoutSegue" id="Qvl-ke-9aU"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wIT-Rb-YEf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="jVM-EA-RUb">
+                    <connections>
+                        <outlet property="delegate" destination="X13-5y-isG" id="UTa-sT-QFL"/>
+                        <outlet property="searchBar" destination="s1N-fP-Pey" id="TG1-bY-Upr"/>
+                        <outlet property="searchContentsController" destination="X13-5y-isG" id="DC1-4f-lGI"/>
+                        <outlet property="searchResultsDataSource" destination="X13-5y-isG" id="gYN-fM-nqh"/>
+                        <outlet property="searchResultsDelegate" destination="X13-5y-isG" id="sRE-Pu-n93"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="3497" y="-546"/>
         </scene>
     </scenes>
     <resources>
