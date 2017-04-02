@@ -11,6 +11,9 @@ import UIKit
 class AllExercisesTableViewController: UITableViewController {
     
     var allExercises = [JSONExercises]()
+    
+    var valueToPass : String = ""
+    var exerciseToPass : String = ""
 
     func readJSONObject(object: [String: AnyObject]) {
         var exerciseNames = [String]()
@@ -88,7 +91,20 @@ class AllExercisesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        valueToPass = allExercises[indexPath.section].muscleGroup
+        exerciseToPass = allExercises[indexPath.section].exercises[indexPath.row]
+        
         self.performSegue(withIdentifier: "addStatsSegue", sender: self)
+        
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "addStatsSegue"){
+            var viewController = segue.destination as! StatsViewController
+            viewController.muscle = valueToPass
+            viewController.exercise = exerciseToPass
+        }
     }
     /*
     // Override to support conditional editing of the table view.

@@ -62,11 +62,12 @@ namespace BBAPI.Controllers
 
 			string key = "user:" + email + ":" + exerciseName + "Data";
 
-			if (redisCache.addExercise(key, date, exerciseData))
-			{
-				return Ok();
-			}
-			return Ok("An Error Occurred");
-		}
-	}
+            if (redisCache.addExercise(key, date, exerciseData))
+            {
+                return Ok();
+            }
+            return Ok("An Error Occurred");
+            
+        }
+    }
 }

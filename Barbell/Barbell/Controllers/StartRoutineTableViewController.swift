@@ -10,6 +10,15 @@ import UIKit
 
 class StartRoutineTableViewController: UITableViewController {
 
+    @IBOutlet weak var RountineExerciseLabel: UILabel!
+    @IBOutlet weak var RountineSetsLabel: UILabel!
+    @IBOutlet weak var RountineRepsLabel: UILabel!
+    @IBOutlet weak var RountineWeightLabel: UILabel!
+    @IBOutlet weak var CompletedExerciseLabel: UILabel!
+    @IBOutlet weak var CompletedSetsTextArea: UITextField!
+    @IBOutlet weak var CompletedRepsTextArea: UITextField!
+    @IBOutlet weak var CompletedWeightTextArea: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,6 +45,13 @@ class StartRoutineTableViewController: UITableViewController {
         return cell
     }
     */
+    
+    @IBAction func nextExercise(_ sender: Any) {
+        //TODO
+    }
+    @IBAction func finishedWorkout(_ sender: Any) {
+        //TODO
+    }
 
     /*
     // Override to support conditional editing of the table view.
