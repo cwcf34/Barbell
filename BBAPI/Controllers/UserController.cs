@@ -8,9 +8,9 @@ namespace BBAPI.Controllers
 	public class UserController : ApiController
 	{
 		User[] users = {
-			new User {Email = "dlopez@me.com", Name = "me", Gender = "male", Age = 22},
-			new User {Email = "d@me.com", Name = "you", Gender = "male", Age = 57},
-			new User {Email = "dl@me.com", Name = "us", Gender = "male", Age = 100}
+			new User {Email = "dlopez@me.com", Name = "me", Age = 22},
+			new User {Email = "d@me.com", Name = "you", Age = 57},
+			new User {Email = "dl@me.com", Name = "us", Age = 100}
 		};
 
 		//use singleton
@@ -37,7 +37,15 @@ namespace BBAPI.Controllers
 		public IHttpActionResult GetUser(string email)
 		{
 			//search for user hash w key in cache
-			return Ok(redisCache.getUserHashData(email));
+			var returnString = redisCache.getUserHashData(email);
+			if (returnString[0].Name == "data")
+			{
+				return Ok(returnString[0].Value.ToString());
+			}
+			else
+			{
+				return Ok(false);
+			}
 		}
 
 
@@ -149,15 +157,16 @@ namespace BBAPI.Controllers
 			string[] postParams = data.Split(delimiterChars);
 
 			//grab any other data that is to be changed
-			var postName = postParams[2];
-			var postPassword = postParams[4];
-			var postAge = postParams[6];
-			var postWeight = postParams[8];
-			var postSquat = postParams[10];
-			var postBench = postParams[12];
-			var postDeadlift = postParams[14];
-			var postSnatch = postParams[16];
-			var postCleanjerk = postParams[18];
+			var postName = postParams[2] + " " + postParams[3];
+			var postPassword = postParams[5];
+			var postAge = postParams[7];
+			var postWeight = postParams[9];
+			var postSquat = postParams[11];
+			var postBench = postParams[13];
+			var postDeadlift = postParams[15];
+			var postSnatch = postParams[17];
+			var postCleanjerk = postParams[19];
+			var postWorkouts = postParams[21];
 
 
 			if ( string.IsNullOrWhiteSpace(postName) && string.IsNullOrWhiteSpace(postPassword))
@@ -166,33 +175,19 @@ namespace BBAPI.Controllers
 			}
 
 			//grab old user Hash data
-			var currData = redisCache.getUserHashData(currEmail);
-			var currRedisData = currData.Split(delimiterChars);
+			var returnedUser = redisCache.getUserHashData(currEmail);
+			var currData = string.Empty;
 
-			//before any logic, make sure email is formatted and exists
-			var emailVerfiyResponse = redisCache.emailVerify(currEmail);
-
-			if (emailVerfiyResponse != -3)
+			if (returnedUser[0].Name == "data")
 			{
-				//send error code
-				switch (emailVerfiyResponse)
-				{
-					case -1:
-						return Ok("email is empty");
-
-					case -2:
-						return Ok("email is not vaild format");
-
-					case 1:
-						return Ok("email doesnt exist");
-
-					case -4:
-						return Ok("some try catch error");
-				}
+				currData = returnedUser[0].Value.ToString();
+			}
+			else
+			{
+				return Ok(returnedUser[0].Value.ToString());
 			}
 
-			//check if post data is null
-
+			var currRedisData = currData.Split(delimiterChars);
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postName))
@@ -297,6 +292,19 @@ namespace BBAPI.Controllers
 				}
 			}
 
+			//if null, user keeps curr workouts
+			if (string.IsNullOrWhiteSpace(postWorkouts))
+			{
+				for (int i = 0; i < currRedisData.Length; i++)
+				{
+					if (currRedisData[i] == "workoutsCompleted")
+					{
+						//grab curr name
+						postWorkouts = currRedisData[i + 2];
+					}
+				}
+			}
+
 			//if null, user keeps curr password
 			if (string.IsNullOrWhiteSpace(postPassword))
 			{
@@ -314,7 +322,7 @@ namespace BBAPI.Controllers
 				postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 			}
 
-			redisCache.updateUserHash("user:" + currEmail, postName, postAge, postWeight, postWeight, postBench,postSquat, postDeadlift, postSnatch, postCleanjerk);
+			redisCache.updateUserHash("user:" + currEmail, postName, postAge, postWeight, postWeight, postBench,postSquat, postDeadlift, postSnatch, postCleanjerk, postWorkouts);
 
 			//return Ok("Successfully Updated your profile");
 			return Ok("true");

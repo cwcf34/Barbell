@@ -68,6 +68,15 @@
       <HintPath>packages\StackExchange.Redis.1.2.0\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression" />
+    <Reference Include="Thinktecture.IdentityModel.Core">
+      <HintPath>packages\Thinktecture.IdentityModel.Core.1.2.0\lib\net45\Thinktecture.IdentityModel.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Thinktecture.IdentityModel.WebApi">
+      <HintPath>packages\Thinktecture.IdentityModel.WebApi.2.0.1\lib\net45\Thinktecture.IdentityModel.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Thinktecture.IdentityModel.WebApi.ScopeAuthorization">
+      <HintPath>packages\Thinktecture.IdentityModel.WebApi.ScopeAuthorization.1.0.0\lib\net45\Thinktecture.IdentityModel.WebApi.ScopeAuthorization.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
