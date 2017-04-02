@@ -18,6 +18,7 @@ namespace BBAPI.Controllers
         /// <param name="data">Should contain the name of the exercise that is being requested</param>
         /// <returns>Array of ExerciseData objects or null</returns>
         [HttpGet]
+        [Authorize] //Checking authorization
         public IHttpActionResult GetExercise(string email, [FromBody]string data)
         {
             //Param checking
