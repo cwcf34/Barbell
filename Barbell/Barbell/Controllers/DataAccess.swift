@@ -32,8 +32,6 @@ public class DataAccess {
             "content-type": "application/json"
         ]
         
-
-        
         request.allHTTPHeaderFields = headers
         let sem = DispatchSemaphore(value: 0)
         
@@ -145,7 +143,7 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
+            print("login responseString = \(responseString)")
             sem.signal()
         }
         task.resume()
@@ -196,7 +194,7 @@ public class DataAccess {
         sem.wait()
         
         let tokens = responseString.components(separatedBy: ",")
-        //var token = [String]()
+        //var token = [String]()B
         if let user = user as? User {
             for i in tokens{
                 var token = i.components(separatedBy: ":")
