@@ -19,10 +19,10 @@ namespace BBAPI.Controllers
         /// <returns>Array of ExerciseData objects or null</returns>
         [HttpGet]
         [Authorize] //Checking authorization
-        public IHttpActionResult GetExercise(string email, string exercise)
+        public IHttpActionResult GetExercise(string email)
         {
 
-			return Ok(email + " alsdkjflsdajl;fj " + exercise);
+			return Ok(email + " alsdkjflsdajl;fj ");
             /*
             var key = "user:" + email + ":" + exercise + "Data";
 
