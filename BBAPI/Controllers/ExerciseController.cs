@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Thinktecture.IdentityModel.WebApi;
 using System.Web.Http;
 
 namespace BBAPI.Controllers
@@ -18,11 +19,11 @@ namespace BBAPI.Controllers
         /// <param name="data">Should contain the name of the exercise that is being requested</param>
         /// <returns>Array of ExerciseData objects or null</returns>
         [HttpGet]
-        [Authorize] //Checking authorization
-        public IHttpActionResult GetExercise(string email)
+		[ScopeAuthorize("WebApi")] //Checking authorization 
+        public IHttpActionResult GetExercise(string email, string exercise)
         {
 
-			return Ok(email + " alsdkjflsdajl;fj ");
+			return Ok(email + " alsdkjflsdajl;fj " + exercise);
             /*
             var key = "user:" + email + ":" + exercise + "Data";
 
