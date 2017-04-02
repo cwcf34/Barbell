@@ -17,9 +17,7 @@ namespace BBAPI.Controllers
 		[Authorize] //Checking authorization 
 		public IHttpActionResult GetExercise(string email, string exercise)
 		{
-
-			return Ok(email + " alsdkjflsdajl;fj " + exercise);
-			/*
+			
             var key = "user:" + email + ":" + exercise + "Data";
 
             //Get the response from the database
@@ -29,7 +27,7 @@ namespace BBAPI.Controllers
             }
 
             return Ok("Data does not exist");
-            */
+            
 		}
 
 
