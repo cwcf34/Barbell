@@ -59,11 +59,19 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "loadExercisesSegue"){
-            var viewController = segue.destination as! AllExercisesTableViewController
+            let viewController = segue.destination as! AllExercisesTableViewController
             viewController.workout = workout
         }
     }
     
+    override func viewWillDisappear(_ animated : Bool) {
+        super.viewWillDisappear(animated)
+        
+        if (self.isMovingFromParentViewController){
+            routinePassed.addToWorkouts(workout)
+            print("backing up")
+        }
+    }
 
     /*
     // MARK: - Navigation
