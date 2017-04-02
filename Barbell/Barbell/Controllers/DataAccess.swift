@@ -32,8 +32,6 @@ public class DataAccess {
             "content-type": "application/json"
         ]
         
-
-        
         request.allHTTPHeaderFields = headers
         let sem = DispatchSemaphore(value: 0)
         
@@ -145,7 +143,7 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
+            print("login responseString = \(responseString)")
             sem.signal()
         }
         task.resume()

@@ -1,8 +1,8 @@
 //
-//  Exercise+CoreDataProperties.swift
+//  Exercisei+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 3/10/17.
+//  Created by Caleb Albertson on 4/1/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 
-extension Exercises {
+extension Exercisei {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Exercises> {
-        return NSFetchRequest<Exercises>(entityName: "Exercises")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Exercisei> {
+        return NSFetchRequest<Exercisei>(entityName: "Exercisei")
     }
 
     @NSManaged public var descript: String?
@@ -24,5 +24,6 @@ extension Exercises {
     @NSManaged public var reps: Int16
     @NSManaged public var sets: Int16
     @NSManaged public var weight: Int16
+    @NSManaged public var inWorkout: Workout?
 
 }

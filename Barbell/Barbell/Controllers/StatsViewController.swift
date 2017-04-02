@@ -37,7 +37,7 @@ class StatsViewController: UIViewController {
     @IBAction func saveStats(_ sender: Any) {
         
         do{
-           let exercise : Exercises = try NSEntityDescription.insertNewObject(forEntityName: "Exercises", into: CoreDataController.getContext()) as! Exercises
+           let exercise : Exercisei = try NSEntityDescription.insertNewObject(forEntityName: "Exercisei", into: CoreDataController.getContext()) as! Exercisei
         
             exercise.muscleGroup = muscle
             exercise.name = self.exercise
@@ -48,9 +48,6 @@ class StatsViewController: UIViewController {
             print("\n\n\n\n\n\n\n\n")
             print(error)
         }
-        
-        
-
         
         CoreDataController.saveContext()
         
