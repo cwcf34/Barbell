@@ -5,9 +5,9 @@ using Owin;
 using IdentityServer3.AccessTokenValidation;
 using System.Web.Http;
 
-[assembly: OwinStartup(typeof(BBAPI.App_Start.Startup))]
+[assembly: OwinStartup(typeof(BBAPI.Startup))]
 
-namespace BBAPI.App_Start
+namespace BBAPI
 {
     public class Startup
     {
