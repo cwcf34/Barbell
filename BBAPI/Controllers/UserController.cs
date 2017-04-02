@@ -8,9 +8,9 @@ namespace BBAPI.Controllers
 	public class UserController : ApiController
 	{
 		User[] users = {
-			new User {Email = "dlopez@me.com", Name = "me", Gender = "male", Age = 22},
-			new User {Email = "d@me.com", Name = "you", Gender = "male", Age = 57},
-			new User {Email = "dl@me.com", Name = "us", Gender = "male", Age = 100}
+			new User {Email = "dlopez@me.com", Name = "me", Age = 22},
+			new User {Email = "d@me.com", Name = "you", Age = 57},
+			new User {Email = "dl@me.com", Name = "us", Age = 100}
 		};
 
 		//use singleton

@@ -4,8 +4,12 @@
 	{
 		public string Email { get; set; }
 		public string Name { get; set; }
-		public string Gender { get; set; }
 		public int Age { get; set; }
-		public string Password { get; set; }
+		public int Weight { get; set; }
+		public int Bench { get; set; }
+		public int Squat { get; set; }
+		public int Deadlift { get; set; }
+		public int Snatch { get; set; }
+		public int CleanAndJerk { get; set; }
 	}
 }
