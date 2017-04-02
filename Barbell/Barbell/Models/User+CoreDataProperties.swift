@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 2/24/17.
+//  Created by Curtis Markway on 4/1/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -17,17 +17,18 @@ extension User {
     }
 
     @NSManaged public var age: Int16
+    @NSManaged public var bench: Int16
+    @NSManaged public var cleanAndJerk: Int16
+    @NSManaged public var deadlift: Int16
     @NSManaged public var email: String?
     @NSManaged public var fname: String?
     @NSManaged public var lname: String?
+    @NSManaged public var snatch: Int16
+    @NSManaged public var squat: Int16
     @NSManaged public var weight: Int16
     @NSManaged public var workoutsCompleted: Int16
-    @NSManaged public var bench: Int16
-    @NSManaged public var squat: Int16
-    @NSManaged public var deadlift: Int16
-    @NSManaged public var snatch: Int16
-    @NSManaged public var cleanAndJerk: Int16
     @NSManaged public var achievements: NSSet?
+    @NSManaged public var madeRoutine: NSSet?
     @NSManaged public var madeWorkouts: NSSet?
     @NSManaged public var scheduleArr: NSSet?
 
@@ -47,6 +48,23 @@ extension User {
 
     @objc(removeAchievements:)
     @NSManaged public func removeFromAchievements(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for madeRoutine
+extension User {
+
+    @objc(addMadeRoutineObject:)
+    @NSManaged public func addToMadeRoutine(_ value: Routine)
+
+    @objc(removeMadeRoutineObject:)
+    @NSManaged public func removeFromMadeRoutine(_ value: Routine)
+
+    @objc(addMadeRoutine:)
+    @NSManaged public func addToMadeRoutine(_ values: NSSet)
+
+    @objc(removeMadeRoutine:)
+    @NSManaged public func removeFromMadeRoutine(_ values: NSSet)
 
 }
 

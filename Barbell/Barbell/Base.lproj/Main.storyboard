@@ -1205,7 +1205,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RhM-ha-gIa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5111" y="-1292"/>
+            <point key="canvasLocation" x="5180" y="-1292"/>
         </scene>
         <!--All Exercises Table View Controller-->
         <scene sceneID="mIu-Re-Hdx">
@@ -1440,6 +1440,6 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cha-Y0-p8d"/>
+        <segue reference="hTW-Zn-CHp"/>
     </inferredMetricsTieBreakers>
 </document>

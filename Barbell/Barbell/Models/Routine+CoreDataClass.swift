@@ -2,7 +2,7 @@
 //  Routine+CoreDataClass.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 2/24/17.
+//  Created by Curtis Markway on 4/1/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 

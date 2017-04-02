@@ -21,6 +21,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     var user = [User]()
     var thisRoutine = Routine()
+    var valueToPass : Int16!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,7 +102,16 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //self.performSegueWithIdentifier("showQuestionnaire", sender: indexPath);
+        valueToPass = Int16(indexPath.row + 1)
+        
         self.performSegue(withIdentifier: "showWeekSegue", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "showWeekSegue"){
+            var viewController = segue.destination as! WeekTableViewController
+            viewController.week = valueToPass
+        }
     }
     
     func deleteCell() {

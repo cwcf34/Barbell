@@ -9,10 +9,14 @@
 import UIKit
 
 class WeekTableViewController: UITableViewController {
-
+    
+    var week : Int16!
+    var valueToPass : Int16!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        print(week)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -38,9 +42,17 @@ class WeekTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        valueToPass = Int16(indexPath.row + 1)
         self.performSegue(withIdentifier: "addExercisesSegue", sender: self)
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "addExercisesSegue"){
+            var viewController = segue.destination as! ExercisesViewController
+            viewController.week = week
+            viewController.day = valueToPass
+        }
+    }
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)

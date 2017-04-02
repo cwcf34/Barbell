@@ -91,8 +91,6 @@ class CoreDataController{
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
         //let error = NSError?.self
         
-        
-        
         do {
             let results:NSArray? = try context.fetch(request) as NSArray
             if let res = results {
