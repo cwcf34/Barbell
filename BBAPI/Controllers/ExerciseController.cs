@@ -1,4 +1,6 @@
 ﻿using System.Web.Http;
+using BBAPI.Helpers;
+using System.Security.Claims;
 
 namespace BBAPI.Controllers
 {
@@ -14,10 +16,13 @@ namespace BBAPI.Controllers
 		/// <param name="data">Should contain the name of the exercise that is being requested</param>
 		/// <returns>Array of ExerciseData objects or null</returns>
 		[HttpGet]
-		[Authorize] //Checking authorization 
+		[Authorize]
 		public IHttpActionResult GetExercise(string email, string exercise)
 		{
-			
+            //code to get email:
+            //string email = JwtHelper.getEmail(User as ClaimsPrincipal);
+
+
             var key = "user:" + email + ":" + exercise + "Data";
 
             //Get the response from the database
@@ -29,7 +34,6 @@ namespace BBAPI.Controllers
             return Ok("Data does not exist");
             
 		}
-
 
 
 		/// <summary>
