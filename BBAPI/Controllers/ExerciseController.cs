@@ -19,23 +19,10 @@ namespace BBAPI.Controllers
         /// <returns>Array of ExerciseData objects or null</returns>
         [HttpGet]
         [Authorize] //Checking authorization
-        public IHttpActionResult GetExercise(string email, [FromBody]string data)
+        public IHttpActionResult GetExercise(string email, string exercise)
         {
-            //Param checking
-            if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("exercise:"))
-            {
-                var resp = "Data is not formatted correctly. Please send formatted data: ";
-                var resp2 = "\"{exercise:exerciseName}\"";
-                string emptyResponse = resp + resp2;
-                return Ok(emptyResponse);
-            }
-
-            //Parse the data given
-            char[] delimiterChars = { '{', '}', ',', ':', ' ' };
-            string[] dataArr = data.Split(delimiterChars);
-
-
-            var key = "user:" + email + ":" + dataArr[1] + "Data";
+            
+            var key = "user:" + email + ":" + exercise + "Data";
 
             //Get the response from the database
             if (redisCache.doesKeyExist(key) == 1)
