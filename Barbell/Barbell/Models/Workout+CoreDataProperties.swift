@@ -2,7 +2,7 @@
 //  Workout+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 3/10/17.
+//  Created by Caleb Albertson on 4/1/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -16,8 +16,8 @@ extension Workout {
         return NSFetchRequest<Workout>(entityName: "Workout")
     }
 
-    @NSManaged public var weekday: String?
     @NSManaged public var id: Int16
+    @NSManaged public var weekday: String?
     @NSManaged public var weeknumber: Int16
     @NSManaged public var createdRoutine: Routine?
     @NSManaged public var creator: User?
@@ -29,10 +29,10 @@ extension Workout {
 extension Workout {
 
     @objc(addHasExercisesObject:)
-    @NSManaged public func addToHasExercises(_ value: Exercise)
+    @NSManaged public func addToHasExercises(_ value: Exercisei)
 
     @objc(removeHasExercisesObject:)
-    @NSManaged public func removeFromHasExercises(_ value: Exercise)
+    @NSManaged public func removeFromHasExercises(_ value: Exercisei)
 
     @objc(addHasExercises:)
     @NSManaged public func addToHasExercises(_ values: NSSet)
