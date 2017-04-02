@@ -22,8 +22,7 @@ namespace BBAPI.Controllers
             //code to get email:
             //string email = JwtHelper.getEmail(User as ClaimsPrincipal);
 
-			return Ok(email + " alsdkjflsdajl;fj " + exercise);
-			/*
+
             var key = "user:" + email + ":" + exercise + "Data";
 
             //Get the response from the database
@@ -33,9 +32,8 @@ namespace BBAPI.Controllers
             }
 
             return Ok("Data does not exist");
-            */
+            
 		}
-
 
 
 		/// <summary>
@@ -60,8 +58,8 @@ namespace BBAPI.Controllers
 			string[] dataArr = data.Split(delimiterChars);
 
 			//extract data from the data given
-			string date = dataArr[1];
-			string exerciseName = dataArr[3];
+			string date = dataArr[2];
+			string exerciseName = dataArr[4];
 			string exerciseData = dataArr[6] + ":" + dataArr[8] + ":" + dataArr[10];
 
 			string key = "user:" + email + ":" + exerciseName + "Data";
