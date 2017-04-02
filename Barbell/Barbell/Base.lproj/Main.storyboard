@@ -1136,7 +1136,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="GVY-Qc-0cJ" kind="show" id="1NM-yq-DsI"/>
+                                            <segue destination="GVY-Qc-0cJ" kind="show" identifier="loadExercisesSegue" id="1NM-yq-DsI"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Abh-Fs-f5g">
@@ -1205,7 +1205,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RhM-ha-gIa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5111" y="-1292"/>
+            <point key="canvasLocation" x="5266" y="-1292"/>
         </scene>
         <!--All Exercises Table View Controller-->
         <scene sceneID="mIu-Re-Hdx">
@@ -1283,7 +1283,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="6023" y="-1292"/>
+            <point key="canvasLocation" x="6063" y="-1292"/>
         </scene>
         <!--Stats View Controller-->
         <scene sceneID="hv6-IB-MKv">

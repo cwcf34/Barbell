@@ -20,9 +20,15 @@ class StatsViewController: UIViewController {
     
     var muscle : String!
     var exercise : String!
+    var workout : Workout!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(muscle)
+        print(exercise)
+        print(workout.weeknumber)
+        print(workout.weekday)
         
         muscleGroup.text = muscle
         exerciseName.text = exercise
@@ -35,24 +41,18 @@ class StatsViewController: UIViewController {
     }
     
     @IBAction func saveStats(_ sender: Any) {
+    
+        let lift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
+    
+        lift.muscleGroup = muscle
+        lift.name = self.exercise
+        lift.sets = Int16(setsTextArea.text!)!
+        lift.reps = Int16(repsTextArea.text!)!
+        lift.weight = Int16(weightTextArea.text!)!
+    
+        workout.addToHasExercises(lift)
         
-//        do{
-//           let exercise : Exercises = try NSEntityDescription.insertNewObject(forEntityName: "Exercises", into: CoreDataController.getContext()) as! Exercises
-//        
-//            exercise.muscleGroup = muscle
-//            exercise.name = self.exercise
-//            exercise.sets = Int16(setsTextArea.text!)!
-//            exercise.reps = Int16(repsTextArea.text!)!
-//            exercise.weight = Int16(weightTextArea.text!)!
-//        }catch let error as NSError{
-//            print("\n\n\n\n\n\n\n\n")
-//            print(error)
-//        }
-        
-        
-
-        
-        //CoreDataController.saveContext()
+        CoreDataController.saveContext()
         
         self.dismiss(animated: true, completion: nil)
     }

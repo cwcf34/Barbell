@@ -29,10 +29,10 @@ extension Workout {
 extension Workout {
 
     @objc(addHasExercisesObject:)
-    @NSManaged public func addToHasExercises(_ value: Exercise)
+    @NSManaged public func addToHasExercises(_ value: Lift)
 
     @objc(removeHasExercisesObject:)
-    @NSManaged public func removeFromHasExercises(_ value: Exercise)
+    @NSManaged public func removeFromHasExercises(_ value: Lift)
 
     @objc(addHasExercises:)
     @NSManaged public func addToHasExercises(_ values: NSSet)

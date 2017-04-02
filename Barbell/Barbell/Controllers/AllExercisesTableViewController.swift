@@ -14,6 +14,8 @@ class AllExercisesTableViewController: UITableViewController {
     
     var valueToPass : String = ""
     var exerciseToPass : String = ""
+    
+    var workout : Workout!
 
     func readJSONObject(object: [String: AnyObject]) {
         var exerciseNames = [String]()
@@ -23,11 +25,11 @@ class AllExercisesTableViewController: UITableViewController {
         for exercise in exercises {
             guard let group = exercise["group"] as? String,
                 let lifts = exercise["lifts"] as? [String] else { break }
-                print(group)
+                //print(group)
             
             for lift in lifts {
                 guard let test = lift as? String else { break }
-                print(test)
+                //print(test)
                 exerciseNames.append(test)
             }
             
@@ -39,7 +41,7 @@ class AllExercisesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        print(workout.weekday)
         
         let url = Bundle.main.url(forResource: "workouts", withExtension: "json")
         let data = NSData(contentsOf: url!)
@@ -104,6 +106,7 @@ class AllExercisesTableViewController: UITableViewController {
             var viewController = segue.destination as! StatsViewController
             viewController.muscle = valueToPass
             viewController.exercise = exerciseToPass
+            viewController.workout = workout
         }
     }
     /*

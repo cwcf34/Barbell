@@ -7,12 +7,25 @@
 //
 
 import UIKit
+import CoreData
 
 class ExercisesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var exerciseTable: UITableView!
+    var week : Int16!
+    var day : String!
+    var workout : Workout!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(week)
+        print(day)
+        
+        let workout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
+        self.workout = workout
+        workout.weekday = day
+        workout.weeknumber = week
+        
+        
         
         exerciseTable.delegate = self
         exerciseTable.dataSource = self
@@ -41,6 +54,13 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
         // Configure the cell...
         
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "loadExercisesSegue"){
+            var viewController = segue.destination as! AllExercisesTableViewController
+            viewController.workout = workout
+        }
     }
     
 
