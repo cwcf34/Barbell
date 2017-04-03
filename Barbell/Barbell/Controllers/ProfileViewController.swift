@@ -142,4 +142,7 @@ class ProfileViewController: UIViewController {
         DataAccess.saveUserToRedis(email: (user?.email)!)
     }
 
+
+    @IBAction func Logout(_ sender: Any) {
+    }
 }
