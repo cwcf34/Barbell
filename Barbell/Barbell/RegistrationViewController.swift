@@ -67,6 +67,8 @@ class RegistrationViewController: UIViewController {
                 user.workoutsCompleted = 0
                 
                 CoreDataController.saveContext()
+                
+                performSegue(withIdentifier: "registerSegue", sender: self)
             }
             
         } else if(!emailField.hasText || !passwordField.hasText || !firstNameField.hasText || !lastNameField.hasText) {

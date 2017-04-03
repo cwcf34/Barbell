@@ -21,10 +21,29 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     var user = [User]()
     var thisRoutine = Routine()
+    var valueToPass : Int16!
+    var routinePassed : Routine!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        routinePassed.name = routine.text
+        if publicSwitch.isOn {
+            //send to api!
+            //not done yet!
+            routinePassed.isPublic = true
+        }
+        else{
+            routinePassed.isPublic = false
+        }
+        routinePassed.numberOfWeeks = Int16(weeks.count)
+        routinePassed.creator = user.first
+        //routinePassed.addToUsers(user.first!)
+        user.first?.addToScheduleArr(routinePassed)
+        
+        thisRoutine = routinePassed
+        
+        
         //user = CoreDataController.getUser()
         
         realTableView.delegate = self
@@ -32,8 +51,24 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         realTableView.register(CustomCell.self, forCellReuseIdentifier: "CustomCell")
         
         stepper.value = Double(value)
-        
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        routine.text = routinePassed.name
+        self.value = Int(routinePassed.numberOfWeeks)
+        
+        
+        if (routinePassed.isPublic == true){
+            //send to api!
+            //not done yet!
+            publicSwitch.setOn(true, animated: true)
+        }
+        else{
+            publicSwitch.setOn(false, animated: true)
+        }
+        
+        return
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,31 +89,24 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     @IBAction func saveRoutine(_ sender: Any) {
-        
-        
-        //CoreData
-       // if let routineObject = routineObject as? Routine{
-         let routineObject:Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
-            routineObject.name = routine.text
-            if publicSwitch.isOn {
-                routineObject.isPublic = true
-            }
-            else{
-                routineObject.isPublic = false
-            }
-            routineObject.numberOfWeeks = Int16(weeks.count)
-            routineObject.creator = user.first
-            routineObject.addToUsers(user.first!)
-            user.first?.addToScheduleArr(routineObject)
-        
-       
-            //}
-        thisRoutine = routineObject
+        //routinePassed.name = routine.text
+        if publicSwitch.isOn {
+            //send to api!
+            //not done yet!
+            routinePassed.isPublic = true
+        }
+        else{
+            routinePassed.isPublic = false
+        }
+//        routinePassed.numberOfWeeks = Int16(weeks.count)
+//        routinePassed.creator = user.first
+//        routinePassed.addToUsers(user.first!)
+//        user.first?.addToScheduleArr(routinePassed)
+//       
+//        thisRoutine = routinePassed
+        saveRoutineInfo()
         CoreDataController.saveContext()
-        //
-    }
-    
-
+     }
     
     func insert() {
         weeks.append("Week \(weeks.count + 1)")
@@ -94,14 +122,24 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomCell
-        cell.nameLabel.text = weeks[indexPath.row]
+        cell.nameLabel.text = "Weeks " + String(indexPath.row + 1)
         cell.myTableViewController = self
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //self.performSegueWithIdentifier("showQuestionnaire", sender: indexPath);
+        valueToPass = Int16(indexPath.row) + 1
+        saveRoutineInfo()
         self.performSegue(withIdentifier: "showWeekSegue", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "showWeekSegue"){
+            var viewController = segue.destination as! WeekTableViewController
+            viewController.week = valueToPass
+            viewController.routinePassed = routinePassed
+        }
     }
     
     func deleteCell() {
@@ -119,6 +157,23 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
+    func saveRoutineInfo() {
+        routinePassed.name = routine.text
+        if publicSwitch.isOn {
+            //send to api!
+            //not done yet!
+            routinePassed.isPublic = true
+        }
+        else{
+            routinePassed.isPublic = false
+        }
+        routinePassed.numberOfWeeks = Int16(weeks.count)
+        routinePassed.creator = user.first
+        //routinePassed.addToUsers(user.first!)
+        user.first?.addToScheduleArr(routinePassed)
+        
+        thisRoutine = routinePassed
+    }
 
 }
 

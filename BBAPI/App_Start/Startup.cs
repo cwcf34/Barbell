@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
 using IdentityServer3.AccessTokenValidation;
+using System.Web.Http;
 
+[assembly: OwinStartup(typeof(BBAPI.Startup))]
 
-[assembly: OwinStartup(typeof(BBAPI.App_Start.Startup))]
-
-namespace BBAPI.App_Start
+namespace BBAPI
 {
     public class Startup
     {
@@ -19,6 +19,7 @@ namespace BBAPI.App_Start
             {
                 Authority = "http://bbapi.eastus.cloudapp.azure.com:63894"
             });
+
         }
     }
 }
