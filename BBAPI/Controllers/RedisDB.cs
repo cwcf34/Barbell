@@ -2,28 +2,29 @@ using System;
 using System.Net.Mail;
 using StackExchange.Redis;
 using BBAPI.Models;
+using System.Collections.Generic;
 
 namespace BBAPI.Controllers
 {
-    class RedisDB 
-    {
+	class RedisDB
+	{
 		public static readonly RedisDB _instance = new RedisDB();
 
 		private static string pWordPath = System.Web.Configuration.WebConfigurationManager.AppSettings["bbAPI_Auth"];
-		private static string windowsVMCache = string.Format("{0}:{1},password={2}", "localhost",6379, pWordPath);
+		private static string windowsVMCache = string.Format("{0}:{1},password={2}", "localhost", 6379, pWordPath);
 
-        private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-        {
+		private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+		{
 			return ConnectionMultiplexer.Connect(windowsVMCache);
-        });
-        
-        public static ConnectionMultiplexer Connection
-        {
-            get
-            {
-                return lazyConnection.Value;
-            }
-        }
+		});
+
+		public static ConnectionMultiplexer Connection
+		{
+			get
+			{
+				return lazyConnection.Value;
+			}
+		}
 
 		private readonly static IDatabase cache = Connection.GetDatabase();
 
@@ -35,13 +36,13 @@ namespace BBAPI.Controllers
 		/// <param name="email">Email.</param>
 		/// <param name="password">Password.</param>
 
-        public void createUserHash(string key, string name, string email, string password)
-        {
+		public void createUserHash(string key, string name, string email, string password)
+		{
 			//no need to check email here, check in controller
 			var securePassword = AuthController.ComputeHash(password, "SHA512", null);
 
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword), new HashEntry("age", 0), new HashEntry("weight", 0), new HashEntry("squat", 0), new HashEntry("bench", 0), new HashEntry("deadlift", 0), new HashEntry("snatch", 0), new HashEntry("cleanjerk", 0), new HashEntry("workoutsCompleted", 0) });
-        }
+		}
 
 		public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
 		{
@@ -64,11 +65,10 @@ namespace BBAPI.Controllers
 		/// </summary>
 		/// <param name="key">Key.</param>
 		/// <param name="name">Name.</param>
-		/// <param name="email">Email.</param>
 		/// <param name="password">Password.</param>
-        public void updateUserHash(string key, string name, string password, string age, string weight, string bench, string squat, string deadlift, string snatch, string cleanjerk)
+		public void updateUserHash(string key, string name, string password, string age, string weight, string bench, string squat, string deadlift, string snatch, string cleanjerk, string workouts)
 		{
-			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("age", age), new HashEntry("weight", weight), new HashEntry("bench", bench), new HashEntry("squat", squat), new HashEntry("deadlift", deadlift), new HashEntry("snatch", snatch), new HashEntry("cleanjerk", cleanjerk)  });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("password", password), new HashEntry("age", age), new HashEntry("weight", weight), new HashEntry("bench", bench), new HashEntry("squat", squat), new HashEntry("deadlift", deadlift), new HashEntry("snatch", snatch), new HashEntry("cleanjerk", cleanjerk), new HashEntry("workoutsCompleted", workouts) });
 		}
 
 		public void addRoutineToUserList(string key, int routineId)
@@ -103,8 +103,45 @@ namespace BBAPI.Controllers
                 return true;
             }
 
-            //parameter checking failed
-            return false;
+			//parameter checking failed
+			return false;
+		}
+
+		/// <summary>
+        /// Grabs all the exercise data from the key given
+        /// </summary>
+        /// <param name="key">The key for the hash of exercise data</param>
+        /// <returns>Array of the data for that exercise or null</returns>
+        public ExerciseData[] getExercise(string key)
+        {
+            //Call the database to get the data to parse
+            List<HashEntry> unparsedData = new List<HashEntry>(cache.HashGetAll(key));
+            List<ExerciseData> data = new List<ExerciseData>();
+
+            DateTime newDate;
+            try
+            {
+                //Parse the data returned
+                foreach (HashEntry entry in unparsedData)
+                {
+                    //Parse the date
+                    string[] stringDate = entry.Name.ToString().Split('/');
+                    newDate = new DateTime(int.Parse(stringDate[2]), int.Parse(stringDate[0]), int.Parse(stringDate[1]));
+
+                    //Parse the data and set it to a new ExerciseData object
+                    string[] stringData = entry.Value.ToString().Split(':');
+
+                    //Add the new data to the array
+                    data.Add(new ExerciseData(newDate, int.Parse(stringData[0]), int.Parse(stringData[1]), int.Parse(stringData[2])));
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            //Return an array of ExerciseData objects
+            return data.ToArray();
         }
 
         public string validateUserPass(string key)
@@ -140,10 +177,10 @@ namespace BBAPI.Controllers
 
 			data = cache.HashGetAll(key);
 
-			var searchedRoutine = new Routine {Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value};
+			var searchedRoutine = new Routine { Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value };
 
 			return searchedRoutine;
-				
+
 		}
 
 		/// <summary>
@@ -152,26 +189,32 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-		public string getUserHashData(string email)
+		public HashEntry[] getUserHashData(string email)
 		{
-
+			//check if email is verifyed in Redis
 			int emailVerifyResponse = emailVerify(email);
 
 			switch (emailVerifyResponse)
 			{
-				case 1: //means no key exists
-					return "User not found.";
+				case 1: //no email exists
+					return new HashEntry[] { new HashEntry("error", "User not found.") };
 
-				case -1: //empty email
-					return "Email field empty.";
+				case -1: //empty field email
+					return new HashEntry[] { new HashEntry("error", "Email field empty.") };
 
-				case -2: //incorrect format
-					return "Email not formatted correctly.";
+				case -2: //incorrect email format
+					return new HashEntry[] { new HashEntry("error", "Email not formatted correctly.") };
 
-				case -3: //means key exists
+				case -3: //YAY email exists
+
+					//create key for Redis call
 					var key = "user:" + email;
+
+					//new empty Hash to pass data
 					var data = new HashEntry[] { };
 					data = cache.HashGetAll(key);
+
+
 					string getResponse = string.Empty;
 
 					for (int i = 0; i < data.Length; i++)
@@ -185,12 +228,11 @@ namespace BBAPI.Controllers
 							getResponse = getResponse + data[i] + ",";
 						}
 					}
-					return getResponse;
+					return new HashEntry[] { new HashEntry("data", getResponse) };
 
 				case -4:
 				default:
-					return "try/catch error";
-
+					return new HashEntry[] { new HashEntry("error", "Try/Catch Error on Email Verification") };
 			}
 		}
 
@@ -199,23 +241,23 @@ namespace BBAPI.Controllers
 			return cache.HashGetAll(key);
 		}
 
-        //check email validation
+		//check email validation
 		/// <summary>
 		/// verify the email.
 		/// </summary>
 		/// <returns>The verify code.</returns>
 		/// <param name="email">Email.</param>
 
-        public int emailVerify(string email)
-        {
+		public int emailVerify(string email)
+		{
 			var key = "user:" + email;
-			 
-            //check if fields are empty
-			if(string.IsNullOrWhiteSpace(email))
-            {
-                //send error message
-                return -1;
-            }
+
+			//check if fields are empty
+			if (string.IsNullOrWhiteSpace(email))
+			{
+				//send error message
+				return -1;
+			}
 
 			try
 			{
@@ -244,7 +286,7 @@ namespace BBAPI.Controllers
 			{
 				return -4;
 			}
-        }
+		}
 
 		/// <summary>
 		/// Does the key exist.
@@ -311,5 +353,5 @@ namespace BBAPI.Controllers
             return sBuilder.ToString();
         }
 		*/
-    }
+	}
 }
