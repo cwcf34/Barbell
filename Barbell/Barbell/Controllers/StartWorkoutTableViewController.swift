@@ -10,6 +10,7 @@ import UIKit
 
 class StartWorkoutTableViewController: UITableViewController {
 
+    @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var DayOfTheWeek: UILabel!
     @IBOutlet weak var RountineExerciseLabel: UILabel!
     @IBOutlet weak var RountineSetsLabel: UILabel!
@@ -20,22 +21,61 @@ class StartWorkoutTableViewController: UITableViewController {
     @IBOutlet weak var CompletedRepsTextArea: UITextField!
     @IBOutlet weak var CompletedWeightTextArea: UITextField!
     var workoutPassed : Workout!
-    var liftsInWorkout : Lift!
+    var liftsInWorkout = [Lift]()
+    var i = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    /*    print("starting workout " + workoutPassed.weeknumber + " " + workoutPassed.weekday)
+        print("starting workout " + String(workoutPassed.weeknumber) + " " + workoutPassed.weekday!)
         
-        liftsInWorkout = workoutPassed.workouts?.allObjects as! [Workout]
+        liftsInWorkout = workoutPassed.hasExercises?.allObjects as! [Lift]
         
         //Sort
-        workoutsInRoutine.sort { Int($0.weekday!)! < Int($1.weekday!)! }
-        workoutsInRoutine.sort { $0.weeknumber < $1.weeknumber }
+        //liftsInWorkout.sort { Int($0.weekday!)! < Int($1.weekday!)! }
+        //liftsInWorkout.sort { $0.weeknumber < $1.weeknumber }
+        //
+        for lift in liftsInWorkout {
+            print(lift.muscleGroup!)
+            print(lift.name!)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         
-        for workout in workoutsInRoutine {
-            print(workout.weeknumber)
-            print(workout.weekday)
-        }*/
+        
+        switch (Int(workoutPassed.weeknumber))
+        {
+            case 1:
+                DayOfTheWeek.text = "Sunday Funday"
+                
+            case 2:
+                DayOfTheWeek.text = "Messed up Monday"
+                
+            case 3:
+                DayOfTheWeek.text = "Tequila Tuesday"
+                
+            case 4:
+                DayOfTheWeek.text = "Wasted Wednesday"
+                
+            case 5:
+                DayOfTheWeek.text = "Thirsty Thursday"
+                
+            case 6:
+                DayOfTheWeek.text = "Fucked up Friday"
+                
+            case 7:
+                DayOfTheWeek.text = "Shitfaced Saturday"
+                
+            default:
+                DayOfTheWeek.text = "Hump Day"
+        }
+        
+        RountineExerciseLabel.text = liftsInWorkout[i].name
+        RountineSetsLabel.text = String(liftsInWorkout[i].sets)
+        RountineRepsLabel.text = String(liftsInWorkout[i].reps)
+        RountineWeightLabel.text = String(liftsInWorkout[i].weight)
+        CompletedExerciseLabel.text = liftsInWorkout[i].name
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,6 +96,17 @@ class StartWorkoutTableViewController: UITableViewController {
     */
     
     @IBAction func nextExercise(_ sender: Any) {
+        
+        if(i + 1 < liftsInWorkout.count ){
+            i += 1
+            viewWillAppear(true)
+            if(i == liftsInWorkout.count - 1){
+                nextButton.isEnabled = false
+            }
+        }else{
+            //LOL DO NOTHING!
+        }
+        
         //TODO
         //this should take us to the next exercise for that workout
     }
