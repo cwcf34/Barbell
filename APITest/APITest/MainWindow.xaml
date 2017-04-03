@@ -1,0 +1,15 @@
+﻿<Window x:Class="APITest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:APITest"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <TextBlock x:Name="output_textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,10,0,0" Height="211" Width="497"/>
+        <Button x:Name="runTest_button" Content="Run Test" HorizontalAlignment="Left" Margin="334,253,0,0" VerticalAlignment="Top" Width="75" Click="runTest_button_Click"/>
+        <ComboBox x:Name="testList_comboBox" HorizontalAlignment="Left" Margin="79,251,0,0" VerticalAlignment="Top" Width="150"/>
+
+    </Grid>
+</Window>
