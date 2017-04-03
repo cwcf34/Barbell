@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12124.1" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Achievement" representedClassName=".Achievement" syncable="YES">
         <attribute name="achievementNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="achievers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="achievements" inverseEntity="User" syncable="YES"/>
     </entity>
-    <entity name="Exercisei" representedClassName=".Exercisei" syncable="YES">
+    <entity name="LegacyLift" representedClassName="LegacyLift" syncable="YES">
+        <attribute name="liftName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="liftRep" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="liftSets" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="liftWeight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="Lift" representedClassName=".Lift" syncable="YES">
         <attribute name="descript" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -48,13 +55,14 @@
         <attribute name="weeknumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="createdRoutine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Routine" inverseName="workouts" inverseEntity="Routine" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="madeWorkouts" inverseEntity="User" syncable="YES"/>
-        <relationship name="hasExercises" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Exercisei" inverseName="inWorkout" inverseEntity="Exercisei" syncable="YES"/>
+        <relationship name="hasExercises" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Lift" inverseName="inWorkout" inverseEntity="Lift" syncable="YES"/>
     </entity>
     <elements>
         <element name="Achievement" positionX="214" positionY="18" width="128" height="88"/>
-        <element name="Exercisei" positionX="-333" positionY="-7" width="128" height="178"/>
+        <element name="Lift" positionX="-333" positionY="-7" width="128" height="178"/>
         <element name="Routine" positionX="162" positionY="200" width="128" height="148"/>
         <element name="User" positionX="-90" positionY="-18" width="128" height="270"/>
         <element name="Workout" positionX="-261" positionY="216" width="128" height="133"/>
+        <element name="LegacyLift" positionX="-506" positionY="216" width="128" height="118"/>
     </elements>
 </model>
