@@ -9,7 +9,9 @@
 import UIKit
 import CoreData
 
-class StartRoutineTableViewController: UITableViewController {
+class StartRoutineTableViewController: UITableViewController, StartWorkoutTableViewControllerDelegate {
+    
+
 
     var routinePassed : Routine!
     var workoutsInRoutine = [Workout]()
@@ -30,20 +32,8 @@ class StartRoutineTableViewController: UITableViewController {
             print(workout.weeknumber)
             print(workout.weekday)
         }
-        
-        //workoutsInRoutine = Workout(context: routinePassed.workouts)
-        //for workout in routinePassed.workouts! {
-        //    print(workout)
-            //print((workout as Workout).weekday)
-            //print((workout as Workout).weeknumber)
-        //    workoutsInRoutine.append(workout as! Workout)
-        //}
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -69,6 +59,9 @@ class StartRoutineTableViewController: UITableViewController {
         }
         
         return count
+    }
+    func sendDataBackToHomePageViewController(routinePassed: Routine?) {
+        self.routinePassed = routinePassed
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -120,6 +113,7 @@ class StartRoutineTableViewController: UITableViewController {
         if (segue.identifier == "startWorkoutSegue"){
             var viewController = segue.destination as! StartWorkoutTableViewController
             viewController.workoutPassed = workoutToPass
+            viewController.routinePassed = self.routinePassed
         }
     }
     
