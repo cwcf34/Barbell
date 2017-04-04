@@ -21,7 +21,6 @@ class StartWorkoutTableViewController: UITableViewController {
     @IBOutlet weak var RountineSetsLabel: UILabel!
     @IBOutlet weak var RountineRepsLabel: UILabel!
     @IBOutlet weak var RountineWeightLabel: UILabel!
-    @IBOutlet weak var CompletedExerciseLabel: UILabel!
     @IBOutlet weak var CompletedSetsTextArea: UITextField!
     @IBOutlet weak var CompletedRepsTextArea: UITextField!
     @IBOutlet weak var CompletedWeightTextArea: UITextField!
@@ -54,25 +53,25 @@ class StartWorkoutTableViewController: UITableViewController {
         switch (Int(workoutPassed.weeknumber))
         {
             case 1:
-                DayOfTheWeek.text = "Sunday Funday"
+                DayOfTheWeek.text = "Sunday"
                 
             case 2:
-                DayOfTheWeek.text = "Messed up Monday"
+                DayOfTheWeek.text = "Monday"
                 
             case 3:
-                DayOfTheWeek.text = "Tequila Tuesday"
+                DayOfTheWeek.text = "Tuesday"
                 
             case 4:
-                DayOfTheWeek.text = "Wasted Wednesday"
+                DayOfTheWeek.text = "Wednesday"
                 
             case 5:
-                DayOfTheWeek.text = "Thirsty Thursday"
+                DayOfTheWeek.text = "Thursday"
                 
             case 6:
-                DayOfTheWeek.text = "Fucked up Friday"
+                DayOfTheWeek.text = "Friday"
                 
             case 7:
-                DayOfTheWeek.text = "Shitfaced Saturday"
+                DayOfTheWeek.text = "Saturday"
                 
             default:
                 DayOfTheWeek.text = "Hump Day"
@@ -82,7 +81,6 @@ class StartWorkoutTableViewController: UITableViewController {
         RountineSetsLabel.text = String(liftsInWorkout[i].sets)
         RountineRepsLabel.text = String(liftsInWorkout[i].reps)
         RountineWeightLabel.text = String(liftsInWorkout[i].weight)
-        CompletedExerciseLabel.text = liftsInWorkout[i].name
         
     }
 
