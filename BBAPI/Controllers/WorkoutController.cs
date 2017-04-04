@@ -46,7 +46,19 @@ namespace BBAPI.Controllers
 			return Ok("exercise:" + exName + " exercise Value: " + exerciseValue);
 		}
 
-		//create new Workout
+		//get all routine Workouts
+		[HttpGet]
+		public IHttpActionResult GetAllWorkouts(string email, int id)
+		{
+			//get all workout hashes for specific routine
+			//var key = "user:" + email + ":" + id;
+
+
+			return Ok(redisCache.getAllWorkoutHashData(email, id));
+		}
+
+
+		//get Workout for specific weekday
 		[HttpGet]
 		public IHttpActionResult GetWorkout(string email, int id, int dayIndex)
 		{

@@ -160,6 +160,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Models\Routine.cs" />
+    <Compile Include="Models\WorkoutData.cs" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
