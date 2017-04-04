@@ -241,24 +241,24 @@ namespace BBAPI.Controllers
 			return cache.HashGetAll(key);
 		}
 
-		public HashEntry[] getAllWorkoutHashData(string email, int id)
+		public List<HashEntry[]> getAllWorkoutHashData(string email, int id)
 		{
 			var routine = getRoutineHash(email, id);
 
 			int weeks = int.Parse(routine.numWeeks);
-			int days = (weeks * 7) - 1;
+			int days = (weeks * 7);
 
-			var data = new HashEntry[days];
+			var newData = new List<HashEntry[]>();
 
 			for (var i = 0; i < days; i++)
 			{
 				var key = "user:" + email + ":" + id + ":" + i;
 				var workoutData = getWorkoutHashData(key);
-				data.SetValue(workoutData, i);
-
+				newData.Add(workoutData);
 			}
 
-			return data;
+			return newData;
+
 		}
 
 		//check email validation
