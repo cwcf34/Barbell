@@ -8,13 +8,16 @@
 
 import UIKit
 
-class AllExercisesTableViewController: UITableViewController {
+class AllExercisesTableViewController: UITableViewController, UISearchResultsUpdating {
     
+    
+
+    var filteredTableData = [JSONExercises]()
+    var allLifts = [String]()
+    var resultSearchController = UISearchController()
     var allExercises = [JSONExercises]()
-    
     var valueToPass : String = ""
     var exerciseToPass : String = ""
-    
     var workout : Workout!
     var routinePassed: Routine!
 
@@ -57,6 +60,20 @@ class AllExercisesTableViewController: UITableViewController {
             print("Error")
         }
         
+        self.resultSearchController = ({
+            let controller = UISearchController(searchResultsController: nil)
+            controller.searchResultsUpdater = self
+            controller.dimsBackgroundDuringPresentation = false
+            controller.searchBar.sizeToFit()
+            
+            self.tableView.tableHeaderView = controller.searchBar
+            
+            return controller
+        })()
+        
+        // Reload the table
+        self.tableView.reloadData()
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -73,24 +90,47 @@ class AllExercisesTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return allExercises.count
+        if (self.resultSearchController.isActive) {
+            return self.filteredTableData.count
+        }
+        else {
+            return allExercises.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return allExercises[section].exercises.count
+        if (self.resultSearchController.isActive) {
+            return self.filteredTableData[section].exercises.count
+        }
+        else {
+            return allExercises[section].exercises.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dataCell", for: indexPath)
-        
-        cell.textLabel?.text = allExercises[indexPath.section].exercises[indexPath.row]
 
-        return cell
+        // 3
+        if (self.resultSearchController.isActive) {
+            cell.textLabel?.text = filteredTableData[indexPath.section].exercises[indexPath.row]
+            
+            return cell
+        }
+        else {
+            cell.textLabel?.text = allExercises[indexPath.section].exercises[indexPath.row]
+            
+            return cell
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return allExercises[section].muscleGroup
+        if (self.resultSearchController.isActive) {
+            return filteredTableData[section].muscleGroup
+        }
+        else {
+            return allExercises[section].muscleGroup
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -110,6 +150,36 @@ class AllExercisesTableViewController: UITableViewController {
             viewController.workout = workout
             viewController.routinePassed = routinePassed
         }
+    }
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filteredTableData.removeAll(keepingCapacity: false)
+        
+        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
+        var exerciseNames = [String]()
+        
+        for index in 0...allExercises.count-1 {
+            let array = (allExercises[index].exercises as NSArray).filtered(using: searchPredicate)
+            
+            for name in array {
+                exerciseNames.append(name as! String)
+            }
+            
+            if(array.count != 0) {
+                let allExercise = JSONExercises(muscleGroup: allExercises[index].muscleGroup, exercises: exerciseNames)
+                filteredTableData.append(allExercise)
+            }
+                exerciseNames.removeAll()
+        }
+        
+//        print(filteredTableData.count)
+//        for index in 0...filteredTableData.count-1 {
+//            for string in filteredTableData[index].exercises {
+//                print(string)
+//            }
+//        }
+        self.tableView.reloadData()
     }
     /*
     // Override to support conditional editing of the table view.
