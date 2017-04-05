@@ -12,10 +12,11 @@ import CoreData
 class RoutineTableViewController: UITableViewController {
     
     var foundRoutines = [Routine]()
-    var routine : Routine!
+    var routine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

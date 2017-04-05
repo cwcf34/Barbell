@@ -105,6 +105,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
 //       
 //        thisRoutine = routinePassed
         saveRoutineInfo()
+        DataAccess.sendRoutineToRedis(routine: routinePassed)
         CoreDataController.saveContext()
      }
     

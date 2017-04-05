@@ -10,11 +10,9 @@ import Foundation
 
 public class WorkoutModel {
     var id: Int
-    var name: String
-    var weight: Int
+    var workout : Workout
     
-    init(id: Int, name: String, weight: Int) {
+    init(id: Int, workout: Workout) {
         self.id = id
-        self.name = name
-        self.weight = weight    }
+        self.workout = workout   }
 }

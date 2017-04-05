@@ -65,6 +65,7 @@ class CoreDataController{
         return (foundUser.first)!
     }
     
+    
     class func clearData() {
         var isLiftEmpty = false
         var isRoutineEmpty = false
@@ -90,7 +91,7 @@ class CoreDataController{
             }
         }
             
-        /*if !isLiftEmpty {
+        if !isLiftEmpty {
             let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Lift")
             let request = NSBatchDeleteRequest(fetchRequest: fetch)
             var result : NSPersistentStoreResult?
@@ -100,32 +101,32 @@ class CoreDataController{
             catch{
                 print(result?.description)
             }
-        }*/
+        }
         
-//        if !isRoutineEmpty {
-//            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Routine")
-//            let request = NSBatchDeleteRequest(fetchRequest: fetch)
-//            var result : NSPersistentStoreResult?
-//            do {
-//                print("deleted Routines")
-//                result = try context.execute(request)
-//            }
-//            catch{
-//                print(result?.description)
-//            }
-//        }
-//        if !isWorkoutEmpty {
-//            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
-//            let request = NSBatchDeleteRequest(fetchRequest: fetch)
-//            var result : NSPersistentStoreResult?
-//            do {
-//                print("deleted Workout")
-//                result = try context.execute(request)
-//            }
-//            catch{
-//                print(result?.description)
-//            }
-//        }
+        if !isRoutineEmpty {
+            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Routine")
+            let request = NSBatchDeleteRequest(fetchRequest: fetch)
+            var result : NSPersistentStoreResult?
+            do {
+                print("deleted Routines")
+                result = try context.execute(request)
+            }
+            catch{
+                print(result?.description)
+            }
+        }
+        if !isWorkoutEmpty {
+            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
+            let request = NSBatchDeleteRequest(fetchRequest: fetch)
+            var result : NSPersistentStoreResult?
+            do {
+                print("deleted Workout")
+                result = try context.execute(request)
+            }
+            catch{
+                print(result?.description)
+            }
+        }
         saveContext()
         return
     }
