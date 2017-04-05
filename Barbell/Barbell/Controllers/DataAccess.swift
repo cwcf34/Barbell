@@ -65,29 +65,18 @@ public class DataAccess {
         return result
     }
     
-    class func createWorkout(workoutModel: WorkoutModel) -> Bool {
-        var request = URLRequest(url: URL(string: apiURL + "user/c@me.com/")!)
-        request.httpMethod = "PUT"
-        
-        var responseString  = "false"
-        
-        print("Request STRING \(request)")
-        
-        let putString = "\"{id:\(workoutModel.id)" + "," + "name:\(workoutModel.name)" + "," + "weight:\(workoutModel.weight)}\" "
-        
-        do {
-            let putData = try JSONSerialization.data(withJSONObject: putString, options: [])
-            print ("\n\(putData)\n\n\n")
-        } catch {
-            let err = error as NSError
-            print("ERROR IS \(err)")
-        }
-        
+    class func getRoutinesFromRedis () -> [Routine] {
+        let user : User = CoreDataController.getUser()
+        var routine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+        var request = URLRequest(url: URL(string: apiURL + "routine/\(user.email!)/")!)
+        var responseString = ""
         let headers = [
             "content-type": "application/json"
         ]
         
         request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {                                                 // check for fundamental networking error
@@ -101,16 +90,263 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
+            
+            print("Loading routine response: " + responseString)
+            
+            
+            sem.signal()
         }
-        task.resume()
-        //sem.wait()
         
-        if(responseString == "true"){
-            return true
-        } else{
-            return false
+        task.resume()
+        sem.wait()
+        
+        //responseString.removeAtIndex(index)
+        //responseString.remove(at: responseString.endIndex)
+        var allRoutines = [Routine]()
+        if let data = responseString.data(using: .utf8) as? Data{
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                print("JSONFULL == \(json)\n\n")
+                
+                for eachRoutine in json {
+                    
+                    let newRoutine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+                    var routineIdArray = [Int]()
+                    
+                    for (key,value) in eachRoutine{
+                        if (key == "numWeeks"){
+                            if let value = value as? Int16{
+                                newRoutine.numberOfWeeks = value
+                            }
+                        }
+                        if (key == "name"){
+                            if let value = value as? String{
+                                newRoutine.name = value
+                            }
+                        }
+                        if (key == "isPublic"){
+                            if let value = value as? Int{
+                                if(value == 1){
+                                    newRoutine.isPublic = true
+                                }else{
+                                    newRoutine.isPublic = false
+                                }
+                            }
+                        }
+                        
+                        //getting exercises for every workoutday
+                        if (key == "Id"){
+                            if let value = value as? Int{
+                                //getWorkoutForRoutineFromRedis(routineId: value)
+                                
+                            }
+                        }
+                    }
+                    
+                    allRoutines.append(newRoutine)
+                }
+            }
         }
+        
+        
+        //print("Hopefully no square brackets: " + responseString)
+        
+        
+
+        return allRoutines
+    }
+    
+    /*
+    
+    class func getWorkoutForRoutineFromRedis (routineId: Int)  {
+        let user : User = CoreDataController.getUser()
+        
+        var request = URLRequest(url: URL(string: apiURL + "workout/\(user.email!)/")!)
+        
+        var responseString = ""
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Loading WOrkout Data response: " + responseString)
+            
+            
+            sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+
+    
+        var allWorkouts = [Workout]()
+        if let data = responseString.data(using: .utf8) as? Data{
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                print("\n\nWorkoutJSONFULL == \(json)\n\n")
+                
+                for eachRoutine in json {
+                    
+                    let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
+                    
+                    
+                    
+                    for (key,value) in eachRoutine{
+                        
+                    }
+                    
+                    
+                }
+            }
+        }
+    }
+ 
+    */
+    
+    
+    class func sendRoutineToRedis (routine: Routine) -> Bool {
+        
+        let user : User = CoreDataController.getUser()
+        
+        var postString = ""
+        print("name:  " + user.fname!)
+        print("email: " + user.email!)
+        var email : String!
+        email = user.email!
+        var request = URLRequest(url: URL(string: apiURL + "routine/\(email!)/")!)
+        let routineName : String!
+        var isPublicInt = 0
+        if routine.isPublic == true {
+            isPublicInt = 1
+        }
+        routineName = routine.name!
+        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(user.fname!)}\" "
+        
+        request.httpMethod = "POST"
+        
+        var responseString = ""
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        print(postString)
+        
+        let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+        
+        request.httpBody = postDATA
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Did save routine to redis?  " + responseString)
+            
+            
+            sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+        
+        if Int(responseString)! > 0 {
+            var workoutsInRoutine = [Workout]()
+            workoutsInRoutine = routine.workouts?.allObjects as! [Workout]
+            for workout in workoutsInRoutine {
+                let workoutModel = WorkoutModel(id: Int(responseString)!, workout: workout)
+                sendWorkoutToRedis(workoutModel: workoutModel)
+            }
+        }
+        return true
+        
+    }
+    
+    class func sendWorkoutToRedis (workoutModel: WorkoutModel) -> Bool {
+        var liftsInWorkout = [Lift]()
+        liftsInWorkout = workoutModel.workout.hasExercises?.allObjects as! [Lift]
+        for lift in liftsInWorkout {
+            let liftModel = LiftModel(id: workoutModel.id, workout: workoutModel.workout, lift: lift)
+            sendLiftToRedis(liftModel: liftModel)
+        }
+        
+        return true
+    }
+    
+    class func sendLiftToRedis (liftModel: LiftModel) -> Bool {
+     
+        let user : User = CoreDataController.getUser()
+        
+        var postString = ""
+        var email : String!
+        email = user.email!
+        var request = URLRequest(url: URL(string: apiURL + "workout/\(email!)/")!)
+        postString = "\"{routineId:\(liftModel.id)" + "," + "exercise:\(liftModel.exercise)" + "," + "sets:\(liftModel.sets)" + "," + "reps:\(liftModel.reps)" + "," + "weight:\(liftModel.weight)" + "," + "dayIndex:\(liftModel.dayIndex)}\" "
+        
+        print("Exercise request" + postString)
+        request.httpMethod = "POST"
+        
+        var responseString = ""
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        print(postString)
+        
+        let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+        
+        request.httpBody = postDATA
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Did save exercise to redis?  " + responseString)
+            
+            
+            sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+        return true
+        
     }
     
     class func login (loginInfo: LoginInfo ) -> Bool{
