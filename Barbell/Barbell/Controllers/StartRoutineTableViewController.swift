@@ -71,25 +71,25 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
         switch (Int(workoutsInRoutine[indexPath.section+indexPath.row].weekday!)!)
         {
         case 1:
-            cell.textLabel?.text = "Sunday Funday"
+            cell.textLabel?.text = "Sunday"
             
         case 2:
-            cell.textLabel?.text = "Messed up Monday"
+            cell.textLabel?.text = "Monday"
             
         case 3:
-            cell.textLabel?.text = "Tequila Tuesday"
+            cell.textLabel?.text = "Tuesday"
             
         case 4:
-            cell.textLabel?.text = "Wasted Wednesday"
+            cell.textLabel?.text = "Wednesday"
             
         case 5:
-            cell.textLabel?.text = "Thirsty Thursday"
+            cell.textLabel?.text = "Thursday"
             
         case 6:
-            cell.textLabel?.text = "Fucked up Friday"
+            cell.textLabel?.text = "Friday"
             
         case 7:
-            cell.textLabel?.text = "Shitfaced Saturday"
+            cell.textLabel?.text = "Saturday"
             
         default:
             cell.textLabel?.text = "Hump Day"
