@@ -100,7 +100,7 @@ namespace BBAPI.Controllers
 
 			//email is now verified as avail in cache
 			//create key
-			var key = "user:" + email;
+			var key = "user:" + email.ToLower();
 
 			//parse email and body data
 			char[] delimiterChars = { '{', '}', ',', ':', ' ' };
