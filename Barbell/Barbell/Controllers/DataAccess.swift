@@ -110,7 +110,8 @@ public class DataAccess {
                 for eachRoutine in json {
                     
                     let newRoutine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
-                    var routineIdArray = [Int]()
+                    
+                    var routineIdNum: String = String()
                     
                     for (key,value) in eachRoutine{
                         if (key == "numWeeks"){
@@ -135,14 +136,28 @@ public class DataAccess {
                         
                         //getting exercises for every workoutday
                         if (key == "Id"){
-                            if let value = value as? Int{
-                                //getWorkoutForRoutineFromRedis(routineId: value)
-                                
+                            if let value = value as? String{
+                                routineIdNum = value
+                                newRoutine.id = 0
                             }
                         }
                     }
                     
+                    //getWorkoutForRoutineFromRedis(routineId: routineIdNum)
+                    let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: "173297413"))
+                    
+                    for eachWorkout in allWorkouts{
+                        if let workout = eachWorkout as? Workout {
+                            workout.createdRoutine = newRoutine
+                        }
+                    }
+                    
+                    newRoutine.creator = user
+                    newRoutine.addToWorkouts(allWorkouts)
+                    newRoutine.addToUsers(user)
+                    
                     allRoutines.append(newRoutine)
+
                 }
             }
         }
@@ -150,17 +165,19 @@ public class DataAccess {
         
         //print("Hopefully no square brackets: " + responseString)
         
-        
+        CoreDataController.saveContext()
 
         return allRoutines
     }
     
-    /*
     
-    class func getWorkoutForRoutineFromRedis (routineId: Int)  {
+    
+    class func getWorkoutForRoutineFromRedis (routineId: String) -> [Workout]  {
         let user : User = CoreDataController.getUser()
         
-        var request = URLRequest(url: URL(string: apiURL + "workout/\(user.email!)/")!)
+        var request = URLRequest(url: URL(string: apiURL + "workout/\(user.email!)/\(routineId)/")!)
+        
+        print("\n\nNEW WORKOUT REQUEST\(request)\n")
         
         var responseString = ""
         let headers = [
@@ -184,7 +201,7 @@ public class DataAccess {
             
             responseString = String(data: data, encoding: .utf8)!
             
-            print("Loading WOrkout Data response: " + responseString)
+            print("\nLoading WOrkout Data response: " + responseString)
             
             
             sem.signal()
@@ -193,29 +210,72 @@ public class DataAccess {
         task.resume()
         sem.wait()
 
-    
+        
         var allWorkouts = [Workout]()
         if let data = responseString.data(using: .utf8) as? Data{
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[[String:Any]]]{
                 print("\n\nWorkoutJSONFULL == \(json)\n\n")
                 
-                for eachRoutine in json {
+                for eachWorkout in json {
                     
                     let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
                     
                     
+                    print("\n\nWORKOUTDATA\(eachWorkout)\n\n")
                     
-                    for (key,value) in eachRoutine{
-                        
+                    var liftList = [Lift]()
+                    
+                    if let eachWorkout = eachWorkout as? [[String:Any]]{
+                        for eachExercise in eachWorkout {
+                            var sets = 0
+                            var reps = 0
+                            var weight = 0
+                            var name = ""
+                            
+                            for (key, value) in eachExercise{
+                                print("\nKEY\(key)\nVALUE\(value)\n\n")
+                                
+                                if (key == "Value"){
+                                    let exerciseData = value as! String
+                                    
+                                    let parsedData = exerciseData.components(separatedBy: ":")
+                                    sets = Int(parsedData[0])!
+                                    reps = Int(parsedData[1])!
+                                    weight = Int(parsedData[2])!
+                                    
+                                }
+                                if (key == "Key"){
+                                    name = value as! String
+                                }
+                            }
+                            
+                            let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
+                            
+                            newLift.descript = ""
+                            newLift.duration = 0
+                            newLift.id = 0
+                            newLift.muscleGroup = ""
+                            newLift.name = name
+                            newLift.sets = Int16(sets)
+                            newLift.reps = Int16(reps)
+                            newLift.inWorkout = newWorkout
+                            
+                            liftList.append(newLift)
+                        }
                     }
+                    newWorkout.creator = user
                     
+                    let addingList = NSSet(array: liftList)
+                    newWorkout.addToHasExercises(addingList)
                     
+                    allWorkouts.append(newWorkout)
                 }
             }
         }
+        
+        return allWorkouts
     }
- 
-    */
+
     
     
     class func sendRoutineToRedis (routine: Routine) -> Bool {
