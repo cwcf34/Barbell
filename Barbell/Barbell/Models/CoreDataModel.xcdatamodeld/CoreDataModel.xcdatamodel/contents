@@ -5,6 +5,13 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="achievers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="achievements" inverseEntity="User" syncable="YES"/>
     </entity>
+    <entity name="LegacyLift" representedClassName="LegacyLift" syncable="YES">
+        <attribute name="liftName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="liftRep" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="liftSets" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="liftWeight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
     <entity name="Lift" representedClassName=".Lift" syncable="YES">
         <attribute name="descript" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -56,5 +63,6 @@
         <element name="Routine" positionX="162" positionY="200" width="128" height="148"/>
         <element name="User" positionX="-90" positionY="-18" width="128" height="270"/>
         <element name="Workout" positionX="-261" positionY="216" width="128" height="133"/>
+        <element name="LegacyLift" positionX="-506" positionY="216" width="128" height="118"/>
     </elements>
 </model>

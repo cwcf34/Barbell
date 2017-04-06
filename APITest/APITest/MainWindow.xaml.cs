@@ -21,7 +21,7 @@ namespace APITest
     public partial class MainWindow : Window
     {
 
-        private static string[] testArray = { "Security", "All" };
+        private static string[] testArray = { "Registration", "Authentication & Security", "All" };
         private List<string> testList = new List<string>(testArray);
 
         public MainWindow()
@@ -43,11 +43,14 @@ namespace APITest
             string testOutput = "";
             switch (testList_comboBox.Text)
             {
-                case "Security":
+                case "Registration":
+                    testOutput = Tests.RunRegistrationTest();
+                    break;
+                case "Authentication & Security":
                     testOutput = await Tests.RunSecurityTest();
                     break;
                 case "All":
-                    testOutput = Tests.RunAllTests();
+                    testOutput = await Tests.RunAllTests();
                     break;
                 default:
                     testOutput = "Please make a selection from the combobox.";

@@ -7,6 +7,11 @@
 //
 
 import UIKit
+import CoreData
+
+protocol StartWorkoutTableViewControllerDelegate: class { //Setting up a Custom delegate for this class. I am using `class` here to make it weak.
+    func sendDataBackToHomePageViewController(routinePassed: Routine?) //This function will send the data back to origin viewcontroller.
+}
 
 class StartWorkoutTableViewController: UITableViewController {
 
@@ -16,13 +21,15 @@ class StartWorkoutTableViewController: UITableViewController {
     @IBOutlet weak var RountineSetsLabel: UILabel!
     @IBOutlet weak var RountineRepsLabel: UILabel!
     @IBOutlet weak var RountineWeightLabel: UILabel!
-    @IBOutlet weak var CompletedExerciseLabel: UILabel!
     @IBOutlet weak var CompletedSetsTextArea: UITextField!
     @IBOutlet weak var CompletedRepsTextArea: UITextField!
     @IBOutlet weak var CompletedWeightTextArea: UITextField!
     var workoutPassed : Workout!
+    var routinePassed : Routine!
     var liftsInWorkout = [Lift]()
     var i = 0
+    
+    weak var customDelegateForDataReturn: StartWorkoutTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,25 +53,25 @@ class StartWorkoutTableViewController: UITableViewController {
         switch (Int(workoutPassed.weeknumber))
         {
             case 1:
-                DayOfTheWeek.text = "Sunday Funday"
+                DayOfTheWeek.text = "Sunday"
                 
             case 2:
-                DayOfTheWeek.text = "Messed up Monday"
+                DayOfTheWeek.text = "Monday"
                 
             case 3:
-                DayOfTheWeek.text = "Tequila Tuesday"
+                DayOfTheWeek.text = "Tuesday"
                 
             case 4:
-                DayOfTheWeek.text = "Wasted Wednesday"
+                DayOfTheWeek.text = "Wednesday"
                 
             case 5:
-                DayOfTheWeek.text = "Thirsty Thursday"
+                DayOfTheWeek.text = "Thursday"
                 
             case 6:
-                DayOfTheWeek.text = "Fucked up Friday"
+                DayOfTheWeek.text = "Friday"
                 
             case 7:
-                DayOfTheWeek.text = "Shitfaced Saturday"
+                DayOfTheWeek.text = "Saturday"
                 
             default:
                 DayOfTheWeek.text = "Hump Day"
@@ -74,7 +81,6 @@ class StartWorkoutTableViewController: UITableViewController {
         RountineSetsLabel.text = String(liftsInWorkout[i].sets)
         RountineRepsLabel.text = String(liftsInWorkout[i].reps)
         RountineWeightLabel.text = String(liftsInWorkout[i].weight)
-        CompletedExerciseLabel.text = liftsInWorkout[i].name
         
     }
 
@@ -96,24 +102,52 @@ class StartWorkoutTableViewController: UITableViewController {
     */
     
     @IBAction func nextExercise(_ sender: Any) {
-        
         if(i + 1 < liftsInWorkout.count ){
             i += 1
             viewWillAppear(true)
+            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+            finished.liftName = liftsInWorkout[i].name
+            finished.liftRep = liftsInWorkout[i].reps
+            finished.liftSets = liftsInWorkout[i].sets
+            finished.liftWeight = liftsInWorkout[i].weight
+            finished.timeStamp = Date() as NSDate
+            
+            CoreDataController.saveContext()
+            
             if(i == liftsInWorkout.count - 1){
-                nextButton.isEnabled = false
+                nextButton.setTitle("Finished", for: [])
             }
         }else{
-            //LOL DO NOTHING!
+            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+            finished.liftName = liftsInWorkout[i].name
+            finished.liftRep = liftsInWorkout[i].reps
+            finished.liftSets = liftsInWorkout[i].sets
+            finished.liftWeight = liftsInWorkout[i].weight
+            finished.timeStamp = Date() as NSDate
+            
+            CoreDataController.saveContext()
+            
+            customDelegateForDataReturn?.sendDataBackToHomePageViewController(routinePassed: routinePassed)
+            
+            let viewControllers = self.navigationController!.viewControllers
+            for var aViewController in viewControllers
+            {
+                if aViewController is ExercisesViewController
+                {
+                    _ = self.navigationController?.popToViewController(aViewController, animated: true)
+                }
+            }
         }
+        
+        CompletedRepsTextArea.text = ""
+        CompletedSetsTextArea.text = ""
+        CompletedWeightTextArea.text = ""
         
         //TODO
         //this should take us to the next exercise for that workout
     }
     @IBAction func finishedWorkout(_ sender: Any) {
-        //TODO
-        //this needs to calculate the time that it took for a workout to finish
-        //should segue back to the routine view
+        
     }
 
     /*

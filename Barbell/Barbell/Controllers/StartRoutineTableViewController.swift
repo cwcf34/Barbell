@@ -9,7 +9,9 @@
 import UIKit
 import CoreData
 
-class StartRoutineTableViewController: UITableViewController {
+class StartRoutineTableViewController: UITableViewController, StartWorkoutTableViewControllerDelegate {
+    
+
 
     var routinePassed : Routine!
     var workoutsInRoutine = [Workout]()
@@ -30,20 +32,8 @@ class StartRoutineTableViewController: UITableViewController {
             print(workout.weeknumber)
             print(workout.weekday)
         }
-        
-        //workoutsInRoutine = Workout(context: routinePassed.workouts)
-        //for workout in routinePassed.workouts! {
-        //    print(workout)
-            //print((workout as Workout).weekday)
-            //print((workout as Workout).weeknumber)
-        //    workoutsInRoutine.append(workout as! Workout)
-        //}
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -70,6 +60,9 @@ class StartRoutineTableViewController: UITableViewController {
         
         return count
     }
+    func sendDataBackToHomePageViewController(routinePassed: Routine?) {
+        self.routinePassed = routinePassed
+    }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dataCell", for: indexPath)
@@ -78,25 +71,25 @@ class StartRoutineTableViewController: UITableViewController {
         switch (Int(workoutsInRoutine[indexPath.section+indexPath.row].weekday!)!)
         {
         case 1:
-            cell.textLabel?.text = "Sunday Funday"
+            cell.textLabel?.text = "Sunday"
             
         case 2:
-            cell.textLabel?.text = "Messed up Monday"
+            cell.textLabel?.text = "Monday"
             
         case 3:
-            cell.textLabel?.text = "Tequila Tuesday"
+            cell.textLabel?.text = "Tuesday"
             
         case 4:
-            cell.textLabel?.text = "Wasted Wednesday"
+            cell.textLabel?.text = "Wednesday"
             
         case 5:
-            cell.textLabel?.text = "Thirsty Thursday"
+            cell.textLabel?.text = "Thursday"
             
         case 6:
-            cell.textLabel?.text = "Fucked up Friday"
+            cell.textLabel?.text = "Friday"
             
         case 7:
-            cell.textLabel?.text = "Shitfaced Saturday"
+            cell.textLabel?.text = "Saturday"
             
         default:
             cell.textLabel?.text = "Hump Day"
@@ -120,6 +113,7 @@ class StartRoutineTableViewController: UITableViewController {
         if (segue.identifier == "startWorkoutSegue"){
             var viewController = segue.destination as! StartWorkoutTableViewController
             viewController.workoutPassed = workoutToPass
+            viewController.routinePassed = self.routinePassed
         }
     }
     
