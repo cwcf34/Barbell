@@ -32,11 +32,6 @@ class StatsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(muscle)
-        print(exercise)
-        print(workout.weeknumber)
-        print(workout.weekday)
-        
         muscleGroup.text = muscle
         exerciseName.text = exercise
         
@@ -71,7 +66,6 @@ class StatsViewController: UIViewController {
 //            }
 //        }
         
-        print(workout.weekday)
         customDelegateForDataReturn?.sendDataBackToHomePageViewController(routinePassed: routinePassed, workoutPassed: self.workout)
         
         let viewControllers = self.navigationController!.viewControllers

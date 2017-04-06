@@ -89,7 +89,6 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     @IBAction func saveRoutine(_ sender: Any) {
-        //routinePassed.name = routine.text
         if publicSwitch.isOn {
             //send to api!
             //not done yet!
@@ -98,12 +97,6 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         else{
             routinePassed.isPublic = false
         }
-//        routinePassed.numberOfWeeks = Int16(weeks.count)
-//        routinePassed.creator = user.first
-//        routinePassed.addToUsers(user.first!)
-//        user.first?.addToScheduleArr(routinePassed)
-//       
-//        thisRoutine = routinePassed
         saveRoutineInfo()
         DataAccess.sendRoutineToRedis(routine: routinePassed)
         CoreDataController.saveContext()
@@ -174,6 +167,15 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         user.first?.addToScheduleArr(routinePassed)
         
         thisRoutine = routinePassed
+    }
+    
+     override func viewWillDisappear(_ animated: Bool) {
+        print(routinePassed.name!)
+        if(routinePassed.name! == "" || routinePassed.name == nil){
+            CoreDataController.getContext().delete(routinePassed)
+            CoreDataController.saveContext()
+        }
+        
     }
 
 }

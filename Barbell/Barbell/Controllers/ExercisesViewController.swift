@@ -106,20 +106,25 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let row = indexPath.row
+            let row = indexPath.row-1
+            print(row)
             if (row < foundLifts.count)
             {
                 //this is where it needs to be removed from coredata
-//                let games = workout[row]
-//                workout.remove(at: row)//remove from the array
-//                getContext().delete(games) //delete games from coredata
+                let lift = foundLifts[row]
+                foundLifts.remove(at: row)//remove from the array
+                CoreDataController.getContext().delete(lift) //delete games from coredata
                 
-//                do{
-//                    try getContext().save()
-//                    
-//                } catch{
-//                    print("error occured saving context after deleting item")
-//                }
+                do{
+                    try CoreDataController.getContext().save()
+                    
+                } catch{
+                    print("error occured saving context after deleting item")
+                }
+                
+                if(foundLifts.count == 0) {
+                    CoreDataController.getContext().delete(workout)
+                }
             }
             
             
