@@ -24,10 +24,13 @@ class StatsViewController: UIViewController {
     weak var customDelegateForDataReturn: StatsViewControllerDelegate?
     
     
-    var muscle : String!
-    var exercise : String!
+    var muscle : String = ""
+    var exercise : String = ""
     var workout : Workout!
     var routinePassed : Routine!
+    var sets: Int = 0
+    var reps: Int = 0
+    var weight: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +38,13 @@ class StatsViewController: UIViewController {
         muscleGroup.text = muscle
         exerciseName.text = exercise
         
+        if(sets != 0 && reps != 0 && weight != 0 && muscle != "" && exercise != "") {
+            exerciseName.text = exercise
+            muscleGroup.text =  muscle
+            setsTextArea.text = String(sets)
+            repsTextArea.text = String(reps)
+            weightTextArea.text = String(weight)
+        }
     }
 
     override func didReceiveMemoryWarning() {

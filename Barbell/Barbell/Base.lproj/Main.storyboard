@@ -1294,19 +1294,16 @@
                                                 <constraint firstItem="qoc-PN-les" firstAttribute="leading" secondItem="Up3-h3-UQy" secondAttribute="trailing" constant="8" symbolic="YES" id="u6I-9g-NRk"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="GVY-Qc-0cJ" kind="show" identifier="loadExercisesSegue" id="1NM-yq-DsI"/>
-                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="exerciseCell" textLabel="h8G-aD-Rv6" rowHeight="44" style="IBUITableViewCellStyleDefault" id="Abh-Fs-f5g">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="exerciseCell" textLabel="h8G-aD-Rv6" rowHeight="44" style="IBUITableViewCellStyleDefault" id="Abh-Fs-f5g">
                                         <rect key="frame" x="0.0" y="72" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Abh-Fs-f5g" id="22Z-hU-niD">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h8G-aD-Rv6">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="325" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -1356,6 +1353,8 @@
                     </view>
                     <connections>
                         <outlet property="exerciseTable" destination="V92-Yx-v1s" id="cUz-mY-sLV"/>
+                        <segue destination="i0H-zF-8Kv" kind="show" identifier="holdMyBeer" id="zRf-bH-u2P"/>
+                        <segue destination="GVY-Qc-0cJ" kind="show" identifier="loadExercisesSegue" id="YYk-F0-9LZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RhM-ha-gIa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1436,7 +1435,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="6063" y="-1292"/>
+            <point key="canvasLocation" x="6076" y="-1327"/>
         </scene>
         <!--Stats View Controller-->
         <scene sceneID="hv6-IB-MKv">
@@ -1669,5 +1668,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="hTW-Zn-CHp"/>
+        <segue reference="zRf-bH-u2P"/>
     </inferredMetricsTieBreakers>
 </document>
