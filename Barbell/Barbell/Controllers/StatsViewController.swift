@@ -31,14 +31,15 @@ class StatsViewController: UIViewController {
     var sets: Int = 0
     var reps: Int = 0
     var weight: Int = 0
+    var lift : Lift?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("viewDidLoad")
         muscleGroup.text = muscle
         exerciseName.text = exercise
         
-        if(sets != 0 && reps != 0 && weight != 0 && muscle != "" && exercise != "") {
+        if(sets != 0 && reps != 0 && weight != 0) {
             exerciseName.text = exercise
             muscleGroup.text =  muscle
             setsTextArea.text = String(sets)
@@ -46,7 +47,6 @@ class StatsViewController: UIViewController {
             weightTextArea.text = String(weight)
         }
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -54,17 +54,29 @@ class StatsViewController: UIViewController {
     
     @IBAction func saveStats(_ sender: Any) {
     
-        let lift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
+        if(sets != 0 && reps != 0 && weight != 0 && muscle != "" && exercise != "") {
+            lift?.muscleGroup = muscle
+            lift?.name = self.exercise
+            lift?.sets = Int16(setsTextArea.text!)!
+            lift?.reps = Int16(repsTextArea.text!)!
+            lift?.weight = Int16(weightTextArea.text!)!
+            
+            CoreDataController.saveContext()
+        }else{
+            let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
     
-        lift.muscleGroup = muscle
-        lift.name = self.exercise
-        lift.sets = Int16(setsTextArea.text!)!
-        lift.reps = Int16(repsTextArea.text!)!
-        lift.weight = Int16(weightTextArea.text!)!
-    
-        workout.addToHasExercises(lift)
+            newLift.muscleGroup = muscle
+            newLift.name = self.exercise
+            newLift.sets = Int16(setsTextArea.text!)!
+            newLift.reps = Int16(repsTextArea.text!)!
+            newLift.weight = Int16(weightTextArea.text!)!
+            
+            workout.addToHasExercises(newLift)
+            
+            CoreDataController.saveContext()
+        }
         
-        CoreDataController.saveContext()
+
         
 //        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as! [UIViewController];
 //        for aViewController in viewControllers {

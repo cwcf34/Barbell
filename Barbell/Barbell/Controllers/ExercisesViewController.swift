@@ -22,6 +22,7 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     var weight: Int!
     var muscle : String!
     var exercise : String!
+    var lift : Lift!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +52,7 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
 //    }
     override func viewWillAppear(_ animated: Bool) {
         let context = CoreDataController.getContext()
-        
+        print("reloading data")
         let fetchRequest = NSFetchRequest<Lift>(entityName: "Lift")
         do{
             foundLifts = workout.hasExercises?.allObjects as! [Lift]
@@ -93,6 +94,7 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
             weight = Int(foundLifts[indexPath.row-1].weight)
             muscle = foundLifts[indexPath.row-1].muscleGroup
             exercise = foundLifts[indexPath.row-1].name
+            lift = foundLifts[indexPath.row-1]
             self.performSegue(withIdentifier: "holdMyBeer", sender: self)
         }
         
@@ -111,6 +113,7 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
             viewController.workout = workout
             viewController.muscle = muscle
             viewController.exercise = exercise
+            viewController.lift = lift
         }
         
     }

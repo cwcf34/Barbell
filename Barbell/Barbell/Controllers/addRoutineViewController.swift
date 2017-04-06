@@ -170,7 +170,6 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     }
     
      override func viewWillDisappear(_ animated: Bool) {
-        print(routinePassed.name!)
         if(routinePassed.name! == "" || routinePassed.name == nil){
             CoreDataController.getContext().delete(routinePassed)
             CoreDataController.saveContext()
