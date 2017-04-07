@@ -105,7 +105,7 @@ public class DataAccess {
         var allRoutines = [Routine]()
         if let data = responseString.data(using: .utf8) as? Data{
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
-                print("JSONFULL == \(json)\n\n")
+                //print("JSONFULL == \(json)\n\n")
                 
                 for eachRoutine in json {
                     
@@ -143,8 +143,8 @@ public class DataAccess {
                         }
                     }
                     
-                    //getWorkoutForRoutineFromRedis(routineId: routineIdNum)
-                    let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: "173297413"))
+                    let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: routineIdNum))
+                    //let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: "687113553"))
                     
                     for eachWorkout in allWorkouts{
                         if let workout = eachWorkout as? Workout {
@@ -173,107 +173,139 @@ public class DataAccess {
     
     
     class func getWorkoutForRoutineFromRedis (routineId: String) -> [Workout]  {
-        let user : User = CoreDataController.getUser()
+        if let user = CoreDataController.getUser() as? User {
         
-        var request = URLRequest(url: URL(string: apiURL + "workout/\(user.email!)/\(routineId)/")!)
-        
-        print("\n\nNEW WORKOUT REQUEST\(request)\n")
-        
-        var responseString = ""
-        let headers = [
-            "content-type": "application/json"
-        ]
-        
-        request.allHTTPHeaderFields = headers
-        
-        let sem = DispatchSemaphore(value: 0)
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
+            var request = URLRequest(url: URL(string: apiURL + "workout/\(user.email!)/\(routineId)/")!)
             
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
-            }
+            print("\n\nNEW WORKOUT REQUEST\(request)\n")
             
-            responseString = String(data: data, encoding: .utf8)!
+            var responseString = ""
+            let headers = [
+                "content-type": "application/json"
+            ]
             
-            print("\nLoading WOrkout Data response: " + responseString)
+            request.allHTTPHeaderFields = headers
             
+            let sem = DispatchSemaphore(value: 0)
             
-            sem.signal()
-        }
-        
-        task.resume()
-        sem.wait()
-
-        
-        var allWorkouts = [Workout]()
-        if let data = responseString.data(using: .utf8) as? Data{
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[[String:Any]]]{
-                print("\n\nWorkoutJSONFULL == \(json)\n\n")
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                    print("error=\(error)")
+                    return
+                }
                 
-                for eachWorkout in json {
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("response = \(response)")
+                }
+                
+                responseString = String(data: data, encoding: .utf8)!
+                
+                print("\nLoading WOrkout Data response: " + responseString)
+                
+                
+                sem.signal()
+            }
+            
+            task.resume()
+            sem.wait()
+
+            
+            var allWorkouts = [Workout]()
+            var count = 0
+            
+            if let data = responseString.data(using: .utf8) as? Data{
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[[String:Any]]]{
+                    //print("\n\nWorkoutJSONFULL == \(json)\n\n")
                     
-                    let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
-                    
-                    
-                    print("\n\nWORKOUTDATA\(eachWorkout)\n\n")
-                    
-                    var liftList = [Lift]()
-                    
-                    if let eachWorkout = eachWorkout as? [[String:Any]]{
-                        for eachExercise in eachWorkout {
-                            var sets = 0
-                            var reps = 0
-                            var weight = 0
-                            var name = ""
+                    for eachWorkout in json {
+                        
+                        
+                        let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
+                        var liftList = [Lift]()
+                        
+                        if eachWorkout.description != "[]" {
                             
-                            for (key, value) in eachExercise{
-                                print("\nKEY\(key)\nVALUE\(value)\n\n")
-                                
-                                if (key == "Value"){
-                                    let exerciseData = value as! String
+                            //print("\n\nWORKOUTDATA\(eachWorkout)\n\n")
+                            
+                            if let eachWorkout = eachWorkout as? [[String:Any]]{
+                                for eachExercise in eachWorkout {
+                                    var sets = 0
+                                    var reps = 0
+                                    var weight = 0
+                                    var name = ""
                                     
-                                    let parsedData = exerciseData.components(separatedBy: ":")
-                                    sets = Int(parsedData[0])!
-                                    reps = Int(parsedData[1])!
-                                    weight = Int(parsedData[2])!
+                                    for (key, value) in eachExercise{
+                                        //print("\nKEY\(key)\nVALUE\(value)\n\n")
+                                        
+                                        if (key == "Value"){
+                                            let exerciseData = value as! String
+                                            
+                                            let parsedData = exerciseData.components(separatedBy: ":")
+                                            sets = Int(parsedData[0])!
+                                            reps = Int(parsedData[1])!
+                                            weight = Int(parsedData[2])!
+                                            
+                                        }
+                                        if (key == "Key"){
+                                            name = value as! String
+                                        }
+                                    }
                                     
-                                }
-                                if (key == "Key"){
-                                    name = value as! String
+                                    let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
+                                    
+                                    newLift.descript = ""
+                                    newLift.duration = 0
+                                    newLift.id = 0
+                                    newLift.muscleGroup = ""
+                                    newLift.name = name
+                                    newLift.sets = Int16(sets)
+                                    newLift.reps = Int16(reps)
+                                    newLift.inWorkout = newWorkout
+                                    
+                                    liftList.append(newLift)
                                 }
                             }
-                            
-                            let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
-                            
-                            newLift.descript = ""
-                            newLift.duration = 0
-                            newLift.id = 0
-                            newLift.muscleGroup = ""
-                            newLift.name = name
-                            newLift.sets = Int16(sets)
-                            newLift.reps = Int16(reps)
-                            newLift.inWorkout = newWorkout
-                            
-                            liftList.append(newLift)
+                        }else{
+                            print("empty workout day")
                         }
+                        
+                        let weekCountInt: Int16 = Int16(floor(Double(count/7)) + 1)
+                        var weekdayString = ""
+                        
+                        switch count % 7 {
+                        case 0:
+                            weekdayString = "Sunday"
+                        case 1:
+                            weekdayString = "Monday"
+                        case 2:
+                            weekdayString = "Tuesday"
+                        case 3:
+                            weekdayString = "Wednesday"
+                        case 4:
+                            weekdayString = "Thursday"
+                        case 5:
+                            weekdayString = "Friday"
+                        default:
+                            weekdayString = "Saturday"
+                        }
+                        
+                        newWorkout.creator = user
+                        newWorkout.weekday = weekdayString
+                        newWorkout.weeknumber = weekCountInt
+                        
+                        let addingList = NSSet(array: liftList)
+                        newWorkout.addToHasExercises(addingList)
+                        
+                        allWorkouts.append(newWorkout)
+                        
+                        count += 1
                     }
-                    newWorkout.creator = user
-                    
-                    let addingList = NSSet(array: liftList)
-                    newWorkout.addToHasExercises(addingList)
-                    
-                    allWorkouts.append(newWorkout)
                 }
             }
+            
+            return allWorkouts
         }
-        
-        return allWorkouts
     }
 
     
