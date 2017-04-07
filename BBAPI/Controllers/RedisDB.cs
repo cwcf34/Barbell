@@ -334,44 +334,5 @@ namespace BBAPI.Controllers
 		{
 			cache.KeyDelete(key);
 		}
-
-
-		/*
-		public string[] createSecurePass(string pword)
-		{
-			SHA512 hash512 = SHA512.Create();
-			string salt = Guid.NewGuid().ToString();
-			string saltedPassword = pword + salt;
-
-			var hashedPass = GetSha512Hash(hash512, saltedPassword);
-			string[] returnArray = new string[2];
-
-			returnArray.SetValue(hashedPass, 0);
-			returnArray.SetValue(salt, 1);
-
-			return returnArray;
-		}
-
-        public string GetSha512Hash(SHA512 sha512Hash, string input)
-        {
-
-            // Convert the input string to a byte array and compute the hash.
-            byte[] data = sha512Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-
-            // Loop through each byte of the hashed data
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
-        }
-		*/
 	}
 }

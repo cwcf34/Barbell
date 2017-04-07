@@ -122,7 +122,7 @@ namespace BBAPI.Controllers
 		private int getRandomId()
 		{
 			var randGen = new Random();
-			var randGuid = Guid.NewGuid().GetHashCode();
+			var randGuid = Guid.NewGuid().GetHashCode() % 65534;
 			if (randGuid < 0)
 			{
 				randGuid = randGuid * -1;

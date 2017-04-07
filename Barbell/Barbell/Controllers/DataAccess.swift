@@ -110,8 +110,7 @@ public class DataAccess {
                 for eachRoutine in json {
                     
                     let newRoutine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
-                    
-                    var routineIdNum: String = String()
+                
                     
                     for (key,value) in eachRoutine{
                         if (key == "numWeeks"){
@@ -119,7 +118,7 @@ public class DataAccess {
                                 newRoutine.numberOfWeeks = value
                             }
                         }
-                        if (key == "name"){
+                        if (key == "Name"){
                             if let value = value as? String{
                                 newRoutine.name = value
                             }
@@ -136,14 +135,13 @@ public class DataAccess {
                         
                         //getting exercises for every workoutday
                         if (key == "Id"){
-                            if let value = value as? String{
-                                routineIdNum = value
-                                newRoutine.id = 0
+                            if let value = value as? Int16{
+                                newRoutine.id = value
                             }
                         }
                     }
                     
-                    let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: routineIdNum))
+                    let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: newRoutine.id))
                     //let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: "687113553"))
                     
                     for eachWorkout in allWorkouts{
@@ -172,7 +170,7 @@ public class DataAccess {
     
     
     
-    class func getWorkoutForRoutineFromRedis (routineId: String) -> [Workout]  {
+    class func getWorkoutForRoutineFromRedis (routineId: Int16) -> [Workout]  {
         if let user = CoreDataController.getUser() as? User {
         
             var request = URLRequest(url: URL(string: apiURL + "workout/\(user.email!)/\(routineId)/")!)
@@ -266,38 +264,39 @@ public class DataAccess {
                                     liftList.append(newLift)
                                 }
                             }
+                            
+                            let weekCountInt: Int16 = Int16(floor(Double(count/7)) + 1)
+                            var weekdayString = ""
+                            
+                            switch count % 7 {
+                            case 0:
+                                weekdayString = "1"
+                            case 1:
+                                weekdayString = "2"
+                            case 2:
+                                weekdayString = "3"
+                            case 3:
+                                weekdayString = "4"
+                            case 4:
+                                weekdayString = "5"
+                            case 5:
+                                weekdayString = "6"
+                            default:
+                                weekdayString = "7"
+                            }
+                            
+                            newWorkout.creator = user
+                            newWorkout.weekday = weekdayString
+                            newWorkout.weeknumber = weekCountInt
+                            
+                            let addingList = NSSet(array: liftList)
+                            newWorkout.addToHasExercises(addingList)
+                            
+                            allWorkouts.append(newWorkout)
+
                         }else{
                             print("empty workout day")
                         }
-                        
-                        let weekCountInt: Int16 = Int16(floor(Double(count/7)) + 1)
-                        var weekdayString = ""
-                        
-                        switch count % 7 {
-                        case 0:
-                            weekdayString = "Sunday"
-                        case 1:
-                            weekdayString = "Monday"
-                        case 2:
-                            weekdayString = "Tuesday"
-                        case 3:
-                            weekdayString = "Wednesday"
-                        case 4:
-                            weekdayString = "Thursday"
-                        case 5:
-                            weekdayString = "Friday"
-                        default:
-                            weekdayString = "Saturday"
-                        }
-                        
-                        newWorkout.creator = user
-                        newWorkout.weekday = weekdayString
-                        newWorkout.weeknumber = weekCountInt
-                        
-                        let addingList = NSSet(array: liftList)
-                        newWorkout.addToHasExercises(addingList)
-                        
-                        allWorkouts.append(newWorkout)
                         
                         count += 1
                     }
