@@ -47,8 +47,7 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
         
         let fetchRequest = NSFetchRequest<Lift>(entityName: "Lift")
         do{
-            foundLifts = try context.fetch(fetchRequest)
-            
+            foundLifts = workout.hasExercises?.allObjects as! [Lift]
         }catch{
             print("Bad getExercise query")
         }
@@ -104,6 +103,35 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
         self.workout = workoutPassed
     }
 
+    // Override to support editing the table view.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let row = indexPath.row
+            if (row < foundLifts.count)
+            {
+                //this is where it needs to be removed from coredata
+//                let games = workout[row]
+//                workout.remove(at: row)//remove from the array
+//                getContext().delete(games) //delete games from coredata
+                
+//                do{
+//                    try getContext().save()
+//                    
+//                } catch{
+//                    print("error occured saving context after deleting item")
+//                }
+            }
+            
+            
+            
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
+    
     /*
     // MARK: - Navigation
 

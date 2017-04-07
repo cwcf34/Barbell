@@ -113,7 +113,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		63FA5E0D1E72248C00DEE65D /* DickGroups */ = {
+		63FA5E0D1E72248C00DEE65D /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
 				635AA01A1E93181100063C25 /* 100.png */,
@@ -124,7 +124,7 @@
 				63FA5E0E1E7224AF00DEE65D /* HeadDick.jpeg */,
 				63FA5E0F1E7224AF00DEE65D /* Plus.png */,
 			);
-			name = DickGroups;
+			name = Pictures;
 			sourceTree = "<group>";
 		};
 		C30AE7EB1E5CF7F70093507B = {
@@ -146,7 +146,7 @@
 		C30AE7F61E5CF7F80093507B /* Barbell */ = {
 			isa = PBXGroup;
 			children = (
-				63FA5E0D1E72248C00DEE65D /* DickGroups */,
+				63FA5E0D1E72248C00DEE65D /* Pictures */,
 				C384A1C71E5D1FAA0026FD99 /* Controllers */,
 				C384A1C81E5D1FAA0026FD99 /* Models */,
 				C30AE7F71E5CF7F80093507B /* AppDelegate.swift */,
