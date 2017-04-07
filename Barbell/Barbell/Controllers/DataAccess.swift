@@ -100,8 +100,6 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
-        //responseString.removeAtIndex(index)
-        //responseString.remove(at: responseString.endIndex)
         var allRoutines = [Routine]()
         if let data = responseString.data(using: .utf8) as? Data{
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
@@ -119,8 +117,9 @@ public class DataAccess {
                                 newRoutine.numberOfWeeks = value
                             }
                         }
-                        if (key == "name"){
+                        if (key == "Name"){
                             if let value = value as? String{
+                                print("Found routine named in redis" + value)
                                 newRoutine.name = value
                             }
                         }
@@ -148,12 +147,14 @@ public class DataAccess {
                     
                     for eachWorkout in allWorkouts{
                         if let workout = eachWorkout as? Workout {
-                            workout.createdRoutine = newRoutine
+                            if ((workout.hasExercises?.count)! > 0)  {
+                                newRoutine.addToWorkouts(workout)
+                                workout.createdRoutine = newRoutine
+                            }
                         }
                     }
                     
                     newRoutine.creator = user
-                    newRoutine.addToWorkouts(allWorkouts)
                     newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)

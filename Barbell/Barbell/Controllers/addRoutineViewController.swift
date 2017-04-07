@@ -92,6 +92,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         //routinePassed.name = routine.text
         if publicSwitch.isOn {
             //send to api!
+            
             //not done yet!
             routinePassed.isPublic = true
         }
