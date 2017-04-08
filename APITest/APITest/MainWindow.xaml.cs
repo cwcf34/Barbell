@@ -53,7 +53,7 @@ namespace APITest
                     testOutput = await Tests.RunAllTests();
                     break;
                 default:
-                    testOutput = "Please make a selection from the combobox.";
+                    output_textBlock.Text = "Please make a selection from the combobox.";
                     break;
             }
 
