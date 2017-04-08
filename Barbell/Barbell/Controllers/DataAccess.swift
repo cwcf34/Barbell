@@ -114,8 +114,10 @@ public class DataAccess {
                     
                     for (key,value) in eachRoutine{
                         if (key == "numWeeks"){
-                            if let value = value as? Int16{
-                                newRoutine.numberOfWeeks = value
+                            if let value = value as? String{
+                                if let castedValue = Int16(value){
+                                    newRoutine.numberOfWeeks = castedValue
+                                }
                             }
                         }
                         if (key == "Name"){
@@ -124,8 +126,8 @@ public class DataAccess {
                             }
                         }
                         if (key == "isPublic"){
-                            if let value = value as? Int{
-                                if(value == 1){
+                            if let value = value as? String{
+                                if(value == "1"){
                                     newRoutine.isPublic = true
                                 }else{
                                     newRoutine.isPublic = false
@@ -135,8 +137,10 @@ public class DataAccess {
                         
                         //getting exercises for every workoutday
                         if (key == "Id"){
-                            if let value = value as? Int16{
-                                newRoutine.id = value
+                            if let value = value as? String{
+                                if let castedValue = Int16(value){
+                                    newRoutine.id = castedValue
+                                }
                             }
                         }
                     }
@@ -218,11 +222,10 @@ public class DataAccess {
                     
                     for eachWorkout in json {
                         
-                        
-                        let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
-                        var liftList = [Lift]()
-                        
                         if eachWorkout.description != "[]" {
+                            
+                            let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
+                            var liftList = [Lift]()
                             
                             //print("\n\nWORKOUTDATA\(eachWorkout)\n\n")
                             
