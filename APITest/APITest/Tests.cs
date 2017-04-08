@@ -28,7 +28,9 @@ namespace APITest
         {
             string regisOutput = RunRegistrationTest();
             string authOutput = await RunSecurityTest();
-            return regisOutput + authOutput;
+            string routineOutput = RunRoutineTests();
+
+            return regisOutput + authOutput + routineOutput;
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace APITest
             generatedUser.Password = RandomString(20);
             string returnString = "Attempting to register user " + generatedUser.Email + "...";
 
-            string resultString = HttpPOST(apiServer + "user/" + generatedUser.Email + "/", "\"{name:Beavis Sinatra,password:" + generatedUser.Password + "}\"");
+            string resultString = HttpCall(apiServer + "user/" + generatedUser.Email + "/", "\"{name:Beavis Sinatra,password:" + generatedUser.Password + "}\"", "POST");
             Console.WriteLine(resultString);
             resultString = resultString.Equals("\"true\"") ? "Success" : "Failure";
             returnString += "Output: " + resultString + "\n";
@@ -92,6 +94,90 @@ namespace APITest
             return returnString;
         }
 
+
+        /*
+         * Step 1: Post a routine
+         * Step 2: Get all routines
+         * Step 3: Get one routine in particular
+         */
+        public static string RunRoutineTests()
+        {
+            string returnString = "Running tests on the routine controller...\n"
+                + "Creating multiple routines for " + generatedUser.Email + "...";
+
+            //"{name:routineName,weeks:numberOfweeks,public:0/1,creator:email}";
+            //Create a new routine
+            Routine[] generatedRoutines = { new Routine(RandomString(6), "5", "1"), new Routine(RandomString(6), "5", "1") };
+
+            //Generate the query string to POST this routine
+            string queryString = "\"{name:" + generatedRoutines[0].Name + ",weeks:" + generatedRoutines[0].numWeeks + ",isPublic:" 
+                + generatedRoutines[0].isPublic + ",creator:" + generatedUser.Email + "}\"";
+            string queryString2 = "\"{name:" + generatedRoutines[1].Name + ",weeks:" + generatedRoutines[1].numWeeks + ",isPublic:"
+                + generatedRoutines[1].isPublic + ",creator:" + generatedUser.Email + "}\"";
+
+
+            //Send the call to the api
+            string resultString = HttpCall(apiServer + "routine/" + generatedUser.Email + "/", queryString, "POST");
+            string resultString2 = HttpCall(apiServer + "routine/" + generatedUser.Email + "/", queryString2, "POST");
+
+            //Find out if we recieved a success of failure
+            try
+            {
+                //Since the return should be a numerical ID, try to parse it. If it fails, we recieved an error code
+                Int64.Parse(resultString);
+                Int64.Parse(resultString2);
+
+                generatedRoutines[0].Id = resultString;
+                generatedRoutines[1].Id = resultString2;
+                returnString += "Success\n";
+            }
+            catch
+            {
+                returnString += "Failure\n";
+            }
+            returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n"
+                + "Getting all routines for this user from the API and comparing them...";
+
+            //Get all the routines for this user now. It should be equal to the ones we just set
+            resultString = HttpCall(apiServer + "routine/" + generatedUser.Email + "/", "", "GET");
+            Console.WriteLine(resultString);
+
+            Routine[] returnedRoutines = JsonConvert.DeserializeObject<Routine[]>(resultString);
+
+            //Compare
+            if(generatedRoutines[0].Equals(returnedRoutines[1]) && generatedRoutines[1].Equals(returnedRoutines[0]))
+            {
+                returnString += "Success\n";
+            }
+            else
+            {
+                returnString += "Failure\n";
+            }
+            returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
+
+
+            returnString += "Testing API call: GET routine...";
+            //Testing get routine api call
+            resultString = HttpCall(apiServer + "routine/" + generatedUser.Email + "/" + generatedRoutines[0].Id + "/", "", "GET");
+            returnedRoutines[0] = JsonConvert.DeserializeObject<Routine>(resultString);
+            resultString = HttpCall(apiServer + "routine/" + generatedUser.Email + "/" + generatedRoutines[1].Id + "/", "", "GET");
+            returnedRoutines[1] = JsonConvert.DeserializeObject<Routine>(resultString);
+            //Compare
+            if (generatedRoutines[0].Equals(returnedRoutines[0]) && generatedRoutines[1].Equals(returnedRoutines[1]))
+            {
+                returnString += "Success\n";
+            }
+            else
+            {
+                returnString += "Failure\n";
+            }
+            returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
+
+            //Console.WriteLine(returnedRoutines);
+            //+ "/" + generatedRoutine.Id
+            return returnString;
+        }
+
         /// <summary>
         /// Helper function for RunSecurityTest that gets a token from the authorization server.
         /// </summary>
@@ -135,26 +221,32 @@ namespace APITest
             }
         }
 
-        private static string HttpPOST(string url, string querystring)
+
+        private static string HttpCall(string url, string querystring, string httpMethod)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = "application/json";
-            request.Method = "POST";
-            StreamWriter requestWriter = new StreamWriter(request.GetRequestStream());
+            request.Method = httpMethod;
 
-            try
+            if (!httpMethod.Equals("GET"))
             {
-                requestWriter.Write(querystring);
+                StreamWriter requestWriter = new StreamWriter(request.GetRequestStream());
+
+                try
+                {
+                    requestWriter.Write(querystring);
+                }
+                catch
+                {
+                    throw;
+                }
+                finally
+                {
+                    requestWriter.Close();
+                    requestWriter = null;
+                }
             }
-            catch
-            {
-                throw;
-            }
-            finally
-            {
-                requestWriter.Close();
-                requestWriter = null;
-            }
+
 
             StartStopwatch();
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -199,10 +291,44 @@ namespace APITest
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public User(string email, string password)
+
+        public User(string Email, string Password)
         {
-            Email = email;
-            Password = password;
+            this.Email = Email;
+            this.Password = Password;
+        }
+    }
+
+    public class Routine
+    {
+        public string Name { get; set; }
+        public string Id { get; set; }
+        public string numWeeks { get; set; }
+        public string isPublic { get; set; }
+
+        public Routine(string Name, string numWeeks, string isPublic)
+        {
+            this.Name = Name;
+            this.numWeeks = numWeeks;
+            this.isPublic = isPublic;
+        }
+
+        public bool Equals(Routine r)
+        {
+            // If r is null return false:
+            if (r == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            if(Name == r.Name && Id == r.Id && numWeeks == r.numWeeks && isPublic == r.isPublic)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
         }
     }
 }
