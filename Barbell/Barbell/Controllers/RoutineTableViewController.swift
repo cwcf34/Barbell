@@ -12,7 +12,7 @@ import CoreData
 class RoutineTableViewController: UITableViewController {
     
     var foundRoutines = [Routine]()
-    var routine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+    var routine : Routine!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,6 +96,39 @@ class RoutineTableViewController: UITableViewController {
         if (segue.identifier == "startRoutineSegue"){
             var viewController = segue.destination as! StartRoutineTableViewController
             viewController.routinePassed = routine
+        }
+    }
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let row = indexPath.row-1
+            print(row)
+            if (row < foundRoutines.count)
+            {
+                //this is where it needs to be removed from coredata
+                let deleteRoutine = foundRoutines[row]
+                foundRoutines.remove(at: row)//remove from the array
+                CoreDataController.getContext().delete(deleteRoutine) //delete games from coredata
+                
+                do{
+                    try CoreDataController.getContext().save()
+                    
+                } catch{
+                    print("error occured saving context after deleting item")
+                }
+                
+//                if(foundRoutines.count == 0) {
+//                    CoreDataController.getContext().delete(routine)
+//                }
+            }
+            
+            
+            
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
     

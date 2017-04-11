@@ -38,7 +38,7 @@ namespace BBAPI.Controllers
 			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "{name:routineName,weeks:numberOfweeks,public:0/1,creator:email}";
+				var resp2 = "{name:routineName,weeks:numberOfweeks,isPublic:0/1,creator:email}";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
