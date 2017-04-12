@@ -13,20 +13,18 @@ class RoutineTableViewController: UITableViewController {
     
     var foundRoutines = [Routine]()
     var routine : Routine!
+    var didDelete: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.tableView.reloadData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         let context = CoreDataController.getContext()
+        didDelete = false
         
         let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
         do{
@@ -37,11 +35,27 @@ class RoutineTableViewController: UITableViewController {
         }
         for routine in foundRoutines{
             print(routine.name)
+            if(routine.name == nil || routine.name == "") {
+                CoreDataController.getContext().delete(routine)
+                didDelete = true;
+                break;
+            }
+        }
+        
+        if(didDelete == true) {
+            let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
+            do{
+                foundRoutines = try context.fetch(fetchRequest)
+                
+            }catch{
+                print("Bad getExercise query")
+            }
         }
         
         self.tableView.reloadData()
-        return
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -57,6 +71,7 @@ class RoutineTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        
         return 1 + foundRoutines.count
     }
 

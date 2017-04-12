@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,6 +39,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        var foundRoutines = [Routine]()
+        
+        let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
+        do{
+            foundRoutines = try CoreDataController.getContext().fetch(fetchRequest)
+            
+        }catch{
+            print("Bad getExercise query")
+        }
+        for routine in foundRoutines{
+            if(routine.name != nil) {
+                print(routine.name)
+                if(routine.isPublic == false) {
+                    DataAccess.sendRoutineToRedis(routine: routine)
+                }
+            }
+        }
+        
+        let user = CoreDataController.getUser()
+        DataAccess.saveUserToRedis(email: (user.email)!)
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
