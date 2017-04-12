@@ -43,7 +43,7 @@ namespace BBAPI.Controllers
 			 */
 			redisCache.createWorkoutDataHash(workoutKey, exName, exerciseValue);
 
-			return Ok("exercise:" + exName + " exercise Value: " + exerciseValue);
+			return Ok(true);
 		}
 
 		//get all routine Workouts
