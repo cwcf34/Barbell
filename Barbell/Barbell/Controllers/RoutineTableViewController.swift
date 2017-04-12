@@ -12,21 +12,19 @@ import CoreData
 class RoutineTableViewController: UITableViewController {
     
     var foundRoutines = [Routine]()
-    var routine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+    var routine : Routine!
+    var didDelete: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.tableView.reloadData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         let context = CoreDataController.getContext()
+        didDelete = false
         
         let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
         do{
@@ -37,11 +35,27 @@ class RoutineTableViewController: UITableViewController {
         }
         for routine in foundRoutines{
             print(routine.name)
+            if(routine.name == nil || routine.name == "") {
+                CoreDataController.getContext().delete(routine)
+                didDelete = true;
+                break;
+            }
+        }
+        
+        if(didDelete == true) {
+            let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
+            do{
+                foundRoutines = try context.fetch(fetchRequest)
+                
+            }catch{
+                print("Bad getExercise query")
+            }
         }
         
         self.tableView.reloadData()
-        return
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -57,6 +71,7 @@ class RoutineTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        
         return 1 + foundRoutines.count
     }
 
@@ -96,6 +111,39 @@ class RoutineTableViewController: UITableViewController {
         if (segue.identifier == "startRoutineSegue"){
             var viewController = segue.destination as! StartRoutineTableViewController
             viewController.routinePassed = routine
+        }
+    }
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let row = indexPath.row-1
+            print(row)
+            if (row < foundRoutines.count)
+            {
+                //this is where it needs to be removed from coredata
+                let deleteRoutine = foundRoutines[row]
+                foundRoutines.remove(at: row)//remove from the array
+                CoreDataController.getContext().delete(deleteRoutine) //delete games from coredata
+                
+                do{
+                    try CoreDataController.getContext().save()
+                    
+                } catch{
+                    print("error occured saving context after deleting item")
+                }
+                
+//                if(foundRoutines.count == 0) {
+//                    CoreDataController.getContext().delete(routine)
+//                }
+            }
+            
+            
+            
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
     

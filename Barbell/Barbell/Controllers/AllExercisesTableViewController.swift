@@ -20,7 +20,7 @@ class AllExercisesTableViewController: UITableViewController, UISearchResultsUpd
     var exerciseToPass : String = ""
     var workout : Workout!
     var routinePassed: Routine!
-
+    
     func readJSONObject(object: [String: AnyObject]) {
         var exerciseNames = [String]()
         
@@ -172,13 +172,7 @@ class AllExercisesTableViewController: UITableViewController, UISearchResultsUpd
             }
                 exerciseNames.removeAll()
         }
-        
-//        print(filteredTableData.count)
-//        for index in 0...filteredTableData.count-1 {
-//            for string in filteredTableData[index].exercises {
-//                print(string)
-//            }
-//        }
+
         self.tableView.reloadData()
     }
     /*

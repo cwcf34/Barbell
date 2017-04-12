@@ -25,6 +25,10 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func prepareForUnwind(segue: UIStoryboardSegue){
+        
+    }
+    
     @IBAction func login(_ sender: Any) {
         let notAllFormsFilled = UIAlertController(title: "Attention!", message: "Please provide all the fields in order to login", preferredStyle: UIAlertControllerStyle.alert)
         notAllFormsFilled.addAction(UIAlertAction(title: "Click here to complete registration", style: UIAlertActionStyle.default, handler: nil))
