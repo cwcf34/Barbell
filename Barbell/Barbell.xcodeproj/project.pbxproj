@@ -162,6 +162,7 @@
 		C384A1C71E5D1FAA0026FD99 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				635AA0241E931F7800063C25 /* AchievementsCollectionViewController.swift */,
 				63FA5E121E722A1800DEE65D /* addRoutineViewController.swift */,
 				C3AB29631E8865BF006D97A4 /* AllExercisesTableViewController.swift */,
 				6F0E3CE11E6A038900357004 /* CoreDataController.swift */,
@@ -175,7 +176,6 @@
 				C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */,
 				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
 				C3FCF3E61E81EF7300E7BB0E /* WeekTableViewController.swift */,
-				635AA0241E931F7800063C25 /* AchievementsCollectionViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
