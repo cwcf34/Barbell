@@ -16,6 +16,7 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
     var routinePassed : Routine!
     var workoutsInRoutine = [Workout]()
     var workoutToPass : Workout!
+    var isSorted : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +26,16 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
         workoutsInRoutine = routinePassed.workouts?.allObjects as! [Workout]
         
         //Sort
-        workoutsInRoutine.sort { Int($0.weekday!)! < Int($1.weekday!)! }
-        workoutsInRoutine.sort { $0.weeknumber < $1.weeknumber }
+//        workoutsInRoutine.sort { Int($0.weekday!)! < Int($1.weekday!)! }
+//        workoutsInRoutine.sort { $0.weeknumber < $1.weeknumber }
         
-        for workout in workoutsInRoutine {
-            print(workout.weeknumber)
-            print(workout.weekday)
-        }
+//        for workout in workoutsInRoutine {
+//            print(workout.weeknumber)
+//            print(workout.weekday)
+//        }
+        
+        //ableView.reloadData()
+        
     }
     
 
@@ -44,6 +48,15 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if(isSorted == false) {
+            workoutsInRoutine.sort { Int($0.weekday!)! < Int($1.weekday!)! }
+            workoutsInRoutine.sort { $0.weeknumber < $1.weeknumber }
+            
+            for workout in workoutsInRoutine {
+                print(workout.weeknumber)
+                print(workout.weekday)
+            }
+        }
         // #warning Incomplete implementation, return the number of sections
         return Int(routinePassed.numberOfWeeks)
     }
@@ -65,10 +78,16 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var count : Int = 0
+        for workout in workoutsInRoutine {
+            if(Int(workout.weeknumber) < indexPath.section+1) {
+                count += 1
+            }
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "dataCell", for: indexPath)
         
-        
-        switch (Int(workoutsInRoutine[indexPath.section+indexPath.row].weekday!)!)
+        switch (Int(workoutsInRoutine[count+indexPath.row].weekday!)!)
         {
         case 1:
             cell.textLabel?.text = "Sunday"

@@ -14,8 +14,6 @@ class WeekTableViewController: UITableViewController {
     var routinePassed : Routine!
     
     override func viewDidLoad() {
-        print(week)
-        print("\n\n")
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations

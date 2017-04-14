@@ -116,6 +116,7 @@ class StartWorkoutTableViewController: UITableViewController {
             
             if(i == liftsInWorkout.count - 1){
                 nextButton.setTitle("Finished", for: [])
+                nextButton.isEnabled = false
             }
         }else{
             let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
