@@ -77,74 +77,74 @@ namespace BBAPI.Controllers
 			cache.ListLeftPush(key, routineId);
 		}
 
-        /// <summary>
-        /// Add a completed exercise to the hash for that user's exercise.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="date"></param>
-        /// <param name="exerciseData"></param>
-        /// <returns>True if the operation succeeded, else false</returns>
-        public bool addExercise(string key, string date, string exerciseData)
-        {
+		/// <summary>
+		/// Add a completed exercise to the hash for that user's exercise.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="date"></param>
+		/// <param name="exerciseData"></param>
+		/// <returns>True if the operation succeeded, else false</returns>
+		public bool addExercise(string key, string date, string exerciseData)
+		{
 
-            if(key.Length > 0 && date.Length > 0 && exerciseData.Length > 0)
-            {
-                try
-                {
-                    //Add a field to the hash for that exercise with the key as the current date and the data as the data from the completed exercise
-                    cache.HashSet(key, new HashEntry[] { new HashEntry(date, exerciseData) });
-                }
-                catch
-                {
-                    //An exception occured
-                    return false;
-                }
-                //Success
-                return true;
-            }
+			if (key.Length > 0 && date.Length > 0 && exerciseData.Length > 0)
+			{
+				try
+				{
+					//Add a field to the hash for that exercise with the key as the current date and the data as the data from the completed exercise
+					cache.HashSet(key, new HashEntry[] { new HashEntry(date, exerciseData) });
+				}
+				catch
+				{
+					//An exception occured
+					return false;
+				}
+				//Success
+				return true;
+			}
 
 			//parameter checking failed
 			return false;
 		}
 
 		/// <summary>
-        /// Grabs all the exercise data from the key given
-        /// </summary>
-        /// <param name="key">The key for the hash of exercise data</param>
-        /// <returns>Array of the data for that exercise or null</returns>
-        public ExerciseData[] getExercise(string key)
-        {
-            //Call the database to get the data to parse
-            List<HashEntry> unparsedData = new List<HashEntry>(cache.HashGetAll(key));
-            List<ExerciseData> data = new List<ExerciseData>();
+		/// Grabs all the exercise data from the key given
+		/// </summary>
+		/// <param name="key">The key for the hash of exercise data</param>
+		/// <returns>Array of the data for that exercise or null</returns>
+		public ExerciseData[] getExercise(string key)
+		{
+			//Call the database to get the data to parse
+			List<HashEntry> unparsedData = new List<HashEntry>(cache.HashGetAll(key));
+			List<ExerciseData> data = new List<ExerciseData>();
 
-            DateTime newDate;
-            try
-            {
-                //Parse the data returned
-                foreach (HashEntry entry in unparsedData)
-                {
-                    //Parse the date
-                    string[] stringDate = entry.Name.ToString().Split('/');
-                    newDate = new DateTime(int.Parse(stringDate[2]), int.Parse(stringDate[0]), int.Parse(stringDate[1]));
+			DateTime newDate;
+			try
+			{
+				//Parse the data returned
+				foreach (HashEntry entry in unparsedData)
+				{
+					//Parse the date
+					string[] stringDate = entry.Name.ToString().Split('/');
+					newDate = new DateTime(int.Parse(stringDate[2]), int.Parse(stringDate[0]), int.Parse(stringDate[1]));
 
-                    //Parse the data and set it to a new ExerciseData object
-                    string[] stringData = entry.Value.ToString().Split(':');
+					//Parse the data and set it to a new ExerciseData object
+					string[] stringData = entry.Value.ToString().Split(':');
 
-                    //Add the new data to the array
-                    data.Add(new ExerciseData(newDate, int.Parse(stringData[0]), int.Parse(stringData[1]), int.Parse(stringData[2])));
-                }
-            }
-            catch
-            {
-                return null;
-            }
+					//Add the new data to the array
+					data.Add(new ExerciseData(newDate, int.Parse(stringData[0]), int.Parse(stringData[1]), int.Parse(stringData[2])));
+				}
+			}
+			catch
+			{
+				return null;
+			}
 
-            //Return an array of ExerciseData objects
-            return data.ToArray();
-        }
+			//Return an array of ExerciseData objects
+			return data.ToArray();
+		}
 
-        public string validateUserPass(string key)
+		public string validateUserPass(string key)
 		{
 			return cache.HashGet(key, "password");
 		}
@@ -330,9 +330,14 @@ namespace BBAPI.Controllers
 			}
 		}
 
-		public void deleteKey(string key)
+		public bool deleteKey(string key)
 		{
-			cache.KeyDelete(key);
+			return cache.KeyDelete(key);
+		}
+
+		public long deleteRoutineItem(string key, int routineId)
+		{
+			return cache.ListRemove(key, routineId, 0);
 		}
 	}
 }
