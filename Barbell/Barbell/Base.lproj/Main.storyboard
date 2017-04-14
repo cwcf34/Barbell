@@ -973,13 +973,7 @@
                             <outlet property="delegate" destination="w1U-63-aIH" id="7eM-fQ-QBi"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Routine" id="U1o-0d-8zN">
-                        <barButtonItem key="rightBarButtonItem" title="Finished" id="Rwj-b5-LMw">
-                            <connections>
-                                <action selector="finishedWorkout:" destination="w1U-63-aIH" id="cTz-1q-d1L"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Routine" id="U1o-0d-8zN"/>
                     <connections>
                         <outlet property="CompletedRepsTextArea" destination="44g-Js-ZNd" id="vcV-F3-3w7"/>
                         <outlet property="CompletedSetsTextArea" destination="eFC-h9-u3e" id="xTq-lX-gdw"/>
@@ -1343,33 +1337,9 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sets" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R4y-3R-GiG">
-                                <rect key="frame" x="139" y="96" width="34" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reps" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cZG-18-wXZ">
-                                <rect key="frame" x="205" y="96" width="39" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weight" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3wJ-AQ-Kug">
-                                <rect key="frame" x="267" y="96" width="54" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="R4y-3R-GiG" firstAttribute="leading" secondItem="jCY-MC-LOx" secondAttribute="trailing" constant="59" id="JAk-jY-mnK"/>
-                            <constraint firstItem="3wJ-AQ-Kug" firstAttribute="leading" secondItem="cZG-18-wXZ" secondAttribute="trailing" constant="23" id="PKB-Mb-Aoh"/>
-                            <constraint firstItem="jCY-MC-LOx" firstAttribute="baseline" secondItem="R4y-3R-GiG" secondAttribute="baseline" id="Wud-Jg-yKP"/>
-                            <constraint firstItem="R4y-3R-GiG" firstAttribute="baseline" secondItem="cZG-18-wXZ" secondAttribute="baseline" id="at6-dq-42G"/>
-                            <constraint firstItem="cZG-18-wXZ" firstAttribute="baseline" secondItem="3wJ-AQ-Kug" secondAttribute="baseline" id="dHH-qP-NQk"/>
-                            <constraint firstItem="cZG-18-wXZ" firstAttribute="leading" secondItem="R4y-3R-GiG" secondAttribute="trailing" constant="32" id="dVe-HD-iP0"/>
                             <constraint firstItem="jCY-MC-LOx" firstAttribute="leading" secondItem="AGX-T5-8nP" secondAttribute="leadingMargin" id="uVG-4I-Ij0"/>
                             <constraint firstItem="jCY-MC-LOx" firstAttribute="top" secondItem="KjF-13-uCG" secondAttribute="bottom" constant="32" id="yBr-mZ-oaC"/>
                         </constraints>
