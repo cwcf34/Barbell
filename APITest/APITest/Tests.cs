@@ -92,6 +92,7 @@ namespace APITest
                 else
                 {
                     returnString += "Success\n";
+                    generatedUser.token = response.AccessToken;
                 }
             }
 
@@ -222,7 +223,6 @@ namespace APITest
             //get all workouts
             returnString += "Getting all workouts for this routine...";
             resultString = HttpCall(apiServer + "workout/" + generatedUser.Email + "/" + generatedRoutine.Id + "/", "", "GET");
-            Console.WriteLine(resultString);
 
             returnedWorkout[][] returnedWorkouts = JsonConvert.DeserializeObject<returnedWorkout[][]>(resultString);
 
@@ -270,7 +270,6 @@ namespace APITest
             returnString += "Getting an individual workout from the API...";
 
             resultString = HttpCall(apiServer + "workout/" + generatedUser.Email + "/" + generatedRoutine.Id + "/" + generatedWorkouts[0].dayIndex + "/", "", "GET");
-            Console.WriteLine(resultString);
             returnedWorkout[] returnedWorkout = JsonConvert.DeserializeObject<returnedWorkout[]>(resultString);
 
             returnString += generatedWorkouts[0].Equals(returnedWorkout[0]) ? "Success\n" : "Failure\n";
@@ -289,14 +288,36 @@ namespace APITest
             string returnString = "Running tests on the exercise controller...\n"
                 + "POSTing an exercise to the API...";
 
-            generatedExercise = new Exercise("5/02/93", generatedWorkout.exercise, generatedWorkout.sets, generatedWorkout.reps, generatedWorkout.weight);
+            generatedExercise = new Exercise("05/22/1993", generatedWorkout.exercise, generatedWorkout.sets, generatedWorkout.reps, generatedWorkout.weight);
 
             //"{date:date, exercise:exerciseName, sets:numOfSets, reps:numOfReps, weight:weightLifted}"
-            string queryString = "\"{date:" + generatedExercise.date  + ",exercise:" + generatedExercise.exercise + ",sets:"
+            string queryString = "\"{date:" + generatedExercise.dateString  + ",exercise:" + generatedExercise.exercise + ",sets:"
                 + generatedExercise.sets + ",reps:" + generatedExercise.reps + ",weight:" + generatedExercise.weight +"}\"";
 
             string resultString = HttpCall(apiServer + "exercise/" + generatedUser.Email + "/", queryString, "PUT");
+            returnString += resultString.ToLower().Equals("true") ? "Success\n" : "Failure\n";
+            returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
+
+
+            //Now retrieve this exercise from the api
+            returnString += "Getting an exercise from the API...";
+            resultString = HttpCall(apiServer + "exercise/" + generatedUser.Email + "/?exercise=" + generatedExercise.exercise, "", "GET");
             Console.WriteLine(resultString);
+
+            Exercise[] returnedExercises = JsonConvert.DeserializeObject<Exercise[]>(resultString);
+
+            returnedExercises[0].dateString = returnedExercises[0].DateTimeDate.ToString(@"MM\/dd\/yyy");
+
+            if (generatedExercise.Equals(returnedExercises[0]))
+            {
+                returnString += "Success\n";
+            }else
+            {
+                returnString += "Failure\n";
+            }
+            returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
+
+
 
             return returnString;
 
@@ -351,6 +372,7 @@ namespace APITest
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.ContentType = "application/json";
             request.Method = httpMethod;
+            request.Headers.Add("Authorization", "Bearer " + generatedUser.token);
 
             if (!httpMethod.Equals("GET"))
             {
@@ -415,6 +437,7 @@ namespace APITest
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public string token;
 
         public User(string Email, string Password)
         {
@@ -523,19 +546,38 @@ namespace APITest
     //"{date:date, exercise:exerciseName, sets:numOfSets, reps:numOfReps, weight:weightLifted}"
     public class Exercise
     {
-        public string date;
+        public string dateString;
+        [JsonProperty("Exercise")]
         public string exercise;
+        [JsonProperty("Sets")]
         public string sets;
+        [JsonProperty("Reps")]
         public string reps;
+        [JsonProperty("Weight")]
         public string weight;
 
-        public Exercise(string date, string exercise, string sets, string reps, string weight)
+
+        [JsonProperty("Date")]
+        public DateTime DateTimeDate;
+
+        public Exercise(string dateString, string exercise, string sets, string reps, string weight)
         {
-            this.date = date;
+            this.dateString = dateString;
             this.exercise = exercise;
             this.sets = sets;
             this.reps = reps;
             this.weight = weight;
+        }
+
+        public bool Equals(Exercise e)
+        {
+            if(dateString.Equals(e.dateString) && sets.Equals(e.sets) && reps.Equals(e.reps) && weight.Equals(e.weight))
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
         }
     }
 }
