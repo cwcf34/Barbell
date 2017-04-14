@@ -160,7 +160,7 @@ class ProfileViewController: UIViewController {
                 }
             }
         }
-        
+        DataAccess.checkRoutines()
         DataAccess.saveUserToRedis(email: (user?.email)!)
         
        self.performSegue(withIdentifier: "toLogin", sender: self)
