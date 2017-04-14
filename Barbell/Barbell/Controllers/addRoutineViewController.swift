@@ -89,26 +89,15 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     @IBAction func saveRoutine(_ sender: Any) {
-        //routinePassed.name = routine.text
-        if publicSwitch.isOn {
-            //send to api!
-            
-            //not done yet!
-            routinePassed.isPublic = true
+        let viewControllers = self.navigationController!.viewControllers
+        for var aViewController in viewControllers
+        {
+            if aViewController is RoutineTableViewController
+            {
+                _ = self.navigationController?.popToViewController(aViewController, animated: true)
+            }
         }
-        else{
-            routinePassed.isPublic = false
-        }
-//        routinePassed.numberOfWeeks = Int16(weeks.count)
-//        routinePassed.creator = user.first
-//        routinePassed.addToUsers(user.first!)
-//        user.first?.addToScheduleArr(routinePassed)
-//       
-//        thisRoutine = routinePassed
-        saveRoutineInfo()
-        DataAccess.sendRoutineToRedis(routine: routinePassed)
-        CoreDataController.saveContext()
-     }
+    }
     
     func insert() {
         weeks.append("Week \(weeks.count + 1)")
