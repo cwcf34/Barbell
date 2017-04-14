@@ -66,9 +66,9 @@ namespace BBAPI.Controllers
 
             if (redisCache.addExercise(key, date, exerciseData))
             {
-                return Ok();
+                return Ok("true");
             }
-            return Ok("An Error Occurred");
+            return Ok("false");
             
         }
     }

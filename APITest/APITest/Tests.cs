@@ -22,6 +22,7 @@ namespace APITest
         private static User generatedUser = new User("d123@me.com", "hello");
         private static Routine generatedRoutine;
         private static Workout generatedWorkout;
+        private static Exercise generatedExercise;
 
 
 
@@ -32,8 +33,9 @@ namespace APITest
             string authOutput = await RunSecurityTest();
             string routineOutput = RunRoutineTests();
             string workoutOutput = RunWorkoutTests();
+            string exerciseOutput = RunExerciseTests();
 
-            return regisOutput + authOutput + routineOutput + workoutOutput;
+            return regisOutput + authOutput + routineOutput + workoutOutput + exerciseOutput;
         }
 
         /// <summary>
@@ -218,23 +220,86 @@ namespace APITest
             returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
 
             //get all workouts
-            returnString += "Getting workouts for this routine. It should only contain the two that we have posted so far";
+            returnString += "Getting all workouts for this routine...";
             resultString = HttpCall(apiServer + "workout/" + generatedUser.Email + "/" + generatedRoutine.Id + "/", "", "GET");
             Console.WriteLine(resultString);
 
-            Workout[][] returnedWorkouts = JsonConvert.DeserializeObject<Workout[][]>(resultString); 
-            /*
-             * Need to fix the code above. Should probably make a new kind of object for the stuff returned and create a .equals in the 
-             * Workout class to compare it to this new kind of object
-             */
-            //if (returnedWorkouts[int.Parse(generatedWorkouts[0].dayIndex)][0].Equals(generatedWorkouts[0]) ||
-            //{
+            returnedWorkout[][] returnedWorkouts = JsonConvert.DeserializeObject<returnedWorkout[][]>(resultString);
 
-            //}
+            //Compare the returned workouts to the workouts we POSTed
+            try
+            {
+                int dayIndex0 = int.Parse(generatedWorkouts[0].dayIndex);
+                int dayIndex1 = int.Parse(generatedWorkouts[1].dayIndex);
 
+                //If the 2 workouts are on different days in the routine
+                if(dayIndex0 != dayIndex1)
+                {
+                    bool check0 = (generatedWorkouts[0].Equals(returnedWorkouts[dayIndex0][0]) || generatedWorkouts[0].Equals(returnedWorkouts[dayIndex1][0]));
+                    bool check1 = (generatedWorkouts[1].Equals(returnedWorkouts[dayIndex0][0]) || generatedWorkouts[1].Equals(returnedWorkouts[dayIndex1][0]));
+                    if (check0 && check1)
+                    {
+                        returnString += "Success\n";
+                    }
+                    else
+                    {
+                        returnString += "Failure\n";
+                    }
+                        
+                }else //dayIndex0 == dayIndex1
+                {
+                    bool check0 = (generatedWorkouts[0].Equals(returnedWorkouts[dayIndex0][0]) || generatedWorkouts[0].Equals(returnedWorkouts[dayIndex0][1]));
+                    bool check1 = (generatedWorkouts[1].Equals(returnedWorkouts[dayIndex0][0]) || generatedWorkouts[1].Equals(returnedWorkouts[dayIndex0][1]));
+                    if(check0 && check1)
+                    {
+                        returnString += "Success\n";
+                    }
+                    else
+                    {
+                        returnString += "Failure\n";
+                    }
+                }
+            }
+            catch //In the case that int parse fails
+            {
+                returnString += "Failure\n";
+            }
+            returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
+
+            //Grab an individual routine from the database and compare it
+            returnString += "Getting an individual workout from the API...";
+
+            resultString = HttpCall(apiServer + "workout/" + generatedUser.Email + "/" + generatedRoutine.Id + "/" + generatedWorkouts[0].dayIndex + "/", "", "GET");
+            Console.WriteLine(resultString);
+            returnedWorkout[] returnedWorkout = JsonConvert.DeserializeObject<returnedWorkout[]>(resultString);
+
+            returnString += generatedWorkouts[0].Equals(returnedWorkout[0]) ? "Success\n" : "Failure\n";
+            returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
 
             generatedWorkout = generatedWorkouts[0];
             return returnString;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static string RunExerciseTests()
+        {
+            string returnString = "Running tests on the exercise controller...\n"
+                + "POSTing an exercise to the API...";
+
+            generatedExercise = new Exercise("5/02/93", generatedWorkout.exercise, generatedWorkout.sets, generatedWorkout.reps, generatedWorkout.weight);
+
+            //"{date:date, exercise:exerciseName, sets:numOfSets, reps:numOfReps, weight:weightLifted}"
+            string queryString = "\"{date:" + generatedExercise.date  + ",exercise:" + generatedExercise.exercise + ",sets:"
+                + generatedExercise.sets + ",reps:" + generatedExercise.reps + ",weight:" + generatedExercise.weight +"}\"";
+
+            string resultString = HttpCall(apiServer + "exercise/" + generatedUser.Email + "/", queryString, "PUT");
+            Console.WriteLine(resultString);
+
+            return returnString;
+
         }
 
         /// <summary>
@@ -395,7 +460,7 @@ namespace APITest
     {
         //"{routineId:4329432,exercise:squat,sets:5,reps:5,weight:420,dayIndex:3}";
         public string routineId;
-        public string exercise;
+        public string exercise; //this is the name of the exercise
         public string sets;
         public string reps;
         public string weight;
@@ -428,6 +493,49 @@ namespace APITest
             {
                 return false;
             }
+        }
+
+        public bool Equals(returnedWorkout w)
+        {
+            if(!String.IsNullOrEmpty(w.Name) || !String.IsNullOrEmpty(w.Value) || !String.IsNullOrEmpty(w.Key))
+            {
+                string[] vals = w.Value.Split(':');
+                if(vals.Length != 3)
+                {
+                    return false;
+                }
+                if(exercise.Equals(w.Name) && exercise.Equals(w.Key) && sets.Equals(vals[0]) && reps.Equals(vals[1]) && weight.Equals(vals[2]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public class returnedWorkout
+    {
+        public string Name;
+        public string Value;
+        public string Key;
+    }
+
+    //"{date:date, exercise:exerciseName, sets:numOfSets, reps:numOfReps, weight:weightLifted}"
+    public class Exercise
+    {
+        public string date;
+        public string exercise;
+        public string sets;
+        public string reps;
+        public string weight;
+
+        public Exercise(string date, string exercise, string sets, string reps, string weight)
+        {
+            this.date = date;
+            this.exercise = exercise;
+            this.sets = sets;
+            this.reps = reps;
+            this.weight = weight;
         }
     }
 }
