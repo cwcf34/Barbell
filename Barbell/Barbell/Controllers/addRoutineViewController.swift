@@ -97,7 +97,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
                 _ = self.navigationController?.popToViewController(aViewController, animated: true)
             }
         }
-    }
+     }
     
     func insert() {
         weeks.append("Week \(weeks.count + 1)")
