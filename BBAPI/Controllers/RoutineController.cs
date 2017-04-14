@@ -117,6 +117,20 @@ namespace BBAPI.Controllers
 					
 		}
 
+		[HttpDelete]
+		public IHttpActionResult DeleteRoutine(string email, int id)
+		{
+			//create key
+			if (redisCache.deleteRoutineItem("user:"+email+":routines", id) != 0)
+			{
+				return Ok(true);
+			}
+			else
+			{
+				return Ok(false);
+			}
+		}
+
 
 
 		private int getRandomId()
