@@ -28,6 +28,7 @@ class StartWorkoutTableViewController: UITableViewController {
     var routinePassed : Routine!
     var liftsInWorkout = [Lift]()
     var i = 0
+    var hasFinished = false
     
     weak var customDelegateForDataReturn: StartWorkoutTableViewControllerDelegate?
     
@@ -81,7 +82,13 @@ class StartWorkoutTableViewController: UITableViewController {
         RountineSetsLabel.text = String(liftsInWorkout[i].sets)
         RountineRepsLabel.text = String(liftsInWorkout[i].reps)
         RountineWeightLabel.text = String(liftsInWorkout[i].weight)
+        print("\n\n")
+        print(liftsInWorkout[i].weight)
         
+        if(liftsInWorkout.count == 1) {
+            hasFinished = true
+            nextButton.setTitle("Finished", for: [])
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -102,22 +109,7 @@ class StartWorkoutTableViewController: UITableViewController {
     */
     
     @IBAction func nextExercise(_ sender: Any) {
-        if(i + 1 < liftsInWorkout.count ){
-            i += 1
-            viewWillAppear(true)
-            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
-            finished.liftName = liftsInWorkout[i].name
-            finished.liftRep = liftsInWorkout[i].reps
-            finished.liftSets = liftsInWorkout[i].sets
-            finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate
-            
-            CoreDataController.saveContext()
-            
-            if(i == liftsInWorkout.count - 1){
-                nextButton.setTitle("Finished", for: [])
-            }
-        }else{
+        if(hasFinished == true){
             let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
             finished.liftName = liftsInWorkout[i].name
             finished.liftRep = liftsInWorkout[i].reps
@@ -132,23 +124,39 @@ class StartWorkoutTableViewController: UITableViewController {
             let viewControllers = self.navigationController!.viewControllers
             for var aViewController in viewControllers
             {
-                if aViewController is ExercisesViewController
+                if aViewController is RoutineTableViewController
                 {
                     _ = self.navigationController?.popToViewController(aViewController, animated: true)
                 }
             }
+        }else{
+            i += 1
+            viewWillAppear(true)
+            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+            finished.liftName = liftsInWorkout[i].name
+            finished.liftRep = liftsInWorkout[i].reps
+            finished.liftSets = liftsInWorkout[i].sets
+            finished.liftWeight = liftsInWorkout[i].weight
+            finished.timeStamp = Date() as NSDate
+            
+            CoreDataController.saveContext()
+            
+            if(i == liftsInWorkout.count - 1){
+                nextButton.setTitle("Finished", for: [])
+                hasFinished = true
+            }
+
         }
         
         CompletedRepsTextArea.text = ""
         CompletedSetsTextArea.text = ""
         CompletedWeightTextArea.text = ""
         
+        
         //TODO
         //this should take us to the next exercise for that workout
     }
-    @IBAction func finishedWorkout(_ sender: Any) {
-        
-    }
+
 
     /*
     // Override to support conditional editing of the table view.

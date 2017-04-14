@@ -16,16 +16,35 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     var workout : Workout!
     var routinePassed : Routine!
     var foundLifts = [Lift]()
+    
+    var sets: Int!
+    var reps: Int!
+    var weight: Int!
+    var muscle : String!
+    var exercise : String!
+    var lift : Lift!
+    var foundDay: Bool = false
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(week)
-        print(day)
         
-        let workout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
-        self.workout = workout
-        workout.weekday = day
-        workout.weeknumber = week
+        var doesHaveWorkout = routinePassed.workouts?.allObjects as! [Workout]
+        
+        for weekDay in doesHaveWorkout{
+            if(weekDay.weekday == day && weekDay.weeknumber == week){
+                workout = weekDay
+                foundDay = true
+            }
+        }
+        
+        if(foundDay == false){
+            let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
+            newWorkout.weekday = day
+            newWorkout.weeknumber = week
+            self.workout = newWorkout
+
+        }
         
         exerciseTable.delegate = self
         exerciseTable.dataSource = self
@@ -51,9 +70,6 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
         }catch{
             print("Bad getExercise query")
         }
-        for lift in foundLifts{
-            print(lift.muscleGroup)
-        }
         
         exerciseTable.reloadData()
         return
@@ -77,12 +93,37 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
         return cell!
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(indexPath.row == 0) {
+            self.performSegue(withIdentifier: "loadExercisesSegue", sender: self)
+        } else {
+            sets = Int(foundLifts[indexPath.row-1].sets)
+            reps = Int(foundLifts[indexPath.row-1].reps)
+            weight = Int(foundLifts[indexPath.row-1].weight)
+            muscle = foundLifts[indexPath.row-1].muscleGroup
+            exercise = foundLifts[indexPath.row-1].name
+            lift = foundLifts[indexPath.row-1]
+            self.performSegue(withIdentifier: "holdMyBeer", sender: self)
+        }
+        
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "loadExercisesSegue"){
             let viewController = segue.destination as! AllExercisesTableViewController
             viewController.workout = workout
             viewController.routinePassed = routinePassed
+        } else if(segue.identifier == "holdMyBeer") {
+            let viewController = segue.destination as! StatsViewController
+            viewController.reps = reps
+            viewController.weight = weight
+            viewController.sets = sets
+            viewController.workout = workout
+            viewController.muscle = muscle
+            viewController.exercise = exercise
+            viewController.lift = lift
         }
+        
     }
     
     override func viewWillDisappear(_ animated : Bool) {
@@ -96,9 +137,6 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     
     func sendDataBackToHomePageViewController(routinePassed: Routine?, workoutPassed: Workout?) { //Custom delegate function which was defined inside child class to get the data and do the other stuffs.
         
-        print(workout.weekday)
-        print(routinePassed?.description)
-        
         self.routinePassed = routinePassed
         self.workout = workoutPassed
     }
@@ -106,20 +144,25 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let row = indexPath.row
+            let row = indexPath.row-1
+            print(row)
             if (row < foundLifts.count)
             {
                 //this is where it needs to be removed from coredata
-//                let games = workout[row]
-//                workout.remove(at: row)//remove from the array
-//                getContext().delete(games) //delete games from coredata
+                let lift = foundLifts[row]
+                foundLifts.remove(at: row)//remove from the array
+                CoreDataController.getContext().delete(lift) //delete games from coredata
                 
-//                do{
-//                    try getContext().save()
-//                    
-//                } catch{
-//                    print("error occured saving context after deleting item")
-//                }
+                do{
+                    try CoreDataController.getContext().save()
+                    
+                } catch{
+                    print("error occured saving context after deleting item")
+                }
+                
+                if(foundLifts.count == 0) {
+                    CoreDataController.getContext().delete(workout)
+                }
             }
             
             

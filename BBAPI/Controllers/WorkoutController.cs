@@ -68,19 +68,5 @@ namespace BBAPI.Controllers
 			return Ok(redisCache.getWorkoutHashData(key));
 		}
 
-
-
-
-		private int getRandomId()
-		{
-			var randGen = new Random();
-			var randGuid = Guid.NewGuid().GetHashCode();
-			if (randGuid < 0)
-			{
-				randGuid = randGuid * -1;
-			}
-			return randGen.Next(randGuid);
-
-		}
 	}
 }

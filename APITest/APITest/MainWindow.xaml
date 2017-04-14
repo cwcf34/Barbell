@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APITest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="426" Width="525">
     <Grid>
-        <TextBlock x:Name="output_textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,10,0,0" Height="211" Width="497"/>
-        <Button x:Name="runTest_button" Content="Run Test" HorizontalAlignment="Left" Margin="334,253,0,0" VerticalAlignment="Top" Width="75" Click="runTest_button_Click"/>
-        <ComboBox x:Name="testList_comboBox" HorizontalAlignment="Left" Margin="79,251,0,0" VerticalAlignment="Top" Width="150"/>
+        <ScrollViewer Margin="0,0,0,73">
+            <TextBlock x:Name="output_textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="auto" Width="auto" />
+        </ScrollViewer>
+        <Button x:Name="runTest_button" Content="Run Test" HorizontalAlignment="Left" Margin="333,341,0,0" VerticalAlignment="Top" Width="75" Click="runTest_button_Click"/>
+        <ComboBox x:Name="testList_comboBox" HorizontalAlignment="Left" Margin="85,339,0,0" VerticalAlignment="Top" Width="150"/>
 
     </Grid>
 </Window>

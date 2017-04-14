@@ -38,7 +38,7 @@ namespace BBAPI.Controllers
 			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "{name:routineName,weeks:numberOfweeks,public:0/1,creator:email}";
+				var resp2 = "{name:routineName,weeks:numberOfweeks,isPublic:0/1,creator:email}";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -122,7 +122,8 @@ namespace BBAPI.Controllers
 		private int getRandomId()
 		{
 			var randGen = new Random();
-			var randGuid = Guid.NewGuid().GetHashCode();
+			//largest signed to fit in int16
+			var randGuid = Guid.NewGuid().GetHashCode() % 32766;
 			if (randGuid < 0)
 			{
 				randGuid = randGuid * -1;

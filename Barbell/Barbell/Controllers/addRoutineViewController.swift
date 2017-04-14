@@ -18,6 +18,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     var weeks = ["Week 1", "Week 2", "Week 3"]
     var value = 3
+    var goingForwards : Bool!
     
     var user = [User]()
     var thisRoutine = Routine()
@@ -26,6 +27,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        goingForwards = false
 
         routinePassed.name = routine.text
         if publicSwitch.isOn {
@@ -53,8 +55,8 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         stepper.value = Double(value)
         // Do any additional setup after loading the view.
     }
-    
     override func viewWillAppear(_ animated: Bool) {
+        goingForwards = false
         routine.text = routinePassed.name
         self.value = Int(routinePassed.numberOfWeeks)
         
@@ -127,6 +129,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "showWeekSegue"){
+            goingForwards = true
             var viewController = segue.destination as! WeekTableViewController
             viewController.week = valueToPass
             viewController.routinePassed = routinePassed
@@ -164,6 +167,33 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         user.first?.addToScheduleArr(routinePassed)
         
         thisRoutine = routinePassed
+    }
+    
+     override func viewWillDisappear(_ animated: Bool) {
+        if(goingForwards == false) {
+//            let alertController = UIAlertController(title: "Warning", message:
+//                "Please save your routine before leaving the page.", preferredStyle: UIAlertControllerStyle.alert)
+//            alertController.addAction(UIAlertAction(title: "Save", style: UIAlertActionStyle.default,handler: nil))
+//            alertController.addAction(UIAlertAction(title: "Exit", style: UIAlertActionStyle.default,handler: nil))
+//            self.present(alertController, animated: true, completion: nil)
+            if publicSwitch.isOn {
+                //send to api!
+                //not done yet!
+                routinePassed.isPublic = true
+            }
+            else{
+                routinePassed.isPublic = false
+            }
+            saveRoutineInfo()
+            
+            if(routinePassed.name == nil || routinePassed.name! == ""){
+                CoreDataController.getContext().delete(routinePassed)
+            } else {
+                DataAccess.sendRoutineToRedis(routine: routinePassed)
+            }
+            
+            CoreDataController.saveContext()
+        }
     }
 
 }

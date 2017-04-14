@@ -139,10 +139,30 @@ class ProfileViewController: UIViewController {
         }
         
         CoreDataController.saveContext()
-        DataAccess.saveUserToRedis(email: (user?.email)!)
     }
 
 
     @IBAction func Logout(_ sender: Any) {
+        var foundRoutines = [Routine]()
+        
+        let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
+        do{
+            foundRoutines = try CoreDataController.getContext().fetch(fetchRequest)
+            
+        }catch{
+            print("Bad getExercise query")
+        }
+        for routine in foundRoutines{
+            if(routine.name != nil) {
+                print(routine.name)
+                if(routine.isPublic == false) {
+                    DataAccess.sendRoutineToRedis(routine: routine)
+                }
+            }
+        }
+        
+        DataAccess.saveUserToRedis(email: (user?.email)!)
+        
+       self.performSegue(withIdentifier: "toLogin", sender: self)
     }
 }
