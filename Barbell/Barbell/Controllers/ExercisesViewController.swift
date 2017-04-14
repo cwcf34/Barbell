@@ -23,17 +23,28 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     var muscle : String!
     var exercise : String!
     var lift : Lift!
+    var foundDay: Bool = false
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(week)
-        print(day)
         
-        let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
-        newWorkout.weekday = day
-        newWorkout.weeknumber = week
-        //newWorkout.createdRoutine = routinePassed
-        self.workout = newWorkout
+        var doesHaveWorkout = routinePassed.workouts?.allObjects as! [Workout]
+        
+        for weekDay in doesHaveWorkout{
+            if(weekDay.weekday == day && weekDay.weeknumber == week){
+                workout = weekDay
+                foundDay = true
+            }
+        }
+        
+        if(foundDay == false){
+            let newWorkout : Workout = NSEntityDescription.insertNewObject(forEntityName: "Workout", into: CoreDataController.getContext()) as! Workout
+            newWorkout.weekday = day
+            newWorkout.weeknumber = week
+            self.workout = newWorkout
+
+        }
         
         exerciseTable.delegate = self
         exerciseTable.dataSource = self
@@ -52,15 +63,12 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
 //    }
     override func viewWillAppear(_ animated: Bool) {
         let context = CoreDataController.getContext()
-        print("reloading data")
+        
         let fetchRequest = NSFetchRequest<Lift>(entityName: "Lift")
         do{
             foundLifts = workout.hasExercises?.allObjects as! [Lift]
         }catch{
             print("Bad getExercise query")
-        }
-        for lift in foundLifts{
-            print(lift.muscleGroup)
         }
         
         exerciseTable.reloadData()
@@ -128,9 +136,6 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func sendDataBackToHomePageViewController(routinePassed: Routine?, workoutPassed: Workout?) { //Custom delegate function which was defined inside child class to get the data and do the other stuffs.
-        
-        print(workout.weekday)
-        print(routinePassed?.description)
         
         self.routinePassed = routinePassed
         self.workout = workoutPassed

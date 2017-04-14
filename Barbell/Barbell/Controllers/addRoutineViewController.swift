@@ -185,13 +185,14 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
                 routinePassed.isPublic = false
             }
             saveRoutineInfo()
-            DataAccess.sendRoutineToRedis(routine: routinePassed)
             
-            if(routinePassed.name == nil || routinePassed.name! == "" ){
+            if(routinePassed.name == nil || routinePassed.name! == ""){
                 CoreDataController.getContext().delete(routinePassed)
+            } else {
+                DataAccess.sendRoutineToRedis(routine: routinePassed)
             }
+            
             CoreDataController.saveContext()
-
         }
     }
 

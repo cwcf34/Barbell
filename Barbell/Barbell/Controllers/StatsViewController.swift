@@ -61,6 +61,9 @@ class StatsViewController: UIViewController {
             lift?.reps = Int16(repsTextArea.text!)!
             lift?.weight = Int16(weightTextArea.text!)!
             
+            print("\n\n\n")
+            print(lift?.weight)
+            
             CoreDataController.saveContext()
         }else{
             let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
@@ -70,6 +73,9 @@ class StatsViewController: UIViewController {
             newLift.sets = Int16(setsTextArea.text!)!
             newLift.reps = Int16(repsTextArea.text!)!
             newLift.weight = Int16(weightTextArea.text!)!
+            
+            print("\n\n\n")
+            print(newLift.weight)
             
             workout.addToHasExercises(newLift)
             
