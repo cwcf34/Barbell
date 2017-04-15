@@ -13,7 +13,7 @@ namespace BBAPI.Controllers
 		/// Gets exercises for a user when given their email and the name of the exercise
 		/// </summary>
 		/// <param name="email">The email for this user</param>
-		/// <param name="data">Should contain the name of the exercise that is being requested</param>
+		/// <param name="exercise">Should contain the name of the exercise that is being requested</param>
 		/// <returns>Array of ExerciseData objects or null</returns>
 		[HttpGet]
 		[Authorize]
@@ -66,9 +66,9 @@ namespace BBAPI.Controllers
 
             if (redisCache.addExercise(key, date, exerciseData))
             {
-                return Ok();
+                return Ok("true");
             }
-            return Ok("An Error Occurred");
+            return Ok("false");
             
         }
     }
