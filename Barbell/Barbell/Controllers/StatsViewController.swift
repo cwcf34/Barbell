@@ -13,7 +13,7 @@ protocol StatsViewControllerDelegate: class { //Setting up a Custom delegate for
     func sendDataBackToHomePageViewController(routinePassed: Routine?, workoutPassed: Workout?) //This function will send the data back to origin viewcontroller.
 }
 
-class StatsViewController: UIViewController {
+class StatsViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var setsTextArea: UITextField!
     @IBOutlet weak var repsTextArea: UITextField!
@@ -38,6 +38,12 @@ class StatsViewController: UIViewController {
         print("viewDidLoad")
         muscleGroup.text = muscle
         exerciseName.text = exercise
+        
+        
+        setsTextArea.delegate = self
+        repsTextArea.delegate = self
+        weightTextArea.delegate = self
+        
         
         if(sets != 0 && reps != 0 && weight != 0) {
             exerciseName.text = exercise
@@ -108,24 +114,12 @@ class StatsViewController: UIViewController {
         
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if (segue.identifier == "addExercisesSegue"){
-//            var viewController = segue.destination as! ExercisesViewController
-//            viewController.week = workout.weeknumber
-//            viewController.day = workout.weekday
-//            viewController.workout = workout
-//        }
-//    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let aSet = NSCharacterSet(charactersIn:"0123456789").inverted
+        let compSepByCharInSet = string.components(separatedBy: aSet)
+        let numberFiltered = compSepByCharInSet.joined(separator: "")
+        return string == numberFiltered
     }
-    */
+
 
 }
