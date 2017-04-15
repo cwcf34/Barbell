@@ -35,40 +35,51 @@ class ProfileViewController: UIViewController {
         if let user = user {
             firstName.text = user.fname
             lastName.text = user.lname
-            age.text = String(user.age)
-            weight.text = String(user.weight)
-            squat.text = String(user.squat)
-            bench.text = String(user.bench)
-            deadlift.text = String(user.deadlift)
-            snatch.text = String(user.snatch)
-            cleanAndJerk.text = String(user.cleanAndJerk)
+            if user.age == 0 {
+                age.text = "Enter value"
+            }
+            else{
+                age.text = String(user.age)
+            }
+            if user.weight == 0{
+                weight.text = "Enter value"
+            }
+            else{
+                weight.text = String(user.weight)
+            }
+            if user.squat == 0{
+                squat.text = "Enter value"
+            }
+            else{
+                squat.text = String(user.squat)
+            }
+            if user.bench == 0{
+                bench.text = "Enter value"
+            }
+            else{
+                bench.text = String(user.bench)
+            }
+            if user.deadlift == 0{
+                deadlift.text = "Enter value"
+            }
+            else{
+                deadlift.text = String(user.deadlift)
+            }
+            if user.snatch == 0{
+                snatch.text = "Enter value"
+            }
+            else{
+                snatch.text = String(user.snatch)
+            }
+            if user.cleanAndJerk == 0{
+                cleanAndJerk.text = "Enter value"
+            }
+            else{
+                cleanAndJerk.text = String(user.cleanAndJerk)
+            }
             workoutsCompleted.text = String(user.workoutsCompleted)
             
             
-            /*if let userAge = user.age{
-                age.text = userAge.description
-            }
-            if let userWeight = user.first?.weight{
-                weight.text = userWeight.description
-            }
-            if let userSquat = user.first?.squat{
-                squat.text = userSquat.description
-            }
-            if let userBench = user.first?.bench{
-                bench.text = userBench.description
-            }
-            if let userDeadlift = user.first?.deadlift{
-                deadlift.text = userDeadlift.description
-            }
-            if let userSnatch = user.first?.snatch{
-                snatch.text = userSnatch.description
-            }
-            if let userClean = user.first?.cleanAndJerk{
-                cleanAndJerk.text = userClean.description
-            }
-            if let userWorkouts = user.first?.workoutsCompleted{
-                workoutsCompleted.text = userWorkouts.description
-            }*/
         }
         
         

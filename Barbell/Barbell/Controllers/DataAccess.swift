@@ -371,6 +371,7 @@ public class DataAccess {
         sem.wait()
         
         if Int(responseString)! > 0 {
+            routine.id = Int16(responseString)!
             var workoutsInRoutine = [Workout]()
             workoutsInRoutine = routine.workouts?.allObjects as! [Workout]
             for workout in workoutsInRoutine {
@@ -586,12 +587,22 @@ public class DataAccess {
     class func checkRoutines(){
         let redisRoutines = reloadRoutinesFromRedis()
         let fetchRequest = NSFetchRequest<User>(entityName: "Routine")
-        var routineToDelete : RedisRoutine?
+        
         var coreRoutines = [Routine] ()
         do{
             coreRoutines = try CoreDataController.getContext().fetch(fetchRequest as! NSFetchRequest<NSFetchRequestResult>) as! [Routine]
         }catch{
             print("we messed this up")
+        }
+        
+        /*for redisRoutine in redisRoutines{
+            print("redis routine id:  " + String(redisRoutine.id))
+        }*/
+        for coreRoutine in coreRoutines{
+            print("core routine id: " + String(coreRoutine.id))
+            if coreRoutine.id == 0 {
+                sendRoutineToRedis(routine: coreRoutine)
+            }
         }
         var isInCore = false
         for redisRoutine in redisRoutines{
