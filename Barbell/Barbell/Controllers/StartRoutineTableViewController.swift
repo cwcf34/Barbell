@@ -21,7 +21,7 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        print("starting routine " + routinePassed.name!)
+        //print("starting routine " + routinePassed.name!)
         
         workoutsInRoutine = routinePassed.workouts?.allObjects as! [Workout]
         
