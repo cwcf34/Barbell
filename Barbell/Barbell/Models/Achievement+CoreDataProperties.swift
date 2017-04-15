@@ -2,7 +2,7 @@
 //  Achievement+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 2/24/17.
+//  Created by Caleb Albertson on 4/15/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -18,23 +18,7 @@ extension Achievement {
 
     @NSManaged public var achievementNumber: Int16
     @NSManaged public var name: String?
-    @NSManaged public var achievers: NSSet?
+    @NSManaged public var achievedOn: NSDate?
 
 }
 
-// MARK: Generated accessors for achievers
-extension Achievement {
-
-    @objc(addAchieversObject:)
-    @NSManaged public func addToAchievers(_ value: User)
-
-    @objc(removeAchieversObject:)
-    @NSManaged public func removeFromAchievers(_ value: User)
-
-    @objc(addAchievers:)
-    @NSManaged public func addToAchievers(_ values: NSSet)
-
-    @objc(removeAchievers:)
-    @NSManaged public func removeFromAchievers(_ values: NSSet)
-
-}

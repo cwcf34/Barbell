@@ -156,8 +156,8 @@ public class DataAccess {
                         }
                     }
                     
-                    newRoutine.creator = user
-                    newRoutine.addToUsers(user)
+                    newRoutine.creator = user.fname! + user.lname!
+                    //newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)
 
@@ -256,8 +256,6 @@ public class DataAccess {
                                     
                                     let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
                                     
-                                    newLift.descript = ""
-                                    newLift.duration = 0
                                     newLift.id = 0
                                     newLift.muscleGroup = ""
                                     newLift.name = name
@@ -289,8 +287,6 @@ public class DataAccess {
                             default:
                                 weekdayString = "7"
                             }
-                            
-                            newWorkout.creator = user
                             newWorkout.weekday = weekdayString
                             newWorkout.weeknumber = weekCountInt
                             
