@@ -156,7 +156,5 @@ class CoreDataController{
             print("error")
             return true
         }
-        
-        
     }
 }
