@@ -36,43 +36,36 @@ class ProfileViewController: UIViewController {
             firstName.text = user.fname
             lastName.text = user.lname
             if user.age == 0 {
-                age.text = "Enter value"
             }
             else{
                 age.text = String(user.age)
             }
             if user.weight == 0{
-                weight.text = "Enter value"
             }
             else{
                 weight.text = String(user.weight)
             }
             if user.squat == 0{
-                squat.text = "Enter value"
             }
             else{
                 squat.text = String(user.squat)
             }
             if user.bench == 0{
-                bench.text = "Enter value"
             }
             else{
                 bench.text = String(user.bench)
             }
             if user.deadlift == 0{
-                deadlift.text = "Enter value"
             }
             else{
                 deadlift.text = String(user.deadlift)
             }
             if user.snatch == 0{
-                snatch.text = "Enter value"
             }
             else{
                 snatch.text = String(user.snatch)
             }
             if user.cleanAndJerk == 0{
-                cleanAndJerk.text = "Enter value"
             }
             else{
                 cleanAndJerk.text = String(user.cleanAndJerk)

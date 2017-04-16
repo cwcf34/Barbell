@@ -241,7 +241,6 @@
 				TargetAttributes = {
 					C30AE7F31E5CF7F70093507B = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 7737TAPM72;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -447,7 +446,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 7737TAPM72;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Barbell/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cameron.Barbell;
@@ -460,7 +459,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 7737TAPM72;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Barbell/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cameron.Barbell;
