@@ -91,6 +91,13 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     @IBAction func saveRoutine(_ sender: Any) {
+        if(routine.text == ""){
+            let notAllFormsFilled = UIAlertController(title: "Attention!", message: "Please provide a Routine name!", preferredStyle: UIAlertControllerStyle.alert)
+            notAllFormsFilled.addAction(UIAlertAction(title: "Click here and fill out Routine name", style: UIAlertActionStyle.default, handler: nil))
+            self.present(notAllFormsFilled, animated: true, completion: nil)
+            return
+        }
+
         let viewControllers = self.navigationController!.viewControllers
         for var aViewController in viewControllers
         {
@@ -171,14 +178,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
      override func viewWillDisappear(_ animated: Bool) {
         if(goingForwards == false) {
-//            let alertController = UIAlertController(title: "Warning", message:
-//                "Please save your routine before leaving the page.", preferredStyle: UIAlertControllerStyle.alert)
-//            alertController.addAction(UIAlertAction(title: "Save", style: UIAlertActionStyle.default,handler: nil))
-//            alertController.addAction(UIAlertAction(title: "Exit", style: UIAlertActionStyle.default,handler: nil))
-//            self.present(alertController, animated: true, completion: nil)
             if publicSwitch.isOn {
-                //send to api!
-                //not done yet!
                 routinePassed.isPublic = true
             }
             else{
