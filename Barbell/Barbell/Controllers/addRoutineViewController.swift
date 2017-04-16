@@ -162,7 +162,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
             routinePassed.isPublic = false
         }
         routinePassed.numberOfWeeks = Int16(weeks.count)
-        routinePassed.creator = (user.first?.fname)! + (user.first?.lname)!
+        routinePassed.creator = CoreDataController.getUser().fname! + CoreDataController.getUser().lname!
         //routinePassed.addToUsers(user.first!)
         //user.first?.addToScheduleArr(routinePassed)
         
