@@ -2,7 +2,7 @@
 //  LegacyLift+CoreDataClass.swift
 //  Barbell
 //
-//  Created by Curtis Markway on 4/2/17.
+//  Created by Caleb Albertson on 4/15/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 

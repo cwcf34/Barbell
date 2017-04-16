@@ -2,7 +2,7 @@
 //  LegacyLift+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Curtis Markway on 4/2/17.
+//  Created by Caleb Albertson on 4/15/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -17,8 +17,8 @@ extension LegacyLift {
     }
 
     @NSManaged public var liftName: String?
-    @NSManaged public var liftSets: Int16
     @NSManaged public var liftRep: Int16
+    @NSManaged public var liftSets: Int16
     @NSManaged public var liftWeight: Int16
     @NSManaged public var timeStamp: NSDate?
 

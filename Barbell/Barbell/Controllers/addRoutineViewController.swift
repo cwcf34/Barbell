@@ -39,9 +39,9 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
             routinePassed.isPublic = false
         }
         routinePassed.numberOfWeeks = Int16(weeks.count)
-        routinePassed.creator = user.first
+        //routinePassed.creator = String(user.first) + String(user.last)
         //routinePassed.addToUsers(user.first!)
-        user.first?.addToScheduleArr(routinePassed)
+        //user.first?.addToScheduleArr(routinePassed)
         
         thisRoutine = routinePassed
         
@@ -162,9 +162,9 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
             routinePassed.isPublic = false
         }
         routinePassed.numberOfWeeks = Int16(weeks.count)
-        routinePassed.creator = user.first
+        routinePassed.creator = CoreDataController.getUser().fname! + CoreDataController.getUser().lname!
         //routinePassed.addToUsers(user.first!)
-        user.first?.addToScheduleArr(routinePassed)
+        //user.first?.addToScheduleArr(routinePassed)
         
         thisRoutine = routinePassed
     }
