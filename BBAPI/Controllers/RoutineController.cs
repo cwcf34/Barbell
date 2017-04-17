@@ -33,7 +33,15 @@ namespace BBAPI.Controllers
 		public IHttpActionResult SearchRoutines(string query)
 		{
 			//returns list of routines that contain query
-			return Ok(redisCache.searchForRoutine(query));
+			//returns list of routines that contain query
+			if (String.IsNullOrEmpty(query))
+			{
+				return Ok(new List<Routine>());
+			}
+			else
+			{
+				return Ok(redisCache.searchForRoutine(query));
+			}
 		}
 
 

@@ -168,9 +168,11 @@ namespace BBAPI.Controllers
 				{
 					foreach (var field in routineData)
 					{
-						if (field.Name.ToString().Equals("name") && field.Value.ToString().Contains(name))
+						if (field.Name.ToString().Equals("name") && (field.Value.ToString().Contains(name.ToLower()) || field.Value.ToString().Contains(name.ToUpper())))
 						{
-							returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value });
+							if (routineData[3].Value.ToString().Equals("1")) {
+								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value });
+							}
 						}
 					}
 
