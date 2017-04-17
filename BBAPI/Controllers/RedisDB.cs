@@ -16,6 +16,7 @@ namespace BBAPI.Controllers
 		private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
 		{
 			return ConnectionMultiplexer.Connect(windowsVMCache);
+
 		});
 
 		public static ConnectionMultiplexer Connection
@@ -26,7 +27,10 @@ namespace BBAPI.Controllers
 			}
 		}
 
+
+
 		private readonly static IDatabase cache = Connection.GetDatabase();
+		private readonly static IServer cacheServer = Connection.GetServer("localhost", 6379);
 
 		/// <summary>
 		/// Creates the user hash.
@@ -150,6 +154,12 @@ namespace BBAPI.Controllers
 		}
 
 		//close connection needed
+
+		public IEnumerable<RedisKey> searchForRoutine(string name) {
+
+			return cacheServer.Keys(0, "user:[A-Za-z@.]*:[^:][^:][^:][^:][^:][^:]", 1000);
+
+		}
 
 		public Routine[] getUserRoutines(string email)
 		{
@@ -283,7 +293,7 @@ namespace BBAPI.Controllers
 			{
 				var mail = new MailAddress(email);
 
-				if (mail.Host.Contains("."))
+				if (mail.Host.Contains(".") && mail.Host.Contains("@"))
 				{
 					//check if unique emailaddress
 					if (cache.KeyExists(key))

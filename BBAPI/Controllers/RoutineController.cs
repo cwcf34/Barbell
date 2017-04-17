@@ -2,6 +2,7 @@
 using System.Web.Http;
 using System.Collections.Generic;
 
+
 namespace BBAPI.Controllers
 {
 	public class RoutineController : ApiController
@@ -26,6 +27,17 @@ namespace BBAPI.Controllers
 		public Routine GetRoutine(string email, int id)
 		{
 			return redisCache.getRoutineHash(email, id);
+		}
+
+		[HttpGet]
+		[Route("routine/?query={query}")]
+		public IHttpActionResult SearchRoutines(string query)
+		{
+			IEnumerable<Routine> routines;
+
+			return Ok(redisCache.searchForRoutine(query));
+
+
 		}
 
 
