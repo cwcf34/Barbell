@@ -16,6 +16,7 @@ namespace BBAPI.Controllers
 		private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
 		{
 			return ConnectionMultiplexer.Connect(windowsVMCache);
+
 		});
 
 		public static ConnectionMultiplexer Connection
@@ -26,7 +27,10 @@ namespace BBAPI.Controllers
 			}
 		}
 
+
+
 		private readonly static IDatabase cache = Connection.GetDatabase();
+		private readonly static IServer cacheServer = Connection.GetServer("localhost", 6379);
 
 		/// <summary>
 		/// Creates the user hash.
@@ -150,6 +154,34 @@ namespace BBAPI.Controllers
 		}
 
 		//close connection needed
+
+		public List<Routine> searchForRoutine(string name) {
+
+			var data = cacheServer.Keys(0, "user:[A-Za-z@.]*:[^:][^:][^:][^:][^:]");
+
+			var returnData = new List<Routine>();
+
+			foreach (var key in data)
+			{
+				var routineData = cache.HashGetAll(key);
+				if (routineData != null)
+				{
+					foreach (var field in routineData)
+					{
+						if (field.Name.ToString().Equals("name") && field.Value.ToString().ToLower().Contains(name.ToLower()))
+						{
+							if (routineData[3].Value.ToString().Equals("1")) {
+								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value });
+							}
+						}
+					}
+
+				}
+			}
+
+			return returnData;
+
+		}
 
 		public Routine[] getUserRoutines(string email)
 		{
@@ -283,7 +315,7 @@ namespace BBAPI.Controllers
 			{
 				var mail = new MailAddress(email);
 
-				if (mail.Host.Contains("."))
+				if (mail.Host.Contains(".") && mail.Host.Contains("@"))
 				{
 					//check if unique emailaddress
 					if (cache.KeyExists(key))
