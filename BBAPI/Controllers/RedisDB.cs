@@ -155,9 +155,26 @@ namespace BBAPI.Controllers
 
 		//close connection needed
 
-		public IEnumerable<RedisKey> searchForRoutine(string name) {
+		public List<Routine> searchForRoutine(string name) {
 
-			return cacheServer.Keys(0, "user:[A-Za-z@.]*:[^:][^:][^:][^:][^:][^:]", 1000);
+			var data = cacheServer.Keys(0, "user:[A-Za-z@.]*:[^:][^:][^:][^:][^:][^:]", 1000);
+			var returnData = new List<Routine>();
+
+			foreach (var key in data){
+				var routineData = cache.HashGetAll(key);
+				if (routineData != null)
+				{
+					foreach (var field in routineData)
+					{
+						if (field.Name.ToString().Equals("Name") && field.Value.ToString().Contains(name))
+						{
+							returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value });
+						}
+					}
+				}
+			}
+
+			return returnData;
 
 		}
 

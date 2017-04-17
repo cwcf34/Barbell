@@ -30,14 +30,10 @@ namespace BBAPI.Controllers
 		}
 
 		[HttpGet]
-		[Route("routine/?query={query}")]
 		public IHttpActionResult SearchRoutines(string query)
 		{
-			IEnumerable<Routine> routines;
-
+			//returns list of routines that contain query
 			return Ok(redisCache.searchForRoutine(query));
-
-
 		}
 
 
