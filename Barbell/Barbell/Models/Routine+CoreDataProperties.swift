@@ -2,7 +2,7 @@
 //  Routine+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 3/10/17.
+//  Created by Caleb Albertson on 4/15/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -17,29 +17,12 @@ extension Routine {
     }
 
     @NSManaged public var id: Int16
+    @NSManaged public var isPublic: Bool
     @NSManaged public var name: String?
     @NSManaged public var numberOfWeeks: Int16
-    @NSManaged public var isPublic: Bool
-    @NSManaged public var creator: User?
-    @NSManaged public var users: NSSet?
+    @NSManaged public var isFinished: Bool
+    @NSManaged public var creator: String?
     @NSManaged public var workouts: NSSet?
-
-}
-
-// MARK: Generated accessors for users
-extension Routine {
-
-    @objc(addUsersObject:)
-    @NSManaged public func addToUsers(_ value: User)
-
-    @objc(removeUsersObject:)
-    @NSManaged public func removeFromUsers(_ value: User)
-
-    @objc(addUsers:)
-    @NSManaged public func addToUsers(_ values: NSSet)
-
-    @objc(removeUsers:)
-    @NSManaged public func removeFromUsers(_ values: NSSet)
 
 }
 

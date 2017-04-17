@@ -156,8 +156,8 @@ public class DataAccess {
                         }
                     }
                     
-                    newRoutine.creator = user
-                    newRoutine.addToUsers(user)
+                    newRoutine.creator = user.fname! + user.lname!
+                    //newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)
 
@@ -256,8 +256,6 @@ public class DataAccess {
                                     
                                     let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
                                     
-                                    newLift.descript = ""
-                                    newLift.duration = 0
                                     newLift.id = 0
                                     newLift.muscleGroup = ""
                                     newLift.name = name
@@ -289,8 +287,6 @@ public class DataAccess {
                             default:
                                 weekdayString = "7"
                             }
-                            
-                            newWorkout.creator = user
                             newWorkout.weekday = weekdayString
                             newWorkout.weeknumber = weekCountInt
                             
@@ -371,6 +367,7 @@ public class DataAccess {
         sem.wait()
         
         if Int(responseString)! > 0 {
+            routine.id = Int16(responseString)!
             var workoutsInRoutine = [Workout]()
             workoutsInRoutine = routine.workouts?.allObjects as! [Workout]
             for workout in workoutsInRoutine {
@@ -586,12 +583,22 @@ public class DataAccess {
     class func checkRoutines(){
         let redisRoutines = reloadRoutinesFromRedis()
         let fetchRequest = NSFetchRequest<User>(entityName: "Routine")
-        var routineToDelete : RedisRoutine?
+        
         var coreRoutines = [Routine] ()
         do{
             coreRoutines = try CoreDataController.getContext().fetch(fetchRequest as! NSFetchRequest<NSFetchRequestResult>) as! [Routine]
         }catch{
             print("we messed this up")
+        }
+        
+        /*for redisRoutine in redisRoutines{
+            print("redis routine id:  " + String(redisRoutine.id))
+        }*/
+        for coreRoutine in coreRoutines{
+            print("core routine id: " + String(coreRoutine.id))
+            if coreRoutine.id == 0 {
+                sendRoutineToRedis(routine: coreRoutine)
+            }
         }
         var isInCore = false
         for redisRoutine in redisRoutines{
