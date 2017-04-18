@@ -17,6 +17,7 @@
 		635AA0251E931F7800063C25 /* AchievementsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635AA0241E931F7800063C25 /* AchievementsCollectionViewController.swift */; };
 		639BC8261E820210008FD198 /* ExercisesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639BC8251E820210008FD198 /* ExercisesViewController.swift */; };
 		63C60DEC1E91AAA000604A13 /* StartRoutineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C60DEB1E91AAA000604A13 /* StartRoutineTableViewController.swift */; };
+		63F4E5491EA59AAD006C0C89 /* StartWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */; };
 		63FA5E101E7224AF00DEE65D /* HeadDick.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 63FA5E0E1E7224AF00DEE65D /* HeadDick.jpeg */; };
 		63FA5E111E7224AF00DEE65D /* Plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 63FA5E0F1E7224AF00DEE65D /* Plus.png */; };
 		63FA5E131E722A1800DEE65D /* addRoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FA5E121E722A1800DEE65D /* addRoutineViewController.swift */; };
@@ -65,6 +66,7 @@
 		635AA0241E931F7800063C25 /* AchievementsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AchievementsCollectionViewController.swift; sourceTree = "<group>"; };
 		639BC8251E820210008FD198 /* ExercisesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExercisesViewController.swift; sourceTree = "<group>"; };
 		63C60DEB1E91AAA000604A13 /* StartRoutineTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartRoutineTableViewController.swift; sourceTree = "<group>"; };
+		63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartWorkoutViewController.swift; sourceTree = "<group>"; };
 		63FA5E0E1E7224AF00DEE65D /* HeadDick.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = HeadDick.jpeg; sourceTree = "<group>"; };
 		63FA5E0F1E7224AF00DEE65D /* Plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plus.png; sourceTree = "<group>"; };
 		63FA5E121E722A1800DEE65D /* addRoutineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addRoutineViewController.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */,
 				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
 				C3FCF3E61E81EF7300E7BB0E /* WeekTableViewController.swift */,
+				63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				6FB6F9931E93214B006ED784 /* LiftModel.swift in Sources */,
 				6F18D0D11EA2E929000C7637 /* LegacyLift+CoreDataClass.swift in Sources */,
 				C384A1C41E5D0D3B0026FD99 /* RegistrationViewController.swift in Sources */,
+				63F4E5491EA59AAD006C0C89 /* StartWorkoutViewController.swift in Sources */,
 				6F0E3CE81E6A0FF600357004 /* WorkoutModel.swift in Sources */,
 				C30AE7F81E5CF7F80093507B /* AppDelegate.swift in Sources */,
 				6F18D0C71EA2E929000C7637 /* User+CoreDataClass.swift in Sources */,
