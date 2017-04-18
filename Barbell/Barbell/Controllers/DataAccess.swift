@@ -366,6 +366,7 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
+        
         if Int(responseString)! > 0 {
             routine.id = Int16(responseString)!
             var workoutsInRoutine = [Workout]()
@@ -474,7 +475,7 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
+            print("login responseString = \(responseString)")
             sem.signal()
         }
         task.resume()
