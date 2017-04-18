@@ -21,7 +21,7 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        print("starting routine " + routinePassed.name!)
+        //print("starting routine " + routinePassed.name!)
         
         workoutsInRoutine = routinePassed.workouts?.allObjects as! [Workout]
         
@@ -130,7 +130,7 @@ class StartRoutineTableViewController: UITableViewController, StartWorkoutTableV
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "startWorkoutSegue"){
-            var viewController = segue.destination as! StartWorkoutTableViewController
+            var viewController = segue.destination as! StartWorkoutViewController
             viewController.workoutPassed = workoutToPass
             viewController.routinePassed = self.routinePassed
         }

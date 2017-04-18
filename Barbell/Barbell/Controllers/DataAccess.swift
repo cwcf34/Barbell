@@ -100,8 +100,6 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
-        //responseString.removeAtIndex(index)
-        //responseString.remove(at: responseString.endIndex)
         var allRoutines = [Routine]()
         if let data = responseString.data(using: .utf8) as? Data{
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
@@ -122,6 +120,7 @@ public class DataAccess {
                         }
                         if (key == "Name"){
                             if let value = value as? String{
+                                print("Found routine named in redis" + value)
                                 newRoutine.name = value
                             }
                         }
@@ -150,13 +149,15 @@ public class DataAccess {
                     
                     for eachWorkout in allWorkouts{
                         if let workout = eachWorkout as? Workout {
-                            workout.createdRoutine = newRoutine
+                            if ((workout.hasExercises?.count)! > 0)  {
+                                newRoutine.addToWorkouts(workout)
+                                workout.createdRoutine = newRoutine
+                            }
                         }
                     }
                     
-                    newRoutine.creator = user
-                    newRoutine.addToWorkouts(allWorkouts)
-                    newRoutine.addToUsers(user)
+                    newRoutine.creator = user.fname! + user.lname!
+                    //newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)
 
@@ -255,13 +256,12 @@ public class DataAccess {
                                     
                                     let newLift : Lift = NSEntityDescription.insertNewObject(forEntityName: "Lift", into: CoreDataController.getContext()) as! Lift
                                     
-                                    newLift.descript = ""
-                                    newLift.duration = 0
                                     newLift.id = 0
                                     newLift.muscleGroup = ""
                                     newLift.name = name
                                     newLift.sets = Int16(sets)
                                     newLift.reps = Int16(reps)
+                                    newLift.weight = Int16(weight)
                                     newLift.inWorkout = newWorkout
                                     
                                     liftList.append(newLift)
@@ -287,8 +287,6 @@ public class DataAccess {
                             default:
                                 weekdayString = "7"
                             }
-                            
-                            newWorkout.creator = user
                             newWorkout.weekday = weekdayString
                             newWorkout.weeknumber = weekCountInt
                             
@@ -368,7 +366,9 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
+        
         if Int(responseString)! > 0 {
+            routine.id = Int16(responseString)!
             var workoutsInRoutine = [Workout]()
             workoutsInRoutine = routine.workouts?.allObjects as! [Workout]
             for workout in workoutsInRoutine {
@@ -475,7 +475,7 @@ public class DataAccess {
             }
             
             responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
+            print("login responseString = \(responseString)")
             sem.signal()
         }
         task.resume()
@@ -579,6 +579,143 @@ public class DataAccess {
             CoreDataController.saveContext()
             return
         }
+    }
+    
+    class func checkRoutines(){
+        let redisRoutines = reloadRoutinesFromRedis()
+        let fetchRequest = NSFetchRequest<User>(entityName: "Routine")
+        
+        var coreRoutines = [Routine] ()
+        do{
+            coreRoutines = try CoreDataController.getContext().fetch(fetchRequest as! NSFetchRequest<NSFetchRequestResult>) as! [Routine]
+        }catch{
+            print("we messed this up")
+        }
+        
+        /*for redisRoutine in redisRoutines{
+            print("redis routine id:  " + String(redisRoutine.id))
+        }*/
+        for coreRoutine in coreRoutines{
+            print("core routine id: " + String(coreRoutine.id))
+            if coreRoutine.id == 0 {
+                sendRoutineToRedis(routine: coreRoutine)
+            }
+        }
+        var isInCore = false
+        for redisRoutine in redisRoutines{
+            isInCore = false
+            for coreRoutine in coreRoutines{
+                
+                if coreRoutine.id == redisRoutine.id{
+                    isInCore = true
+                    break
+                }
+               
+            }
+            if isInCore == false {
+                deleteRoutineFromRedis(routine: redisRoutine)
+            }
+        }
+    }
+    
+    class func reloadRoutinesFromRedis () -> [RedisRoutine] {
+        let user : User = CoreDataController.getUser()
+        var request = URLRequest(url: URL(string: apiURL + "routine/\(user.email!)/")!)
+        var responseString = ""
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Loading routine response: " + responseString)
+            
+            
+            sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+        
+        
+        var allRoutines = [RedisRoutine]()
+        if let data = responseString.data(using: .utf8) as? Data{
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                //print("JSONFULL == \(json)\n\n")
+                
+                for eachRoutine in json {
+                    
+                    let newRoutine = RedisRoutine(id: 0)
+                    
+                    
+                    for (key,value) in eachRoutine{
+
+                        if (key == "Id"){
+                            if let value = value as? String{
+                                if let castedValue = Int16(value){
+                                    newRoutine.id = castedValue
+                                }
+                            }
+                        }
+                    }
+                    allRoutines.append(newRoutine)
+                }
+            }
+        }
+        return allRoutines
+    }
+    
+    class func deleteRoutineFromRedis(routine : RedisRoutine){
+        let user : User = CoreDataController.getUser()
+        var request = URLRequest(url: URL(string: apiURL + "routine/\(user.email!)/\(routine.id)")!)
+        request.httpMethod = "DELETE"
+        var responseString = ""
+        
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Get user response " + responseString)
+            
+            
+            sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+        
     }
 
     class func saveUserToRedis(email : String){

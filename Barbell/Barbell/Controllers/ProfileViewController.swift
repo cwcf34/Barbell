@@ -35,40 +35,44 @@ class ProfileViewController: UIViewController {
         if let user = user {
             firstName.text = user.fname
             lastName.text = user.lname
-            age.text = String(user.age)
-            weight.text = String(user.weight)
-            squat.text = String(user.squat)
-            bench.text = String(user.bench)
-            deadlift.text = String(user.deadlift)
-            snatch.text = String(user.snatch)
-            cleanAndJerk.text = String(user.cleanAndJerk)
+            if user.age == 0 {
+            }
+            else{
+                age.text = String(user.age)
+            }
+            if user.weight == 0{
+            }
+            else{
+                weight.text = String(user.weight)
+            }
+            if user.squat == 0{
+            }
+            else{
+                squat.text = String(user.squat)
+            }
+            if user.bench == 0{
+            }
+            else{
+                bench.text = String(user.bench)
+            }
+            if user.deadlift == 0{
+            }
+            else{
+                deadlift.text = String(user.deadlift)
+            }
+            if user.snatch == 0{
+            }
+            else{
+                snatch.text = String(user.snatch)
+            }
+            if user.cleanAndJerk == 0{
+            }
+            else{
+                cleanAndJerk.text = String(user.cleanAndJerk)
+            }
             workoutsCompleted.text = String(user.workoutsCompleted)
             
             
-            /*if let userAge = user.age{
-                age.text = userAge.description
-            }
-            if let userWeight = user.first?.weight{
-                weight.text = userWeight.description
-            }
-            if let userSquat = user.first?.squat{
-                squat.text = userSquat.description
-            }
-            if let userBench = user.first?.bench{
-                bench.text = userBench.description
-            }
-            if let userDeadlift = user.first?.deadlift{
-                deadlift.text = userDeadlift.description
-            }
-            if let userSnatch = user.first?.snatch{
-                snatch.text = userSnatch.description
-            }
-            if let userClean = user.first?.cleanAndJerk{
-                cleanAndJerk.text = userClean.description
-            }
-            if let userWorkouts = user.first?.workoutsCompleted{
-                workoutsCompleted.text = userWorkouts.description
-            }*/
         }
         
         
@@ -160,7 +164,7 @@ class ProfileViewController: UIViewController {
                 }
             }
         }
-        
+        DataAccess.checkRoutines()
         DataAccess.saveUserToRedis(email: (user?.email)!)
         
        self.performSegue(withIdentifier: "toLogin", sender: self)

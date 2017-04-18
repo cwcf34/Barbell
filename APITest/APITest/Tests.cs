@@ -29,13 +29,39 @@ namespace APITest
 
         public async static Task<string> RunAllTests()
         {
-            string regisOutput = RunRegistrationTest();
-            string authOutput = await RunSecurityTest();
-            string routineOutput = RunRoutineTests();
-            string workoutOutput = RunWorkoutTests();
-            string exerciseOutput = RunExerciseTests();
+            try
+            {
+                string regisOutput = RunRegistrationTest();
+                Console.WriteLine("Registration completed");
+                string authOutput = await RunSecurityTest();
+                Console.WriteLine("Security test completed");
+                string routineOutput = RunRoutineTests();
+                Console.WriteLine("Routine tests completed");
+                string workoutOutput = RunWorkoutTests();
+                Console.WriteLine("Workout tests completed");
+                string exerciseOutput = RunExerciseTests();
+                Console.WriteLine("Exercise tests completed");
 
-            return regisOutput + authOutput + routineOutput + workoutOutput + exerciseOutput;
+                string testsOutput = regisOutput + authOutput + routineOutput + workoutOutput + exerciseOutput;
+                string finalStatement = "";
+                if (testsOutput.Contains("Failure"))
+                {
+                    finalStatement = "\nOne or more tests failed";
+                }else
+                {
+                    finalStatement = "\nAll tests completed successfully";
+                }
+
+
+                return testsOutput + finalStatement;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            return "";
+
         }
 
         /// <summary>
@@ -295,7 +321,8 @@ namespace APITest
                 + generatedExercise.sets + ",reps:" + generatedExercise.reps + ",weight:" + generatedExercise.weight +"}\"";
 
             string resultString = HttpCall(apiServer + "exercise/" + generatedUser.Email + "/", queryString, "PUT");
-            returnString += resultString.ToLower().Equals("true") ? "Success\n" : "Failure\n";
+            returnString += resultString.ToLower().Equals("\"true\"") ? "Success\n" : "Failure\n";
+            Console.WriteLine(resultString);
             returnString += String.Format("Response time: {0:g}", elapsed) + " seconds\n";
 
 
@@ -338,6 +365,7 @@ namespace APITest
                 client.DefaultRequestHeaders.Authorization
                     = new AuthenticationHeaderValue("Basic", basicAuth);
 
+                StartStopwatch();
                 var rawResult = await client.PostAsync(authServer + "/connect/token",
                     new FormUrlEncodedContent(new[]
                     {
@@ -357,10 +385,10 @@ namespace APITest
                             "password",
                             generatedUser.Password)
                     }));
-
-                StartStopwatch();
-                var data = await rawResult.Content.ReadAsStringAsync();
                 StopStopwatch();
+
+                var data = await rawResult.Content.ReadAsStringAsync();
+                
 
                 return JsonConvert.DeserializeObject<TokenResponse>(data);
             }

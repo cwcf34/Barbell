@@ -2,7 +2,7 @@
 //  Workout+CoreDataProperties.swift
 //  Barbell
 //
-//  Created by Caleb Albertson on 3/10/17.
+//  Created by Caleb Albertson on 4/15/17.
 //  Copyright © 2017 Team Barbell. All rights reserved.
 //
 
@@ -16,11 +16,11 @@ extension Workout {
         return NSFetchRequest<Workout>(entityName: "Workout")
     }
 
-    @NSManaged public var weekday: String?
     @NSManaged public var id: Int16
+    @NSManaged public var weekday: String?
     @NSManaged public var weeknumber: Int16
+    @NSManaged public var isFinished: Bool
     @NSManaged public var createdRoutine: Routine?
-    @NSManaged public var creator: User?
     @NSManaged public var hasExercises: NSSet?
 
 }

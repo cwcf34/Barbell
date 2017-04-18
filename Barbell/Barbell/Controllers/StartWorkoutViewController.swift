@@ -9,12 +9,12 @@
 import UIKit
 import CoreData
 
-protocol StartWorkoutTableViewControllerDelegate: class { //Setting up a Custom delegate for this class. I am using `class` here to make it weak.
+protocol StartWorkoutViewControllerDelegate: class { //Setting up a Custom delegate for this class. I am using `class` here to make it weak.
     func sendDataBackToHomePageViewController(routinePassed: Routine?) //This function will send the data back to origin viewcontroller.
 }
 
-class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegate {
-
+class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
+    
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var DayOfTheWeek: UILabel!
     @IBOutlet weak var RountineExerciseLabel: UILabel!
@@ -24,13 +24,14 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
     @IBOutlet weak var CompletedSetsTextArea: UITextField!
     @IBOutlet weak var CompletedRepsTextArea: UITextField!
     @IBOutlet weak var CompletedWeightTextArea: UITextField!
+    
     var workoutPassed : Workout!
     var routinePassed : Routine!
     var liftsInWorkout = [Lift]()
     var i = 0
     var hasFinished = false
     
-    weak var customDelegateForDataReturn: StartWorkoutTableViewControllerDelegate?
+    weak var customDelegateForDataReturn: StartWorkoutViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,29 +49,29 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
         
         switch (Int(workoutPassed.weeknumber))
         {
-            case 1:
-                DayOfTheWeek.text = "Sunday"
-                
-            case 2:
-                DayOfTheWeek.text = "Monday"
-                
-            case 3:
-                DayOfTheWeek.text = "Tuesday"
-                
-            case 4:
-                DayOfTheWeek.text = "Wednesday"
-                
-            case 5:
-                DayOfTheWeek.text = "Thursday"
-                
-            case 6:
-                DayOfTheWeek.text = "Friday"
-                
-            case 7:
-                DayOfTheWeek.text = "Saturday"
-                
-            default:
-                DayOfTheWeek.text = "Hump Day"
+        case 1:
+            DayOfTheWeek.text = "Sunday"
+            
+        case 2:
+            DayOfTheWeek.text = "Monday"
+            
+        case 3:
+            DayOfTheWeek.text = "Tuesday"
+            
+        case 4:
+            DayOfTheWeek.text = "Wednesday"
+            
+        case 5:
+            DayOfTheWeek.text = "Thursday"
+            
+        case 6:
+            DayOfTheWeek.text = "Friday"
+            
+        case 7:
+            DayOfTheWeek.text = "Saturday"
+            
+        default:
+            DayOfTheWeek.text = "Hump Day"
         }
         
         RountineExerciseLabel.text = liftsInWorkout[i].name
@@ -85,7 +86,7 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
             nextButton.setTitle("Finished", for: [])
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -105,7 +106,7 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
             customDelegateForDataReturn?.sendDataBackToHomePageViewController(routinePassed: routinePassed)
             
             let viewControllers = self.navigationController!.viewControllers
-            for var aViewController in viewControllers
+            for aViewController in viewControllers
             {
                 if aViewController is RoutineTableViewController
                 {
@@ -128,7 +129,7 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
                 nextButton.setTitle("Finished", for: [])
                 hasFinished = true
             }
-
+            
         }
         
         CompletedRepsTextArea.text = ""
@@ -147,5 +148,5 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
         return string == numberFiltered
     }
     
-
+    
 }
