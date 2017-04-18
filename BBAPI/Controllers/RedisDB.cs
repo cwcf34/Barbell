@@ -315,7 +315,7 @@ namespace BBAPI.Controllers
 			{
 				var mail = new MailAddress(email);
 
-				if (mail.Host.Contains(".") && mail.Host.Contains("@"))
+				if (mail.Host.Contains("."))
 				{
 					//check if unique emailaddress
 					if (cache.KeyExists(key))
