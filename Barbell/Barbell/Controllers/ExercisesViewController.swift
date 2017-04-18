@@ -29,7 +29,7 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var doesHaveWorkout = routinePassed.workouts?.allObjects as! [Workout]
+        let doesHaveWorkout = routinePassed.workouts?.allObjects as! [Workout]
         
         for weekDay in doesHaveWorkout{
             if(weekDay.weekday == day && weekDay.weeknumber == week){
@@ -43,34 +43,23 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
             newWorkout.weekday = day
             newWorkout.weeknumber = week
             self.workout = newWorkout
-
         }
         
         exerciseTable.delegate = self
         exerciseTable.dataSource = self
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 1
-//    }
     override func viewWillAppear(_ animated: Bool) {
-        let context = CoreDataController.getContext()
+        _  = CoreDataController.getContext()
         
-        let fetchRequest = NSFetchRequest<Lift>(entityName: "Lift")
-        do{
-            foundLifts = workout.hasExercises?.allObjects as! [Lift]
-        }catch{
-            print("Bad getExercise query")
-        }
-        
+        _ = NSFetchRequest<Lift>(entityName: "Lift")
+ 
+        foundLifts = workout.hasExercises?.allObjects as! [Lift]
+
         exerciseTable.reloadData()
         return
     }
@@ -105,7 +94,6 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
             lift = foundLifts[indexPath.row-1]
             self.performSegue(withIdentifier: "holdMyBeer", sender: self)
         }
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -123,29 +111,24 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
             viewController.exercise = exercise
             viewController.lift = lift
         }
-        
     }
     
     override func viewWillDisappear(_ animated : Bool) {
         super.viewWillDisappear(animated)
-        
         if (self.isMovingFromParentViewController){
             routinePassed.addToWorkouts(workout)
-            print("backing up")
         }
     }
     
     func sendDataBackToHomePageViewController(routinePassed: Routine?, workoutPassed: Workout?) { //Custom delegate function which was defined inside child class to get the data and do the other stuffs.
-        
         self.routinePassed = routinePassed
         self.workout = workoutPassed
     }
-
+    
     // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let row = indexPath.row-1
-            print(row)
             if (row < foundLifts.count)
             {
                 //this is where it needs to be removed from coredata
@@ -164,25 +147,10 @@ class ExercisesViewController: UIViewController, UITableViewDataSource, UITableV
                     CoreDataController.getContext().delete(workout)
                 }
             }
-            
-            
-            
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

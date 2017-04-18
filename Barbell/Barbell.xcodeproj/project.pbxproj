@@ -179,9 +179,9 @@
 				C3E32C3A1E6F8E4800800545 /* RoutineTableViewController.swift */,
 				63C60DEB1E91AAA000604A13 /* StartRoutineTableViewController.swift */,
 				C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */,
+				63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */,
 				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
 				C3FCF3E61E81EF7300E7BB0E /* WeekTableViewController.swift */,
-				63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
