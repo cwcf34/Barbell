@@ -170,6 +170,7 @@ public class DataAccess {
     class func getRoutinesFromRedis () -> [Routine] {
         let user : User = CoreDataController.getUser()
         var routine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+        print("email trying to login: " + user.email!)
         var request = URLRequest(url: URL(string: apiURL + "routine/\(user.email!)/")!)
         var responseString = ""
         let headers = [
@@ -410,8 +411,77 @@ public class DataAccess {
         }
     }
 
+    class func editRoutineinRedis (routine: Routine) -> Bool {
     
-    
+        let user : User = CoreDataController.getUser()
+        
+        var putString = ""
+        var email : String!
+        email = user.email!
+        var request = URLRequest(url: URL(string: apiURL + "routine/\(email!)/")!)
+        let routineName : String!
+        var isPublicInt = 0
+        if routine.isPublic == true {
+            isPublicInt = 1
+        }
+        routineName = routine.name!
+        putString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator)}\" "
+        
+        request.httpMethod = "PUT"
+        
+        var responseString = ""
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        print(putString)
+        
+        let putDATA:Data = putString.data(using: String.Encoding.utf8)!
+        
+        request.httpBody = putDATA
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                   // check for fundamental networking error
+                print("error=\(error)")
+                return
+        }
+        
+        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+            print("statusCode should be 200, but is \(httpStatus.statusCode)")
+            print("response = \(response)")
+        }
+        
+        responseString = String(data: data, encoding: .utf8)!
+        
+        print("Did save routine to redis?  " + responseString)
+        
+        
+        sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+        
+        
+        if Int(responseString)! > 0 {
+            routine.id = Int16(responseString)!
+            var workoutsInRoutine = [Workout]()
+            workoutsInRoutine = routine.workouts?.allObjects as! [Workout]
+            for workout in workoutsInRoutine {
+                let workoutModel = WorkoutModel(id: Int(responseString)!, workout: workout)
+                sendWorkoutToRedis(workoutModel: workoutModel)
+            }
+        }
+        
+        return true
+        
+    }
+
+
+
     class func sendRoutineToRedis (routine: Routine) -> Bool {
         
         let user : User = CoreDataController.getUser()
@@ -428,7 +498,7 @@ public class DataAccess {
             isPublicInt = 1
         }
         routineName = routine.name!
-        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(user.fname!)}\" "
+        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator)}\" "
         
         request.httpMethod = "POST"
         
