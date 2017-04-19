@@ -80,51 +80,6 @@ public class DataAccess {
         
         //login by getting authentication
         return getAuthentication(user: loginInfo.email,pass: loginInfo.password)
-        
-        /*
-        var request = URLRequest(url: URL(string: apiURL + "login/\(loginInfo.email)/")!)
-        
-        var responseString  = "false"
-        
-        request.httpMethod = "POST"
-        
-        let postString = "\"{password:\(loginInfo.password)}\" "
-        
-        let postDATA:Data = postString.data(using: String.Encoding.utf8)!
-        
-        request.httpBody = postDATA
-        
-        let headers = [
-            "content-type": "application/json"
-        ]
-        
-        request.allHTTPHeaderFields = headers
-        let sem = DispatchSemaphore(value: 0)
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("login response = \(response)")
-            }
-            
-            responseString = String(data: data, encoding: .utf8)!
-            print("responseString = \(responseString)")
-            sem.signal()
-        }
-        task.resume()
-        sem.wait()
-        
-        if(responseString == "\"true\""){
-            return true
-        } else{
-            return false
-        }
-        */
     }
     
     class func getAuthentication(user: String, pass: String) -> Bool{
@@ -512,6 +467,7 @@ public class DataAccess {
         
         task.resume()
         sem.wait()
+        
         
         if Int(responseString)! > 0 {
             routine.id = Int16(responseString)!

@@ -11,7 +11,8 @@ namespace BBAPI.Controllers
 		RedisDB redisCache = RedisDB._instance;
 
 		[HttpGet]
-		public IEnumerable<Routine> GetAllRoutines(string email)
+        [Authorize]
+        public IEnumerable<Routine> GetAllRoutines(string email)
 		{
 			//to get all routines get list of user:[email]:routines list
 			Routine[] routines = redisCache.getUserRoutines(email);
@@ -24,13 +25,15 @@ namespace BBAPI.Controllers
 		}
 
 		[HttpGet]
-		public Routine GetRoutine(string email, int id)
+        [Authorize]
+        public Routine GetRoutine(string email, int id)
 		{
 			return redisCache.getRoutineHash(email, id);
 		}
 
 		[HttpGet]
-		public IHttpActionResult SearchRoutines(string query)
+        [Authorize]
+        public IHttpActionResult SearchRoutines(string query)
 		{
 			//returns list of routines that contain query
 			//returns list of routines that contain query
@@ -47,7 +50,8 @@ namespace BBAPI.Controllers
 
 		//create new Routine w all empty workouts
 		[HttpPost]
-		public IHttpActionResult PostRoutine(string email, [FromBody]string data)
+        [Authorize]
+        public IHttpActionResult PostRoutine(string email, [FromBody]string data)
 		{
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
@@ -134,7 +138,8 @@ namespace BBAPI.Controllers
 		}
 
 		[HttpDelete]
-		public IHttpActionResult DeleteRoutine(string email, int id)
+        [Authorize]
+        public IHttpActionResult DeleteRoutine(string email, int id)
 		{
 			//create key
 			if (redisCache.deleteRoutineItem("user:"+email+":routines", id) != 0)

@@ -80,6 +80,10 @@ class AllExercisesTableViewController: UITableViewController, UISearchResultsUpd
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.resultSearchController.dismiss(animated: true, completion: nil)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -135,8 +139,14 @@ class AllExercisesTableViewController: UITableViewController, UISearchResultsUpd
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        valueToPass = allExercises[indexPath.section].muscleGroup
-        exerciseToPass = allExercises[indexPath.section].exercises[indexPath.row]
+        if (self.resultSearchController.isActive) {
+            valueToPass = filteredTableData[indexPath.section].muscleGroup
+            exerciseToPass = filteredTableData[indexPath.section].exercises[indexPath.row]
+        }
+        else {
+            valueToPass = allExercises[indexPath.section].muscleGroup
+            exerciseToPass = allExercises[indexPath.section].exercises[indexPath.row]
+        }
         
         self.performSegue(withIdentifier: "addStatsSegue", sender: self)
         

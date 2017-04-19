@@ -34,7 +34,6 @@ class RoutineTableViewController: UITableViewController {
             print("Bad getExercise query")
         }
         for routine in foundRoutines{
-            print(routine.name)
             if(routine.name == nil || routine.name == "") {
                 CoreDataController.getContext().delete(routine)
                 didDelete = true;
@@ -115,132 +114,63 @@ class RoutineTableViewController: UITableViewController {
     }
     
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            let row = indexPath.row-1
+//            print(row)
+//            if (row < foundRoutines.count)
+//            {
+//                //this is where it needs to be removed from coredata
+//                let deleteRoutine = foundRoutines[row]
+//                foundRoutines.remove(at: row)//remove from the array
+//                CoreDataController.getContext().delete(deleteRoutine) //delete games from coredata
+//                
+//                do{
+//                    try CoreDataController.getContext().save()
+//                    
+//                } catch{
+//                    print("error occured saving context after deleting item")
+//            }
+//        }
+//            // Delete the row from the data source
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//        } else if editingStyle == .insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }
+//    }
+    
+    
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            
             let row = indexPath.row-1
-            print(row)
-            if (row < foundRoutines.count)
+            if (row < self.foundRoutines.count)
             {
                 //this is where it needs to be removed from coredata
-                let deleteRoutine = foundRoutines[row]
-                foundRoutines.remove(at: row)//remove from the array
+                let deleteRoutine = self.foundRoutines[row]
+                self.foundRoutines.remove(at: row)//remove from the array
                 CoreDataController.getContext().delete(deleteRoutine) //delete games from coredata
-                
+
                 do{
                     try CoreDataController.getContext().save()
-                    
+
                 } catch{
                     print("error occured saving context after deleting item")
-                }
-                
-//                if(foundRoutines.count == 0) {
-//                    CoreDataController.getContext().delete(routine)
-//                }
             }
-            
-            
-            
-            // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
-    }
-    
-    /*func loadRoutines() -> [Routine]{
-        
-        
-        //CoreData
-        let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
-        do{
-            let foundRoutine = try CoreDataController.getContext().fetch(fetchRequest)
-            return foundRoutine
-        }catch{
-            print("we messed this up")
         }
-        return [Routine]()
         
-    }*/
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+            let routineObject : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
+            self.routine = routineObject
+            
+            self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
+        }
+        
+        edit.backgroundColor = UIColor.blue
+        
+        return [delete, edit]
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    
-    
-    /*Logic for searching through workouts */
-    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        filterPlayers = allPlayers?.filter({ (players: Player) -> Bool in
-//            return players.firstName?.lowercased().range(of: searchText.lowercased()) != nil
-//        })
-//        
-//        if searchText != ""{
-//            shouldShowSearch = true
-//            self.tableView.reloadData()
-//        }
-//        else{
-//            shouldShowSearch = false
-//            self.tableView.reloadData()
-//        }
-//    }
-//    
-//    
-//    func createSearchbar() {
-//        searchBar.showsCancelButton = false
-//        searchBar.placeholder = "Enter search"
-//        searchBar.delegate = self
-//        
-//        self.navigationItem.titleView = searchBar
-//    }
-//    
-//    func searchBarSearchButtonClicked(searchBar: UISearchBar){
-//        shouldShowSearch = true
-//        searchBar.endEditing(true)
-//        self.tableView.reloadData()
-//    }
-    
-    /*End Search Logic*/
-
 }
