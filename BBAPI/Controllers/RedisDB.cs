@@ -157,7 +157,7 @@ namespace BBAPI.Controllers
 
 		public List<Routine> searchForRoutine(string name) {
 
-			var data = cacheServer.Keys(0, "user:[A-Za-z@.]*:[^:][^:][^:][^:][^:]");
+			var data = cacheServer.Keys(0, "user:[A-Za-z@.]*:[0-9]*[^:]?");
 
 			var returnData = new List<Routine>();
 
