@@ -52,6 +52,8 @@ class LoginViewController: UIViewController {
             if(dbResponse == true){
                 CoreDataController.clearData()
                 
+                //start timer to refresh auth tokens
+                DataAccess.startRefreshCountdown()
                 
                 //Add user info to persistent Database
                 DataAccess.getUserfromRedis(email: email.text!)

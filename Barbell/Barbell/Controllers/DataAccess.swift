@@ -51,7 +51,7 @@ public class DataAccess {
                 
                 if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                     print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                    print("response = \(response)")
+                    print("\nREgister response = \(response)\n")
                 }
                 
                 responseString = String(data: data, encoding: .utf8)!
@@ -73,6 +73,9 @@ public class DataAccess {
             result = getAuthentication(user: registerInfo.email,pass: registerInfo.password)
         }
         
+        //start the countdown to resfresh tokens
+        startRefreshCountdown()
+        
         return result
     }
     
@@ -89,6 +92,7 @@ public class DataAccess {
         //request token for validation
         var request = URLRequest(url: URL(string: authURL)!)
         
+        //add request settings
         let headers = [
             "Content-type": "application/x-www-form-urlencoded"
         ]
@@ -96,12 +100,11 @@ public class DataAccess {
         request.allHTTPHeaderFields = headers
         request.httpMethod = "POST"
         
-        if let pass = pass as? String, let user = user as? String  {
+        if  (pass != " " && user != " " ) {
             
             let postBody = "client_id=iOS&username=\(user)&password=\(pass)&client_secret=secret&grant_type=password&scope=WebAPI offline_access".data(using:String.Encoding.ascii, allowLossyConversion: false)
             
-            
-            
+            // add form url encoded post data
             request.httpBody = postBody
             
             
@@ -114,22 +117,24 @@ public class DataAccess {
                     return
                 }
                 
+                
+                    
+                // check for http errors
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("\nGet Auth response = \(response)\n")
+                    authenticated = false
+                }
+                
+                //convert data to string
+                responseString = String(data: data, encoding: .utf8)!
+                print("Loading Auth request response: " + responseString)
+                
                 if (authenticated){
-                    
-                    // check for http errors
-                    if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                        print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                        print("response = \(response)")
-                        authenticated = false
-                    }
-                    
-                    responseString = String(data: data, encoding: .utf8)!
-                    
-                    print("Loading Auth request response: " + responseString)
-                    
+                    //convert data to [String:String] for parsing
                     if let authData = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any] {
                         
-                        
+                        //key:value pairs on response from server
                         for (key,value) in authData{
                             print("KEY::\(key)VALUE::\(value)")
                             
@@ -143,28 +148,120 @@ public class DataAccess {
                                 }
                             }
                         }
-                        
-                        
                     }else {
+                        // if data cant be converted into [string:any], something went wrong
                         authenticated = false
                     }
-                
                 }
                 
-                
-                
+                //send signal to continue w execution
                 sem.signal()
             }
-            
+            // start url task
             task.resume()
+            
+            // wait for signal
             sem.wait()
             
-            
         }else {
+            //if passed user or pass is " ", auth WILL fail
             authenticated = false
         }
         
+        //are you auth'd?
         return authenticated
+    }
+    
+    //refreshs' the auth tokens
+    class func startRefreshCountdown() {
+        
+        //access token and refresh token expire in 60m/3600s
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3300)) {
+        
+            //refresh both tokens 55m/3300s after register or login to be safe
+            refreshAuthToken(token: refreshToken)
+            
+            //after another 55m refresh again
+            //i <3 recursion
+            startRefreshCountdown()
+        }
+    }
+    
+    class func refreshAuthToken(token: String){
+        //request token for refresh of validation
+        var responseString = ""
+        
+        //URL REQUEST SETUP
+        var request = URLRequest(url: URL(string: authURL)!)
+        
+        let headers = [
+            "Content-type": "application/x-www-form-urlencoded"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        request.httpMethod = "POST"
+        
+        //how to form url encoded post data as opposed to json
+        let postBody = "client_id=iOS&client_secret=secret&grant_type=refresh_token&refresh_token=\(refreshToken)".data(using:String.Encoding.ascii, allowLossyConversion: false)
+        
+        //attach post body data
+        request.httpBody = postBody
+        
+        //create semaphore control
+        let sem = DispatchSemaphore(value: 0)
+        
+        //create url task to refresh access token using refresh token
+        let task = URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            
+            // check for fundamental networking error
+            guard let data = data, error == nil else {
+                print("error=\(error)")
+                return
+            }
+            
+            //now i  haz teh data
+            // check for http errors
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("\nREFRESH Auth TOKEN response = \(response)\n")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Loading REFRESH Auth TOKEN response: " + responseString)
+            
+            //convert data to [String:String] for parsing
+            if let refreshData = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any] {
+                
+                //key:value pairs on response from server
+                for (key,value) in refreshData{
+                    print("KEY::\(key)VALUE::\(value)")
+                    
+                    if (key == "error") {
+                        
+                    }else if (key == "access_token") {
+                        //grab new access token
+                        if let value = value as? String {
+                            accessToken = "Bearer \(value)"
+                        }
+                    }else if(key == "refresh_token"){
+                        //grab new refresh token
+                        if let value = value as? String {
+                            refreshToken = value
+                        }
+                    }
+                }
+            }
+            
+            //send signal of completion
+            sem.signal()
+        }
+        
+        //start task
+        task.resume()
+        //wait for singal of completion
+        sem.wait()
     }
     
     class func getRoutinesFromRedis () -> [Routine] {
@@ -173,7 +270,8 @@ public class DataAccess {
         var request = URLRequest(url: URL(string: apiURL + "routine/\(user.email!)/")!)
         var responseString = ""
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -188,7 +286,7 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
+                print("\nGetting routine from redis response = \(response)\n")
             }
             
             responseString = String(data: data, encoding: .utf8)!
@@ -286,7 +384,8 @@ public class DataAccess {
             
             var responseString = ""
             let headers = [
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "authorize": self.accessToken
             ]
             
             request.allHTTPHeaderFields = headers
@@ -434,7 +533,8 @@ public class DataAccess {
         
         var responseString = ""
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         print(postString)
@@ -508,7 +608,8 @@ public class DataAccess {
         
         var responseString = ""
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         print(postString)
@@ -528,6 +629,11 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                if (httpStatus.statusCode == 401){
+                    //get refresh token because there is a problem w Auth
+                    refreshAuthToken(token: refreshToken)
+                    
+                }
                 print("response = \(response)")
             }
             
@@ -552,7 +658,8 @@ public class DataAccess {
         var responseString = ""
         
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -567,12 +674,12 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
+                print("\nGET USER FROM REDIS response = \(response)\n")
             }
             
             responseString = String(data: data, encoding: .utf8)!
             
-            print("Get user response " + responseString)
+            print("\nGet user response \(responseString)\n")
             
             
             sem.signal()
@@ -679,7 +786,8 @@ public class DataAccess {
         var request = URLRequest(url: URL(string: apiURL + "routine/\(user.email!)/")!)
         var responseString = ""
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -694,12 +802,12 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
+                print("\nreloadRoutines response = \(response)\n")
             }
             
             responseString = String(data: data, encoding: .utf8)!
             
-            print("Loading routine response: " + responseString)
+            print("\nLoading routine response: \(responseString)\n")
             
             
             sem.signal()
@@ -743,7 +851,8 @@ public class DataAccess {
         var responseString = ""
         
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -758,12 +867,12 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
+                print("\nDELETE ROUTINE response = \(response)\n")
             }
             
             responseString = String(data: data, encoding: .utf8)!
             
-            print("Get user response " + responseString)
+            print("\nGet user response \(responseString)\n")
             
             
             sem.signal()
@@ -801,7 +910,8 @@ public class DataAccess {
         
         var responseString = ""
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         print(putString)
@@ -821,12 +931,12 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
+                print("\nSAVE USER TO REDIS response = \(response)\n")
             }
             
             responseString = String(data: data, encoding: .utf8)!
             
-            print("Save user to redis response " + responseString)
+            print("\nSave user to redis response \(responseString)\n")
             
             
             sem.signal()
