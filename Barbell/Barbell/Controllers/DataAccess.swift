@@ -700,7 +700,7 @@ public class DataAccess {
             isPublicInt = 1
         }
         routineName = routine.name!
-        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator)}\" "
+        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(user.email!)}\" "
         
         request.httpMethod = "POST"
         
