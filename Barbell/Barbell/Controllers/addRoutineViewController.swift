@@ -28,22 +28,40 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         goingForwards = false
+        var count : Int = Int(routinePassed.numberOfWeeks)
 
-        routinePassed.name = routine.text
-        if publicSwitch.isOn {
-            //send to api!
-            //not done yet!
-            routinePassed.isPublic = true
+        if (routinePassed.name != nil) {
+            stepper.value = Double(value)
+            //print("addRoutine received routine named: " + routinePassed.name!)
+            routine.text = routinePassed.name
+            if !routinePassed.isPublic {
+                publicSwitch.setOn(false, animated: true)
+            }
+            
+            while(value < count) {
+                AddWeeks(nil)
+                value += 1
+                stepper.value = Double(value)
+            }
         }
-        else{
-            routinePassed.isPublic = false
+        else {
+            routinePassed.name = routine.text
+            if publicSwitch.isOn {
+                //send to api!
+                //not done yet!
+                routinePassed.isPublic = true
+            }
+            else{
+                routinePassed.isPublic = false
+            }
+            routinePassed.numberOfWeeks = Int16(weeks.count)
+            //routinePassed.creator = String(user.first) + String(user.last)
+            //routinePassed.addToUsers(user.first!)
+            //user.first?.addToScheduleArr(routinePassed)
+            
+            thisRoutine = routinePassed
+            stepper.value = Double(value)
         }
-        routinePassed.numberOfWeeks = Int16(weeks.count)
-        //routinePassed.creator = String(user.first) + String(user.last)
-        //routinePassed.addToUsers(user.first!)
-        //user.first?.addToScheduleArr(routinePassed)
-        
-        thisRoutine = routinePassed
         
         
         //user = CoreDataController.getUser()
@@ -52,13 +70,13 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         realTableView.dataSource = self
         realTableView.register(CustomCell.self, forCellReuseIdentifier: "CustomCell")
         
-        stepper.value = Double(value)
+
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
         goingForwards = false
         routine.text = routinePassed.name
-        self.value = Int(routinePassed.numberOfWeeks)
+        //self.value = Int(routinePassed.numberOfWeeks)
         
         
         if (routinePassed.isPublic == true){
@@ -69,8 +87,6 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         else{
             publicSwitch.setOn(false, animated: true)
         }
-        
-        return
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,7 +94,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func AddWeeks(_ sender: Any) {
+    @IBAction func AddWeeks(_ sender: Any?) {
         if(stepper.value < Double(value)) {
             deleteCell()
         } else {
@@ -169,7 +185,7 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
             routinePassed.isPublic = false
         }
         routinePassed.numberOfWeeks = Int16(weeks.count)
-        routinePassed.creator = CoreDataController.getUser().fname! + CoreDataController.getUser().lname!
+        routinePassed.creator = CoreDataController.getUser().fname! + " " + CoreDataController.getUser().lname!
         //routinePassed.addToUsers(user.first!)
         //user.first?.addToScheduleArr(routinePassed)
         
@@ -190,7 +206,14 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
                 CoreDataController.getContext().delete(routinePassed)
             } else {
                 if routinePassed.isPublic == true {
-                    DataAccess.sendRoutineToRedis(routine: routinePassed)
+                    if routinePassed.id <= 0 {
+                        DataAccess.sendRoutineToRedis(routine: routinePassed)
+                    }
+                    else{
+                        let redisRoutine = RedisRoutine(id: routinePassed.id)
+                        DataAccess.deleteRoutineFromRedis(routine: redisRoutine)
+                        DataAccess.editRoutineinRedis(routine: routinePassed)
+                    }
                 }
             }
             

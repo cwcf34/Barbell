@@ -163,7 +163,7 @@ class RoutineTableViewController: UITableViewController {
         }
         
         let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
-            let routineObject : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
+            let routineObject = self.foundRoutines[indexPath.row-1]
             self.routine = routineObject
             
             self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
