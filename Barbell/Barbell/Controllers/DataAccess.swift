@@ -274,7 +274,7 @@ public class DataAccess {
             var request = URLRequest(url: URL(string: "\(apiURL)/routine/?query=\(query)")!)
             let headers = [
                 "Content-Type": "application/json",
-                "Authorize": self.accessToken
+                "Authorization": self.accessToken
             ]
             
             request.allHTTPHeaderFields = headers
@@ -374,7 +374,7 @@ public class DataAccess {
         var responseString = ""
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -488,7 +488,7 @@ public class DataAccess {
             var responseString = ""
             let headers = [
                 "Content-Type": "application/json",
-                "Authorize": self.accessToken
+                "Authorization": self.accessToken
             ]
             
             request.allHTTPHeaderFields = headers
@@ -633,7 +633,7 @@ public class DataAccess {
         var responseString = ""
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         print(putString)
@@ -707,7 +707,7 @@ public class DataAccess {
         var responseString = ""
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         print(postString)
@@ -782,7 +782,7 @@ public class DataAccess {
         var responseString = ""
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         print(postString)
@@ -832,7 +832,7 @@ public class DataAccess {
         
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -960,7 +960,7 @@ public class DataAccess {
         var responseString = ""
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -1025,7 +1025,7 @@ public class DataAccess {
         
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         request.allHTTPHeaderFields = headers
@@ -1084,7 +1084,7 @@ public class DataAccess {
         var responseString = ""
         let headers = [
             "Content-Type": "application/json",
-            "Authorize": self.accessToken
+            "Authorization": self.accessToken
         ]
         
         print(putString)
