@@ -43,7 +43,8 @@ namespace BBAPI.Controllers
 		/// <param name="data">date, exercise, sets, reps, weight</param>
 		/// <returns></returns>
 		[HttpPut]
-		public IHttpActionResult PutExercise(string email, [FromBody]string data)
+        [Authorize]
+        public IHttpActionResult PutExercise(string email, [FromBody]string data)
 		{
 			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("date:") || !data.Contains("exercise:") || !data.Contains("sets:") || !data.Contains("reps:") || !data.Contains("weight"))
 			{
