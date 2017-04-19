@@ -83,15 +83,36 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        var validSearch = true
         //check for nil search text
         if let query = searchBar.text {
-            routineSearchResults = DataAccess.searchRoutinesInRedis(query)
+            if (query.contains(" ") ){
+                let badSearch = query.trimmingCharacters(in: .whitespaces)
+                if (badSearch.characters.count < 1) {
+                    //alert you must enter text
+                    let alertCont: UIAlertController = UIAlertController(title: "Uh Oh!", message: "Please enter a search string.", preferredStyle: .alert)
+                    
+                    // set the confirm action
+                    let confirmAction: UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                    
+                    // add confirm button to alert
+                    alertCont.addAction(confirmAction)
+                    self.present(alertCont, animated: true, completion: nil)
+                    validSearch = false
+                }
+            }
+            
+            if (validSearch) {
+                routineSearchResults = DataAccess.searchRoutinesInRedis(query)
+            }
         }
         
         //dismiss search bar
         resultSearchController.dismiss(animated: true, completion: nil)
         
         //myfingersarefallingasleep\\ //beansinmyfings\\
+        //reset valid search flag
+        validSearch = true
         tableView.reloadData()
     }
     
