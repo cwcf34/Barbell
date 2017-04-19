@@ -10,7 +10,8 @@ namespace BBAPI.Controllers
 
 		//create new Workout
 		[HttpPost]
-		public IHttpActionResult PostWorkout(string email, [FromBody]string data)
+        [Authorize]
+        public IHttpActionResult PostWorkout(string email, [FromBody]string data)
 		{
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
@@ -48,7 +49,8 @@ namespace BBAPI.Controllers
 
 		//get all routine Workouts
 		[HttpGet]
-		public IHttpActionResult GetAllWorkouts(string email, int id)
+        [Authorize]
+        public IHttpActionResult GetAllWorkouts(string email, int id)
 		{
 			//get all workout hashes for specific routine
 			//var key = "user:" + email + ":" + id;
@@ -60,7 +62,8 @@ namespace BBAPI.Controllers
 
 		//get Workout for specific weekday
 		[HttpGet]
-		public IHttpActionResult GetWorkout(string email, int id, int dayIndex)
+        [Authorize]
+        public IHttpActionResult GetWorkout(string email, int id, int dayIndex)
 		{
 			//get the dayIndex workout hash for specific routine
 			var key = "user:" + email + ":" + id + ":" + dayIndex;
