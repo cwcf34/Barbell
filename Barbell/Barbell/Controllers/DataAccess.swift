@@ -264,6 +264,108 @@ public class DataAccess {
         sem.wait()
     }
     
+    class func searchRoutinesInRedis(_ query: String) -> [Routine] {
+        //temp holder
+        var searchedRoutines = [Routine]()
+        
+        if let user = CoreDataController.getUser() as? User {
+            
+            //setup URL Request
+            var request = URLRequest(url: URL(string: "\(apiURL)/routine/?query=\(query)")!)
+            let headers = [
+                "content-type": "application/json",
+                "authorize": self.accessToken
+            ]
+            
+            request.allHTTPHeaderFields = headers
+            
+            let sem = DispatchSemaphore(value: 0)
+            let task = URLSession.shared.dataTask(with: request) {
+                data, response, error in
+                
+                //opposite of if let
+                guard let data = data, error == nil else {
+                    print("error=\(error)")
+                    return
+                }
+                
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                    //print("JSONFULL == \(json)\n\n")
+                    
+                    for eachRoutine in json {
+                        
+                        //this would save every searched routine to core data LUL
+                        let newRoutine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+                        
+                        for (key,value) in eachRoutine{
+                            if (key == "numWeeks"){
+                                if let value = value as? String{
+                                    if let castedValue = Int16(value){
+                                        newRoutine.numberOfWeeks = castedValue
+                                    }
+                                }
+                            }
+                            if (key == "Name"){
+                                if let value = value as? String{
+                                    print("Found routine named in redis" + value)
+                                    newRoutine.name = value
+                                }
+                            }
+                            if (key == "isPublic"){
+                                if let value = value as? String{
+                                    if(value == "1"){
+                                        newRoutine.isPublic = true
+                                    }else{
+                                        newRoutine.isPublic = false
+                                    }
+                                }
+                            }
+                            if (key == "creator"){
+                                if let value = value as? String{
+                                    newRoutine.creator = value
+                                }
+                            }
+                            if (key == "Id"){
+                                if let value = value as? String{
+                                    if let castedValue = Int16(value){
+                                        newRoutine.id = castedValue
+                                    }
+                                }
+                            }
+                        }
+                        
+                        /*
+                        let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: newRoutine.id))
+                        //let allWorkouts = NSSet(array: getWorkoutForRoutineFromRedis(routineId: "687113553"))
+                        
+                        for eachWorkout in allWorkouts{
+                            if let workout = eachWorkout as? Workout {
+                                if ((workout.hasExercises?.count)! > 0)  {
+                                    newRoutine.addToWorkouts(workout)
+                                    workout.createdRoutine = newRoutine
+                                }
+                            }
+                        }
+                        */
+ 
+                        //add searched Routine to searchedResults LIst
+                        searchedRoutines.append(newRoutine)
+                    }
+                }
+                
+                //send completion signal
+                sem.signal()
+            }
+            
+            //start task and wait for completion
+            task.resume()
+            sem.wait()
+            
+        }
+        
+        return searchedRoutines
+    }
+    
     class func getRoutinesFromRedis () -> [Routine] {
         let user : User = CoreDataController.getUser()
         var routine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
