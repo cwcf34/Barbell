@@ -7,12 +7,14 @@ namespace BBAPI.Controllers
 {
 	public class UserController : ApiController
 	{
+		/*
 		User[] users = {
 			new User {Email = "dlopez@me.com", Name = "me", Age = 22},
 			new User {Email = "d@me.com", Name = "you", Age = 57},
 			new User {Email = "dl@me.com", Name = "us", Age = 100}
 		};
 
+		*/
 		//use singleton
 		readonly RedisDB redisCache = RedisDB._instance;
 
