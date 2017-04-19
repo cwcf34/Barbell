@@ -14,10 +14,16 @@ import CoreData
 public class DataAccess {
     
     private static var apiURL = "http://bbapi.eastus.cloudapp.azure.com/api/"
+    private static var authURL = "http://bbapi.eastus.cloudapp.azure.com:63894/connect/token/"
+    private static var refreshToken = ""
+    private static var accessToken = ""
+    
     class func register(registerInfo: RegisterInfo) -> Bool {
+        var responseString = ""
+        
         var request = URLRequest(url: URL(string: apiURL + "user/\(registerInfo.email)/")!)
+        
         request.httpMethod = "POST"
-        var x : Int = -1
         
         var result = false
         
@@ -48,7 +54,7 @@ public class DataAccess {
                     print("response = \(response)")
                 }
                 
-                let responseString = String(data: data, encoding: .utf8)!
+                responseString = String(data: data, encoding: .utf8)!
                 
                 if(responseString == "\"true\""){
                     result = true
@@ -62,12 +68,109 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
+        //after registring, check if true
+        if (result){
+            result = getAuthentication(user: registerInfo.email,pass: registerInfo.password)
+        }
+        
         return result
+    }
+    
+    class func login (loginInfo: LoginInfo ) -> Bool{
+        
+        //login by getting authentication
+        return getAuthentication(user: loginInfo.email,pass: loginInfo.password)
+    }
+    
+    class func getAuthentication(user: String, pass: String) -> Bool{
+        var responseString = ""
+        var authenticated = true
+        
+        //request token for validation
+        var request = URLRequest(url: URL(string: authURL)!)
+        
+        let headers = [
+            "Content-type": "application/x-www-form-urlencoded"
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        request.httpMethod = "POST"
+        
+        if let pass = pass as? String, let user = user as? String  {
+            
+            let postBody = "client_id=iOS&username=\(user)&password=\(pass)&client_secret=secret&grant_type=password&scope=WebAPI offline_access".data(using:String.Encoding.ascii, allowLossyConversion: false)
+            
+            
+            
+            request.httpBody = postBody
+            
+            
+            let sem = DispatchSemaphore(value: 0)
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                
+                // check for fundamental networking error
+                guard let data = data, error == nil else {                                                                        print("error=\(error)")
+                    authenticated = false
+                    return
+                }
+                
+                if (authenticated){
+                    
+                    // check for http errors
+                    if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                        print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                        print("response = \(response)")
+                        authenticated = false
+                    }
+                    
+                    responseString = String(data: data, encoding: .utf8)!
+                    
+                    print("Loading Auth request response: " + responseString)
+                    
+                    if let authData = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any] {
+                        
+                        
+                        for (key,value) in authData{
+                            print("KEY::\(key)VALUE::\(value)")
+                            
+                            if (key == "access_token") {
+                                if let value = value as? String {
+                                    accessToken = "Bearer \(value)"
+                                }
+                            }else if(key == "refresh_token"){
+                                if let value = value as? String {
+                                    refreshToken = value
+                                }
+                            }
+                        }
+                        
+                        
+                    }else {
+                        authenticated = false
+                    }
+                
+                }
+                
+                
+                
+                sem.signal()
+            }
+            
+            task.resume()
+            sem.wait()
+            
+            
+        }else {
+            authenticated = false
+        }
+        
+        return authenticated
     }
     
     class func getRoutinesFromRedis () -> [Routine] {
         let user : User = CoreDataController.getUser()
         var routine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+        print("email trying to login: " + user.email!)
         var request = URLRequest(url: URL(string: apiURL + "routine/\(user.email!)/")!)
         var responseString = ""
         let headers = [
@@ -308,8 +411,77 @@ public class DataAccess {
         }
     }
 
+    class func editRoutineinRedis (routine: Routine) -> Bool {
     
-    
+        let user : User = CoreDataController.getUser()
+        
+        var putString = ""
+        var email : String!
+        email = user.email!
+        var request = URLRequest(url: URL(string: apiURL + "routine/\(email!)/")!)
+        let routineName : String!
+        var isPublicInt = 0
+        if routine.isPublic == true {
+            isPublicInt = 1
+        }
+        routineName = routine.name!
+        putString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator)}\" "
+        
+        request.httpMethod = "PUT"
+        
+        var responseString = ""
+        let headers = [
+            "content-type": "application/json"
+        ]
+        
+        print(putString)
+        
+        let putDATA:Data = putString.data(using: String.Encoding.utf8)!
+        
+        request.httpBody = putDATA
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                   // check for fundamental networking error
+                print("error=\(error)")
+                return
+        }
+        
+        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+            print("statusCode should be 200, but is \(httpStatus.statusCode)")
+            print("response = \(response)")
+        }
+        
+        responseString = String(data: data, encoding: .utf8)!
+        
+        print("Did save routine to redis?  " + responseString)
+        
+        
+        sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+        
+        
+        if Int(responseString)! > 0 {
+            routine.id = Int16(responseString)!
+            var workoutsInRoutine = [Workout]()
+            workoutsInRoutine = routine.workouts?.allObjects as! [Workout]
+            for workout in workoutsInRoutine {
+                let workoutModel = WorkoutModel(id: Int(responseString)!, workout: workout)
+                sendWorkoutToRedis(workoutModel: workoutModel)
+            }
+        }
+        
+        return true
+        
+    }
+
+
+
     class func sendRoutineToRedis (routine: Routine) -> Bool {
         
         let user : User = CoreDataController.getUser()
@@ -326,7 +498,7 @@ public class DataAccess {
             isPublicInt = 1
         }
         routineName = routine.name!
-        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(user.fname!)}\" "
+        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator)}\" "
         
         request.httpMethod = "POST"
         
@@ -442,52 +614,6 @@ public class DataAccess {
         return true
         
     }
-    
-    class func login (loginInfo: LoginInfo ) -> Bool{
-        var request = URLRequest(url: URL(string: apiURL + "login/\(loginInfo.email)/")!)
-        
-        var responseString  = "false"
-        
-        request.httpMethod = "POST"
-        
-        let postString = "\"{password:\(loginInfo.password)}\" "
-        
-        let postDATA:Data = postString.data(using: String.Encoding.utf8)!
-        
-        request.httpBody = postDATA
-        
-        let headers = [
-            "content-type": "application/json"
-        ]
-        
-        request.allHTTPHeaderFields = headers
-        let sem = DispatchSemaphore(value: 0)
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("login response = \(response)")
-            }
-            
-            responseString = String(data: data, encoding: .utf8)!
-            print("login responseString = \(responseString)")
-            sem.signal()
-        }
-        task.resume()
-        sem.wait()
-        
-        if(responseString == "\"true\""){
-            return true
-        } else{
-            return false
-        }
-    }
-
     
     class func getUserfromRedis(email : String){
         var request = URLRequest(url: URL(string: apiURL + "user/\(email)/")!)
