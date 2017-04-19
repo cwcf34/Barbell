@@ -176,12 +176,12 @@ public class DataAccess {
     class func startRefreshCountdown() {
         
         //access token and refresh token expire in 60m/3600s
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3300)) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3000)) {
         
-            //refresh both tokens 55m/3300s after register or login to be safe
+            //refresh both tokens 50m/3000s after register or login to be safe
             refreshAuthToken(token: refreshToken)
             
-            //after another 55m refresh again
+            //after another 50m refresh again
             //i <3 recursion
             startRefreshCountdown()
         }
