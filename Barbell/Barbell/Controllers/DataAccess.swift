@@ -530,7 +530,8 @@ public class DataAccess {
         
         var responseString = ""
         let headers = [
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "authorize": self.accessToken
         ]
         
         print(putString)
