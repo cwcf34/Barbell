@@ -43,6 +43,27 @@
 		C30AE7F81E5CF7F80093507B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30AE7F71E5CF7F80093507B /* AppDelegate.swift */; };
 		C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30AE8001E5CF7F80093507B /* Assets.xcassets */; };
 		C30AE8041E5CF7F80093507B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C30AE8021E5CF7F80093507B /* LaunchScreen.storyboard */; };
+<<<<<<< HEAD
+		C31395341EA842DE006523F2 /* Dumbbell-75.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395331EA842DE006523F2 /* Dumbbell-75.png */; };
+		C31395361EA842FC006523F2 /* Dumbbell_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395351EA842FC006523F2 /* Dumbbell_25.png */; };
+		C31395381EA84305006523F2 /* Dumbbell_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395371EA84305006523F2 /* Dumbbell_50.png */; };
+		C313953A1EA84468006523F2 /* Calendar_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395391EA84468006523F2 /* Calendar_25.png */; };
+		C313953C1EA84478006523F2 /* Calendar_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C313953B1EA84478006523F2 /* Calendar_50.png */; };
+		C313953E1EA84552006523F2 /* Trophy_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C313953D1EA84552006523F2 /* Trophy_25.png */; };
+		C31395401EA84561006523F2 /* Trophy_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C313953F1EA84561006523F2 /* Trophy_50.png */; };
+		C31395421EA84643006523F2 /* User_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395411EA84643006523F2 /* User_50.png */; };
+		C31395441EA84663006523F2 /* User_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395431EA84663006523F2 /* User_25.png */; };
+=======
+		C31395471EA847E5006523F2 /* User_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395451EA847E5006523F2 /* User_25.png */; };
+		C31395481EA847E5006523F2 /* User_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395461EA847E5006523F2 /* User_50.png */; };
+		C313954B1EA847F2006523F2 /* Trophy_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395491EA847F2006523F2 /* Trophy_25.png */; };
+		C313954C1EA847F2006523F2 /* Trophy_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C313954A1EA847F2006523F2 /* Trophy_50.png */; };
+		C313954F1EA84806006523F2 /* Calendar_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C313954D1EA84806006523F2 /* Calendar_25.png */; };
+		C31395501EA84806006523F2 /* Calendar_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C313954E1EA84806006523F2 /* Calendar_50.png */; };
+		C31395531EA8485B006523F2 /* Dumbbell_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395511EA8485B006523F2 /* Dumbbell_25.png */; };
+		C31395541EA8485B006523F2 /* Dumbbell_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395521EA8485B006523F2 /* Dumbbell_50.png */; };
+		C31395561EA84B58006523F2 /* FakeLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395551EA84B58006523F2 /* FakeLogo.png */; };
+>>>>>>> master
 		C33A5DB61E8D584900936AA4 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33A5DB51E8D584900936AA4 /* StatsViewController.swift */; };
 		C33A5DBA1E8D69A900936AA4 /* StartWorkoutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */; };
 		C384A1C41E5D0D3B0026FD99 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */; };
@@ -95,6 +116,27 @@
 		C30AE8001E5CF7F80093507B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C30AE8031E5CF7F80093507B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C30AE8051E5CF7F80093507B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+<<<<<<< HEAD
+		C31395331EA842DE006523F2 /* Dumbbell-75.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dumbbell-75.png"; sourceTree = "<group>"; };
+		C31395351EA842FC006523F2 /* Dumbbell_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_25.png; sourceTree = "<group>"; };
+		C31395371EA84305006523F2 /* Dumbbell_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_50.png; sourceTree = "<group>"; };
+		C31395391EA84468006523F2 /* Calendar_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calendar_25.png; sourceTree = "<group>"; };
+		C313953B1EA84478006523F2 /* Calendar_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calendar_50.png; sourceTree = "<group>"; };
+		C313953D1EA84552006523F2 /* Trophy_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trophy_25.png; sourceTree = "<group>"; };
+		C313953F1EA84561006523F2 /* Trophy_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trophy_50.png; sourceTree = "<group>"; };
+		C31395411EA84643006523F2 /* User_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = User_50.png; sourceTree = "<group>"; };
+		C31395431EA84663006523F2 /* User_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = User_25.png; sourceTree = "<group>"; };
+=======
+		C31395451EA847E5006523F2 /* User_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = User_25.png; sourceTree = "<group>"; };
+		C31395461EA847E5006523F2 /* User_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = User_50.png; sourceTree = "<group>"; };
+		C31395491EA847F2006523F2 /* Trophy_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trophy_25.png; sourceTree = "<group>"; };
+		C313954A1EA847F2006523F2 /* Trophy_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trophy_50.png; sourceTree = "<group>"; };
+		C313954D1EA84806006523F2 /* Calendar_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calendar_25.png; sourceTree = "<group>"; };
+		C313954E1EA84806006523F2 /* Calendar_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calendar_50.png; sourceTree = "<group>"; };
+		C31395511EA8485B006523F2 /* Dumbbell_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_25.png; sourceTree = "<group>"; };
+		C31395521EA8485B006523F2 /* Dumbbell_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_50.png; sourceTree = "<group>"; };
+		C31395551EA84B58006523F2 /* FakeLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FakeLogo.png; sourceTree = "<group>"; };
+>>>>>>> master
 		C33A5DB51E8D584900936AA4 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartWorkoutTableViewController.swift; sourceTree = "<group>"; };
 		C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationViewController.swift; path = ../RegistrationViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +163,27 @@
 		63FA5E0D1E72248C00DEE65D /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
+				C31395411EA84643006523F2 /* User_50.png */,
+				C313953B1EA84478006523F2 /* Calendar_50.png */,
+				C31395431EA84663006523F2 /* User_25.png */,
+				C31395331EA842DE006523F2 /* Dumbbell-75.png */,
+				C313953F1EA84561006523F2 /* Trophy_50.png */,
+				C313953D1EA84552006523F2 /* Trophy_25.png */,
+				C31395391EA84468006523F2 /* Calendar_25.png */,
+				C31395371EA84305006523F2 /* Dumbbell_50.png */,
+				C31395351EA842FC006523F2 /* Dumbbell_25.png */,
+=======
+				C31395551EA84B58006523F2 /* FakeLogo.png */,
+				C31395511EA8485B006523F2 /* Dumbbell_25.png */,
+				C31395521EA8485B006523F2 /* Dumbbell_50.png */,
+				C313954D1EA84806006523F2 /* Calendar_25.png */,
+				C313954E1EA84806006523F2 /* Calendar_50.png */,
+				C31395491EA847F2006523F2 /* Trophy_25.png */,
+				C313954A1EA847F2006523F2 /* Trophy_50.png */,
+				C31395451EA847E5006523F2 /* User_25.png */,
+				C31395461EA847E5006523F2 /* User_50.png */,
+>>>>>>> master
 				635AA01A1E93181100063C25 /* 100.png */,
 				635AA01B1E93181100063C25 /* 200.png */,
 				635AA01C1E93181100063C25 /* 300.png */,
@@ -271,17 +334,41 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
+				C313953C1EA84478006523F2 /* Calendar_50.png in Resources */,
+=======
+				C313954C1EA847F2006523F2 /* Trophy_50.png in Resources */,
+				C313954B1EA847F2006523F2 /* Trophy_25.png in Resources */,
+				C313954F1EA84806006523F2 /* Calendar_25.png in Resources */,
+				C31395531EA8485B006523F2 /* Dumbbell_25.png in Resources */,
+				C31395541EA8485B006523F2 /* Dumbbell_50.png in Resources */,
+>>>>>>> master
 				635AA01F1E93181100063C25 /* 100.png in Resources */,
+				C31395481EA847E5006523F2 /* User_50.png in Resources */,
 				635AA0231E93181100063C25 /* 1500.png in Resources */,
+				C31395341EA842DE006523F2 /* Dumbbell-75.png in Resources */,
+				C313953A1EA84468006523F2 /* Calendar_25.png in Resources */,
+				C31395421EA84643006523F2 /* User_50.png in Resources */,
+				C31395381EA84305006523F2 /* Dumbbell_50.png in Resources */,
+				C31395361EA842FC006523F2 /* Dumbbell_25.png in Resources */,
 				C3FCF3E51E81ED4600E7BB0E /* Main.storyboard in Resources */,
 				635AA0221E93181100063C25 /* 1000.png in Resources */,
 				C30AE8041E5CF7F80093507B /* LaunchScreen.storyboard in Resources */,
+<<<<<<< HEAD
+				C313953E1EA84552006523F2 /* Trophy_25.png in Resources */,
+=======
+				C31395561EA84B58006523F2 /* FakeLogo.png in Resources */,
+>>>>>>> master
 				C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */,
+				C31395401EA84561006523F2 /* Trophy_50.png in Resources */,
 				635AA0201E93181100063C25 /* 200.png in Resources */,
+				C31395441EA84663006523F2 /* User_25.png in Resources */,
 				63FA5E111E7224AF00DEE65D /* Plus.png in Resources */,
 				635AA0211E93181100063C25 /* 300.png in Resources */,
+				C31395501EA84806006523F2 /* Calendar_50.png in Resources */,
 				6F9E12471E733D0800A05FA5 /* workouts.json in Resources */,
 				63FA5E101E7224AF00DEE65D /* HeadDick.jpeg in Resources */,
+				C31395471EA847E5006523F2 /* User_25.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
