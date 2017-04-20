@@ -27,6 +27,8 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        
         goingForwards = false
         var count : Int = Int(routinePassed.numberOfWeeks)
 
