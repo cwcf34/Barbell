@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ufj-Q2-zB6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ufj-Q2-zB6">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -172,7 +172,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="HeadDick.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="Chj-Le-bpz">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="FakeLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Chj-Le-bpz">
                                 <rect key="frame" x="134" y="44" width="106" height="261"/>
                                 <color key="backgroundColor" red="0.050980392156862744" green="0.074509803921568626" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -418,7 +418,7 @@
         <scene sceneID="nvU-Nx-al3">
             <objects>
                 <navigationController id="N2o-is-6T4" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="History" id="ung-eq-MVk"/>
+                    <tabBarItem key="tabBarItem" title="History" image="Calendar_25.png" id="ung-eq-MVk"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZYQ-Tj-PfC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -431,11 +431,11 @@
             </objects>
             <point key="canvasLocation" x="1582" y="487"/>
         </scene>
-        <!--Favorites-->
+        <!--Achievements-->
         <scene sceneID="fMr-YG-DWA">
             <objects>
                 <navigationController id="70S-Pj-Pgo" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Favorites" image="second" id="wYJ-v5-w2Z"/>
+                    <tabBarItem key="tabBarItem" title="Achievements" image="Trophy_25.png" id="wYJ-v5-w2Z"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="KY8-Hh-cRH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -452,7 +452,7 @@
         <scene sceneID="68c-a2-ZYy">
             <objects>
                 <navigationController id="noq-Zt-5Je" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" id="Dv8-qe-KhZ"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="User_25.png" id="Dv8-qe-KhZ"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1yg-E7-QUE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -727,7 +727,7 @@
                                                 <constraint firstAttribute="width" constant="138" id="vgr-6C-LwF"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
+                                            <color key="textColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -754,7 +754,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" red="0.24313725489999999" green="0.36078431370000003" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
+                                            <color key="textColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -1730,7 +1730,7 @@
         <scene sceneID="h1g-4N-ahD">
             <objects>
                 <navigationController title="Workouts" id="4fz-N4-0ap" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Workouts" image="first" id="1N9-i3-4ez"/>
+                    <tabBarItem key="tabBarItem" title="Workouts" image="Dumbbell_25.png" id="1N9-i3-4ez"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GjY-Lk-r4Y">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1757,8 +1757,8 @@
                         <color key="barTintColor" red="0.050980392159999999" green="0.074509803920000006" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="70S-Pj-Pgo" kind="relationship" relationship="viewControllers" id="KzX-aU-4zf"/>
                         <segue destination="4fz-N4-0ap" kind="relationship" relationship="viewControllers" id="xLN-m0-hFk"/>
+                        <segue destination="70S-Pj-Pgo" kind="relationship" relationship="viewControllers" id="KzX-aU-4zf"/>
                         <segue destination="N2o-is-6T4" kind="relationship" relationship="viewControllers" id="pBc-My-bFm"/>
                         <segue destination="noq-Zt-5Je" kind="relationship" relationship="viewControllers" id="oOQ-ZD-hre"/>
                     </connections>
@@ -1841,13 +1841,16 @@
         <image name="1500.png" width="252" height="171"/>
         <image name="200.png" width="214" height="171"/>
         <image name="300.png" width="215" height="170"/>
+        <image name="Calendar_25.png" width="25" height="25"/>
+        <image name="Dumbbell_25.png" width="25" height="25"/>
+        <image name="FakeLogo.png" width="361" height="302"/>
         <image name="HeadDick.jpeg" width="433" height="433"/>
         <image name="Plus.png" width="256" height="256"/>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="Trophy_25.png" width="25" height="25"/>
+        <image name="User_25.png" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cha-Y0-p8d"/>
+        <segue reference="hTW-Zn-CHp"/>
         <segue reference="kdM-Xd-0YG"/>
     </inferredMetricsTieBreakers>
 </document>
