@@ -1730,11 +1730,7 @@
         <scene sceneID="h1g-4N-ahD">
             <objects>
                 <navigationController title="Workouts" id="4fz-N4-0ap" sceneMemberID="viewController">
-<<<<<<< HEAD
-                    <tabBarItem key="tabBarItem" tag="1" title="Routines" image="Dumbbell_25.png" id="1N9-i3-4ez"/>
-=======
                     <tabBarItem key="tabBarItem" title="Workouts" image="Dumbbell_25.png" id="1N9-i3-4ez"/>
->>>>>>> master
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GjY-Lk-r4Y">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1847,10 +1843,7 @@
         <image name="300.png" width="215" height="170"/>
         <image name="Calendar_25.png" width="25" height="25"/>
         <image name="Dumbbell_25.png" width="25" height="25"/>
-<<<<<<< HEAD
-=======
         <image name="FakeLogo.png" width="361" height="302"/>
->>>>>>> master
         <image name="HeadDick.jpeg" width="433" height="433"/>
         <image name="Plus.png" width="256" height="256"/>
         <image name="Trophy_25.png" width="25" height="25"/>
