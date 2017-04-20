@@ -9,11 +9,14 @@
 import UIKit
 import CoreData
 
-class RoutineTableViewController: UITableViewController {
+class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
     
     var foundRoutines = [Routine]()
     var routine : Routine!
+    var resultSearchController = UISearchController()
+    var routineSearchResults = [Routine]()
     var didDelete: Bool!
+    var shouldBeginEditing = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +37,6 @@ class RoutineTableViewController: UITableViewController {
             print("Bad getExercise query")
         }
         for routine in foundRoutines{
-            print(routine.name)
             if(routine.name == nil || routine.name == "") {
                 CoreDataController.getContext().delete(routine)
                 didDelete = true;
@@ -61,6 +63,114 @@ class RoutineTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    @IBAction func activateSearch(_ sender: Any) {
+        self.resultSearchController = ({
+            let controller = UISearchController(searchResultsController: nil)
+            controller.searchBar.showsCancelButton = false
+            controller.searchBar.delegate = self
+            controller.searchBar.enablesReturnKeyAutomatically = true
+            controller.dimsBackgroundDuringPresentation = false
+            controller.searchBar.sizeToFit()
+            
+            self.tableView.tableHeaderView = controller.searchBar
+            
+            return controller
+        })()
+        
+        
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        var validSearch = true
+        //check for nil search text
+        if let query = searchBar.text {
+            if (query.contains(" ") ){
+                let badSearch = query.trimmingCharacters(in: .whitespaces)
+                if (badSearch.characters.count < 1) {
+                    //alert you must enter text
+                    let alertCont: UIAlertController = UIAlertController(title: "Uh Oh!", message: "Please enter a search string.", preferredStyle: .alert)
+                    
+                    // set the confirm action
+                    let confirmAction: UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                    
+                    // add confirm button to alert
+                    alertCont.addAction(confirmAction)
+                    self.present(alertCont, animated: true, completion: nil)
+                    validSearch = false
+                }
+            }
+            
+            if (validSearch) {
+                routineSearchResults = DataAccess.searchRoutinesInRedis(query)
+            }
+        }
+        
+        //dismiss search bar
+        resultSearchController.dismiss(animated: true, completion: nil)
+        
+        //myfingersarefallingasleep\\ //beansinmyfings\\
+        //reset valid search flag
+        validSearch = true
+        
+        if (routineSearchResults.count > 0) {
+            tableView.reloadData()
+        }else {
+            //alert you must enter text
+            let alertCont: UIAlertController = UIAlertController(title: "Uh Oh!", message: "Found 0 results matching your search.", preferredStyle: .alert)
+            
+            // set the confirm action
+            let confirmAction: UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            
+            // add confirm button to alert
+            alertCont.addAction(confirmAction)
+            
+            //tellem
+            self.present(alertCont, animated: true, completion: nil)
+            
+            //reset the search bar to nil
+            resultSearchController.searchBar.text = ""
+        }
+    }
+    
+    func handleClearOrCancel() {
+       
+        //reset editing var
+        shouldBeginEditing = false
+        
+        for routine in routineSearchResults {
+            CoreDataController.getContext().delete(routine)
+        }
+        
+        //clear search results array
+        routineSearchResults = [Routine]()
+        
+        //dismiss search bar
+        //resultSearchController.dismiss(animated: true, completion: nil)
+        
+        //user hit clear button
+        tableView.reloadData()
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if (!searchBar.isFirstResponder){
+            //reset editing var
+            handleClearOrCancel()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        handleClearOrCancel()
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        // reset the shouldBeginEditing BOOL
+        let boolToReturn = shouldBeginEditing
+        shouldBeginEditing = true
+        return boolToReturn
+    }
 
     // MARK: - Table view data source
 
@@ -71,8 +181,11 @@ class RoutineTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        
-        return 1 + foundRoutines.count
+        if (routineSearchResults.count == 0){
+            return 1 + foundRoutines.count
+        }else {
+            return 1 + routineSearchResults.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -82,8 +195,15 @@ class RoutineTableViewController: UITableViewController {
             cell = tableView.dequeueReusableCell(withIdentifier: "addWorkout", for: indexPath)
         } else {
             cell = tableView.dequeueReusableCell(withIdentifier: "workoutCell", for: indexPath)
-            cell?.textLabel?.text = foundRoutines[indexPath.row-1].name
+            
+            if (routineSearchResults.count == 0){
+                cell?.textLabel?.text = foundRoutines[indexPath.row-1].name
+            }else{
+                cell?.textLabel?.text = routineSearchResults[indexPath.row-1].name
+            }
+
         }
+
         
         return cell!
     }
@@ -93,11 +213,20 @@ class RoutineTableViewController: UITableViewController {
             let routineObject : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
             routine = routineObject
             
+            //if searching, then click add
+            //remove the searched routines
+            handleClearOrCancel()
+            
             self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
         } else {
-            routine = foundRoutines[indexPath.row-1]
+            if (routineSearchResults.count == 0) {
+                routine = foundRoutines[indexPath.row-1]
             
-            self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
+                self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
+            }else {
+                routine = routineSearchResults[indexPath.row-1]
+                //perform segue to do somwthing w someonelse's routine
+            }
         }
         
     }
@@ -115,132 +244,70 @@ class RoutineTableViewController: UITableViewController {
     }
     
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            let row = indexPath.row-1
+//            print(row)
+//            if (row < foundRoutines.count)
+//            {
+//                //this is where it needs to be removed from coredata
+//                let deleteRoutine = foundRoutines[row]
+//                foundRoutines.remove(at: row)//remove from the array
+//                CoreDataController.getContext().delete(deleteRoutine) //delete games from coredata
+//                
+//                do{
+//                    try CoreDataController.getContext().save()
+//                    
+//                } catch{
+//                    print("error occured saving context after deleting item")
+//            }
+//        }
+//            // Delete the row from the data source
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//        } else if editingStyle == .insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }
+//    }
+    
+    
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            
             let row = indexPath.row-1
-            print(row)
-            if (row < foundRoutines.count)
+            if (row < self.foundRoutines.count)
             {
                 //this is where it needs to be removed from coredata
-                let deleteRoutine = foundRoutines[row]
-                foundRoutines.remove(at: row)//remove from the array
+                let deleteRoutine = self.foundRoutines[row]
+                self.foundRoutines.remove(at: row)//remove from the array
                 CoreDataController.getContext().delete(deleteRoutine) //delete games from coredata
-                
+
                 do{
                     try CoreDataController.getContext().save()
-                    
+
                 } catch{
                     print("error occured saving context after deleting item")
                 }
                 
-//                if(foundRoutines.count == 0) {
-//                    CoreDataController.getContext().delete(routine)
-//                }
+                tableView.deleteRows(at: [indexPath], with: .fade)
             }
-            
-            
-            
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
-    }
-    
-    /*func loadRoutines() -> [Routine]{
         
-        
-        //CoreData
-        let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
-        do{
-            let foundRoutine = try CoreDataController.getContext().fetch(fetchRequest)
-            return foundRoutine
-        }catch{
-            print("we messed this up")
+        let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
+            let routineObject = self.foundRoutines[indexPath.row-1]
+            self.routine = routineObject
+            
+            self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
         }
-        return [Routine]()
         
-    }*/
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+        edit.backgroundColor = UIColor.blue
+        
+        if (routineSearchResults.count == 0) {
+            return [delete, edit]
     
-    
-    
-    /*Logic for searching through workouts */
-    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        filterPlayers = allPlayers?.filter({ (players: Player) -> Bool in
-//            return players.firstName?.lowercased().range(of: searchText.lowercased()) != nil
-//        })
-//        
-//        if searchText != ""{
-//            shouldShowSearch = true
-//            self.tableView.reloadData()
-//        }
-//        else{
-//            shouldShowSearch = false
-//            self.tableView.reloadData()
-//        }
-//    }
-//    
-//    
-//    func createSearchbar() {
-//        searchBar.showsCancelButton = false
-//        searchBar.placeholder = "Enter search"
-//        searchBar.delegate = self
-//        
-//        self.navigationItem.titleView = searchBar
-//    }
-//    
-//    func searchBarSearchButtonClicked(searchBar: UISearchBar){
-//        shouldShowSearch = true
-//        searchBar.endEditing(true)
-//        self.tableView.reloadData()
-//    }
-    
-    /*End Search Logic*/
-
+        }else{
+            return []
+        }
+        
+    }
 }

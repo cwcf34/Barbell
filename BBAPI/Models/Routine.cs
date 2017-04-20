@@ -6,5 +6,6 @@
 		public string Id { get; set; }
 		public string numWeeks { get; set; }
 		public string isPublic { get; set; }
+		public string creator { get; set; }
 	}
 }

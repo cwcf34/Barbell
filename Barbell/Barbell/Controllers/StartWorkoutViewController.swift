@@ -15,15 +15,6 @@ protocol StartWorkoutViewControllerDelegate: class { //Setting up a Custom deleg
 
 class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
     
-//    @IBOutlet weak var nextButton: UIButton!
-//    @IBOutlet weak var DayOfTheWeek: UILabel!
-//    @IBOutlet weak var RountineExerciseLabel: UILabel!
-//    @IBOutlet weak var RountineSetsLabel: UILabel!
-//    @IBOutlet weak var RountineRepsLabel: UILabel!
-//    @IBOutlet weak var RountineWeightLabel: UILabel!
-//    @IBOutlet weak var CompletedSetsTextArea: UITextField!
-//    @IBOutlet weak var CompletedRepsTextArea: UITextField!
-//    @IBOutlet weak var CompletedWeightTextArea: UITextField!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var DayOfTheWeek: UILabel!
     @IBOutlet weak var RountineExerciseLabel: UILabel!
@@ -115,7 +106,7 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
             customDelegateForDataReturn?.sendDataBackToHomePageViewController(routinePassed: routinePassed)
             
             let viewControllers = self.navigationController!.viewControllers
-            for var aViewController in viewControllers
+            for aViewController in viewControllers
             {
                 if aViewController is RoutineTableViewController
                 {

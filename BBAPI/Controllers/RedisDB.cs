@@ -171,7 +171,7 @@ namespace BBAPI.Controllers
 						if (field.Name.ToString().Equals("name") && field.Value.ToString().ToLower().Contains(name.ToLower()))
 						{
 							if (routineData[3].Value.ToString().Equals("1")) {
-								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value });
+								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value, creator = routineData[4].Value });
 							}
 						}
 					}
@@ -209,7 +209,7 @@ namespace BBAPI.Controllers
 
 			data = cache.HashGetAll(key);
 
-			var searchedRoutine = new Routine { Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value };
+			var searchedRoutine = new Routine { Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value, creator = data[4].Value };
 
 			return searchedRoutine;
 
@@ -315,7 +315,7 @@ namespace BBAPI.Controllers
 			{
 				var mail = new MailAddress(email);
 
-				if (mail.Host.Contains(".") && mail.Host.Contains("@"))
+				if (mail.Host.Contains("."))
 				{
 					//check if unique emailaddress
 					if (cache.KeyExists(key))

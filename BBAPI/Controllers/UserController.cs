@@ -21,11 +21,11 @@ namespace BBAPI.Controllers
 		/// </summary>
 		/// <returns>The all users.</returns>
 
-		[HttpGet]
-		public IEnumerable<User> GetAllUsers()
-		{
-			return users;
-		}
+		//[HttpGet]
+		//public IEnumerable<User> GetAllUsers()
+		//{
+		//	return users;
+		//}
 
 		/// <summary>
 		/// Gets the user.
@@ -34,7 +34,8 @@ namespace BBAPI.Controllers
 		/// <param name="email">Email.</param>
 
 		[HttpGet]
-		public IHttpActionResult GetUser(string email)
+        [Authorize]
+        public IHttpActionResult GetUser(string email)
 		{
 			//search for user hash w key in cache
 			var returnString = redisCache.getUserHashData(email);
@@ -57,7 +58,7 @@ namespace BBAPI.Controllers
 		/// <param name="data">Data.</param>
 
 		[HttpPost]
-		public IHttpActionResult PostUser(string email, [FromBody]string data)
+        public IHttpActionResult PostUser(string email, [FromBody]string data)
 		{
 			//!!![FromBody]!!!
 			//sets post body = data
@@ -138,7 +139,8 @@ namespace BBAPI.Controllers
 		/// <param name="email">Email.</param>
 		/// <param name="data">Data.</param>
 		[HttpPut]
-		public IHttpActionResult PutUser(string email, [FromBody]string data)
+        [Authorize]
+        public IHttpActionResult PutUser(string email, [FromBody]string data)
 		{
 
 			//check if body is empty, white space or null
