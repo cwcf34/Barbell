@@ -9,11 +9,14 @@
 import UIKit
 import CoreData
 
-class RoutineTableViewController: UITableViewController {
+class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
     
     var foundRoutines = [Routine]()
     var routine : Routine!
+    var resultSearchController = UISearchController()
+    var routineSearchResults = [Routine]()
     var didDelete: Bool!
+    var shouldBeginEditing = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +63,114 @@ class RoutineTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    @IBAction func activateSearch(_ sender: Any) {
+        self.resultSearchController = ({
+            let controller = UISearchController(searchResultsController: nil)
+            controller.searchBar.showsCancelButton = false
+            controller.searchBar.delegate = self
+            controller.searchBar.enablesReturnKeyAutomatically = true
+            controller.dimsBackgroundDuringPresentation = false
+            controller.searchBar.sizeToFit()
+            
+            self.tableView.tableHeaderView = controller.searchBar
+            
+            return controller
+        })()
+        
+        
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        var validSearch = true
+        //check for nil search text
+        if let query = searchBar.text {
+            if (query.contains(" ") ){
+                let badSearch = query.trimmingCharacters(in: .whitespaces)
+                if (badSearch.characters.count < 1) {
+                    //alert you must enter text
+                    let alertCont: UIAlertController = UIAlertController(title: "Uh Oh!", message: "Please enter a search string.", preferredStyle: .alert)
+                    
+                    // set the confirm action
+                    let confirmAction: UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                    
+                    // add confirm button to alert
+                    alertCont.addAction(confirmAction)
+                    self.present(alertCont, animated: true, completion: nil)
+                    validSearch = false
+                }
+            }
+            
+            if (validSearch) {
+                routineSearchResults = DataAccess.searchRoutinesInRedis(query)
+            }
+        }
+        
+        //dismiss search bar
+        resultSearchController.dismiss(animated: true, completion: nil)
+        
+        //myfingersarefallingasleep\\ //beansinmyfings\\
+        //reset valid search flag
+        validSearch = true
+        
+        if (routineSearchResults.count > 0) {
+            tableView.reloadData()
+        }else {
+            //alert you must enter text
+            let alertCont: UIAlertController = UIAlertController(title: "Uh Oh!", message: "Found 0 results matching your search.", preferredStyle: .alert)
+            
+            // set the confirm action
+            let confirmAction: UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            
+            // add confirm button to alert
+            alertCont.addAction(confirmAction)
+            
+            //tellem
+            self.present(alertCont, animated: true, completion: nil)
+            
+            //reset the search bar to nil
+            resultSearchController.searchBar.text = ""
+        }
+    }
+    
+    func handleClearOrCancel() {
+       
+        //reset editing var
+        shouldBeginEditing = false
+        
+        for routine in routineSearchResults {
+            CoreDataController.getContext().delete(routine)
+        }
+        
+        //clear search results array
+        routineSearchResults = [Routine]()
+        
+        //dismiss search bar
+        //resultSearchController.dismiss(animated: true, completion: nil)
+        
+        //user hit clear button
+        tableView.reloadData()
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if (!searchBar.isFirstResponder){
+            //reset editing var
+            handleClearOrCancel()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        handleClearOrCancel()
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        // reset the shouldBeginEditing BOOL
+        let boolToReturn = shouldBeginEditing
+        shouldBeginEditing = true
+        return boolToReturn
+    }
 
     // MARK: - Table view data source
 
@@ -70,8 +181,11 @@ class RoutineTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        
-        return 1 + foundRoutines.count
+        if (routineSearchResults.count == 0){
+            return 1 + foundRoutines.count
+        }else {
+            return 1 + routineSearchResults.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -81,8 +195,15 @@ class RoutineTableViewController: UITableViewController {
             cell = tableView.dequeueReusableCell(withIdentifier: "addWorkout", for: indexPath)
         } else {
             cell = tableView.dequeueReusableCell(withIdentifier: "workoutCell", for: indexPath)
-            cell?.textLabel?.text = foundRoutines[indexPath.row-1].name
+            
+            if (routineSearchResults.count == 0){
+                cell?.textLabel?.text = foundRoutines[indexPath.row-1].name
+            }else{
+                cell?.textLabel?.text = routineSearchResults[indexPath.row-1].name
+            }
+
         }
+
         
         return cell!
     }
@@ -92,11 +213,20 @@ class RoutineTableViewController: UITableViewController {
             let routineObject : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
             routine = routineObject
             
+            //if searching, then click add
+            //remove the searched routines
+            handleClearOrCancel()
+            
             self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
         } else {
-            routine = foundRoutines[indexPath.row-1]
+            if (routineSearchResults.count == 0) {
+                routine = foundRoutines[indexPath.row-1]
             
-            self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
+                self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
+            }else {
+                routine = routineSearchResults[indexPath.row-1]
+                //perform segue to do somwthing w someonelse's routine
+            }
         }
         
     }
@@ -157,13 +287,14 @@ class RoutineTableViewController: UITableViewController {
 
                 } catch{
                     print("error occured saving context after deleting item")
+                }
+                
+                tableView.deleteRows(at: [indexPath], with: .fade)
             }
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
         }
         
         let edit = UITableViewRowAction(style: .normal, title: "Edit") { (action, indexPath) in
-            let routineObject : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.persistentContainer.viewContext) as! Routine
+            let routineObject = self.foundRoutines[indexPath.row-1]
             self.routine = routineObject
             
             self.performSegue(withIdentifier: "addRoutineSegue", sender: self)
@@ -171,6 +302,12 @@ class RoutineTableViewController: UITableViewController {
         
         edit.backgroundColor = UIColor.blue
         
-        return [delete, edit]
+        if (routineSearchResults.count == 0) {
+            return [delete, edit]
+    
+        }else{
+            return []
+        }
+        
     }
 }
