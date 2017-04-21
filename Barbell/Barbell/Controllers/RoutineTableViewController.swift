@@ -21,6 +21,8 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //might see if we can get to the hex color
+        
         self.tableView.reloadData()
         
     }

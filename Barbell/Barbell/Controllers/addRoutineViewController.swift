@@ -27,7 +27,9 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        
+        self.stepper.tintColor = UIColor(red:0.94, green:0.92, blue:0.85, alpha:1.0)
+        //self.realTableView.backgroundColor = UIColor(red:0.94, green:0.92, blue:0.85, alpha:1.0)
         
         goingForwards = false
         var count : Int = Int(routinePassed.numberOfWeeks)
@@ -75,6 +77,11 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
 
         // Do any additional setup after loading the view.
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor(red:0.24, green:0.36, blue:0.46, alpha:1.0)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         goingForwards = false
         routine.text = routinePassed.name
@@ -228,7 +235,6 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
 
 class CustomCell: UITableViewCell {
     
-    
     var myTableViewController: addRoutineViewController?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -242,6 +248,7 @@ class CustomCell: UITableViewCell {
     
     let nameLabel: UILabel = {
         let label = UILabel()
+        label.textColor = UIColor(red:0.94, green:0.92, blue:0.85, alpha:1.0)
         label.text = "Sample Item"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 14)

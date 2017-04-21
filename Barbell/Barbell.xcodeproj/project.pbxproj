@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2424EA4A1EA9842A00E68FBD /* Plus Math Filled_50.png in Resources */ = {isa = PBXBuildFile; fileRef = 2424EA481EA9842A00E68FBD /* Plus Math Filled_50.png */; };
+		2424EA4B1EA9842A00E68FBD /* Plus Math Filled_25.png in Resources */ = {isa = PBXBuildFile; fileRef = 2424EA491EA9842A00E68FBD /* Plus Math Filled_25.png */; };
 		6328E9131E78A4DC005A5E3D /* LoginInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328E9121E78A4DC005A5E3D /* LoginInfo.swift */; };
 		6328E9151E78BE25005A5E3D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328E9141E78BE25005A5E3D /* ProfileViewController.swift */; };
 		635AA01F1E93181100063C25 /* 100.png in Resources */ = {isa = PBXBuildFile; fileRef = 635AA01A1E93181100063C25 /* 100.png */; };
@@ -65,6 +67,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2424EA481EA9842A00E68FBD /* Plus Math Filled_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plus Math Filled_50.png"; sourceTree = "<group>"; };
+		2424EA491EA9842A00E68FBD /* Plus Math Filled_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plus Math Filled_25.png"; sourceTree = "<group>"; };
 		6328E9121E78A4DC005A5E3D /* LoginInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInfo.swift; sourceTree = "<group>"; };
 		6328E9141E78BE25005A5E3D /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		635AA01A1E93181100063C25 /* 100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 100.png; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 		63FA5E0D1E72248C00DEE65D /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				2424EA481EA9842A00E68FBD /* Plus Math Filled_50.png */,
+				2424EA491EA9842A00E68FBD /* Plus Math Filled_25.png */,
 				C31395551EA84B58006523F2 /* FakeLogo.png */,
 				C31395511EA8485B006523F2 /* Dumbbell_25.png */,
 				C31395521EA8485B006523F2 /* Dumbbell_50.png */,
@@ -306,22 +312,17 @@
 				635AA01F1E93181100063C25 /* 100.png in Resources */,
 				C31395481EA847E5006523F2 /* User_50.png in Resources */,
 				635AA0231E93181100063C25 /* 1500.png in Resources */,
-				C31395341EA842DE006523F2 /* Dumbbell-75.png in Resources */,
-				C313953A1EA84468006523F2 /* Calendar_25.png in Resources */,
-				C31395421EA84643006523F2 /* User_50.png in Resources */,
-				C31395381EA84305006523F2 /* Dumbbell_50.png in Resources */,
-				C31395361EA842FC006523F2 /* Dumbbell_25.png in Resources */,
 				C3FCF3E51E81ED4600E7BB0E /* Main.storyboard in Resources */,
 				635AA0221E93181100063C25 /* 1000.png in Resources */,
 				C30AE8041E5CF7F80093507B /* LaunchScreen.storyboard in Resources */,
 				C31395561EA84B58006523F2 /* FakeLogo.png in Resources */,
 				C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */,
-				C31395401EA84561006523F2 /* Trophy_50.png in Resources */,
 				635AA0201E93181100063C25 /* 200.png in Resources */,
-				C31395441EA84663006523F2 /* User_25.png in Resources */,
 				63FA5E111E7224AF00DEE65D /* Plus.png in Resources */,
 				635AA0211E93181100063C25 /* 300.png in Resources */,
 				C31395501EA84806006523F2 /* Calendar_50.png in Resources */,
+				2424EA4A1EA9842A00E68FBD /* Plus Math Filled_50.png in Resources */,
+				2424EA4B1EA9842A00E68FBD /* Plus Math Filled_25.png in Resources */,
 				6F9E12471E733D0800A05FA5 /* workouts.json in Resources */,
 				63FA5E101E7224AF00DEE65D /* HeadDick.jpeg in Resources */,
 				C31395471EA847E5006523F2 /* User_25.png in Resources */,
