@@ -34,6 +34,8 @@ namespace BBAPI.Controllers
 				return Ok(emptyResponse);
 			}
 
+
+
 			//Parse the data given
 			char[] delimiterChars = { '{', '}', ',', ':', ' ' };
 			string[] dataArr = data.Split(delimiterChars);
@@ -42,8 +44,9 @@ namespace BBAPI.Controllers
 			var id = dataArr[4];
 
 			var key = "user:" + email + ":achievement:" + id;
+			return Ok(id);
 
-			return Ok(redisCache.createAchievemntHash(key, date));
+			//return Ok(redisCache.createAchievemntHash(key, date));
 		}
 
 	}
