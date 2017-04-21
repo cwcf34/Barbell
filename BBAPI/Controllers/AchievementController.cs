@@ -13,7 +13,7 @@ namespace BBAPI.Controllers
 		[Authorize]
 		public IHttpActionResult GetAchievements(string email)
 		{
-			var key = "user" + email + ":achievement:";
+			var key = "user:" + email + ":achievement:";
 
 			var returnData = redisCache.getAchievements(key);
 
