@@ -161,6 +161,8 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Models\Routine.cs" />
     <Compile Include="Models\WorkoutData.cs" />
+    <Compile Include="Controllers\AchievementController.cs" />
+    <Compile Include="Models\Achievement.cs" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

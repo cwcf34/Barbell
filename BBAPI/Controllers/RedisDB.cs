@@ -48,6 +48,22 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword), new HashEntry("age", 0), new HashEntry("weight", 0), new HashEntry("squat", 0), new HashEntry("bench", 0), new HashEntry("deadlift", 0), new HashEntry("snatch", 0), new HashEntry("cleanjerk", 0), new HashEntry("workoutsCompleted", 0) });
 		}
 
+		public bool createAchievemntHash(string key, string date)
+		{
+			try
+			{
+				//Add a field to the hash for that achievement with the key as the "date" and the date as the data from the completed achievement
+				cache.HashSet(key, new HashEntry[] { new HashEntry("date", date) });
+			}
+			catch
+			{
+				//An exception occured
+				return false;
+			}
+			//Success
+			return true;
+		}
+
 		public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
 		{
 			//creates hash data for routine
@@ -148,6 +164,47 @@ namespace BBAPI.Controllers
 			return data.ToArray();
 		}
 
+		public List<Achievement> getAchievements(string key)
+		{
+			
+			var newHash = new HashEntry[] { };
+			var returnData = new List<Achievement>();
+
+
+
+			for (var i = 1; i < 6; i++)
+			{
+				var keyWithId = key + i.ToString();
+
+				var data = cache.HashGetAll(keyWithId);
+
+				if (data != newHash)
+				{
+					var newAch = new Achievement();
+
+					foreach (var field in data)
+					{
+						if (field.Name.ToString().Equals("date"))
+						{
+							newAch.Date = field.Value.ToString();
+						}
+						else if (field.Name.ToString().Equals("id"))
+						{
+							newAch.Id = field.Value.ToString();
+						}
+
+						returnData.Add(newAch);
+					}
+				}
+				else
+				{
+					returnData.Add(new Achievement());
+				}
+			}
+
+			return returnData;
+		}
+
 		public string validateUserPass(string key)
 		{
 			return cache.HashGet(key, "password");
@@ -170,6 +227,7 @@ namespace BBAPI.Controllers
 					{
 						if (field.Name.ToString().Equals("name") && field.Value.ToString().ToLower().Contains(name.ToLower()))
 						{
+							//if isPublic is true
 							if (routineData[3].Value.ToString().Equals("1")) {
 								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value, creator = routineData[4].Value });
 							}

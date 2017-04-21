@@ -8,7 +8,7 @@ namespace BBAPI.Controllers
 	public class RoutineController : ApiController
 	{
 		//use singleton
-		RedisDB redisCache = RedisDB._instance;
+		readonly RedisDB redisCache = RedisDB._instance;
 
 		[HttpGet]
         [Authorize]
