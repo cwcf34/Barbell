@@ -65,18 +65,48 @@ class CoreDataController{
         return (foundUser.first)!
     }
     
+    class func getAchievements() -> [Achievement]{
+        let fetchRequest = NSFetchRequest<Achievement>(entityName: "Achievement")
+        var foundAchievements = [Achievement] ()
+        do{
+            foundAchievements = try getContext().fetch(fetchRequest)
+            return (foundAchievements)
+        }catch{
+            print("we messed this up")
+        }
+        return (foundAchievements)
+    }
+    
+    class func newAchievement(achievementNumber: Int16){
+        
+        let existingAchievements = getAchievements()
+        for achievement in existingAchievements{
+            if achievement.achievementNumber == achievementNumber{
+                return
+            }
+        }
+        
+        let achievement:Achievement = NSEntityDescription.insertNewObject(forEntityName: "Achievement", into: CoreDataController.getContext()) as! Achievement
+        
+        achievement.achievementNumber = achievementNumber
+        achievement.achievedOn = NSDate()
+        print("New Achievement " + String(achievementNumber) + " earned on: " + String(describing: achievement.achievedOn))
+        saveContext()
+    }
     
     class func clearData() {
         var isLiftEmpty = false
         var isRoutineEmpty = false
         var isUserEmpty = false
         var isWorkoutEmpty = false
+        var isAchievementEmpty = false
         let context = getContext()
         
         isUserEmpty = entityIsEmpty(entity: "User")
         isRoutineEmpty = entityIsEmpty(entity: "Routine")
         isLiftEmpty = entityIsEmpty(entity: "Lift")
         isWorkoutEmpty = entityIsEmpty(entity: "Workout")
+        isAchievementEmpty = entityIsEmpty(entity: "Achievement")
         
      
         if !isUserEmpty {
@@ -121,6 +151,18 @@ class CoreDataController{
             var result : NSPersistentStoreResult?
             do {
                 print("deleted Workout")
+                result = try context.execute(request)
+            }
+            catch{
+                print(result?.description)
+            }
+        }
+        if !isAchievementEmpty{
+            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Achievement")
+            let request = NSBatchDeleteRequest(fetchRequest: fetch)
+            var result : NSPersistentStoreResult?
+            do {
+                //print("deleted Workout")
                 result = try context.execute(request)
             }
             catch{

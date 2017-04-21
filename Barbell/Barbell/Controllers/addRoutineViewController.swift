@@ -221,7 +221,6 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
             CoreDataController.saveContext()
         }
     }
-
 }
 
 class CustomCell: UITableViewCell {

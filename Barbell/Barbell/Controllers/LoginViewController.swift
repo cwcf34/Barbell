@@ -57,13 +57,10 @@ class LoginViewController: UIViewController {
                 
                 //Add user info to persistent Database
                 DataAccess.getUserfromRedis(email: email.text!)
+                DataAccess.getAchievementsfromRedis(email: email.text!)
                 _ = DataAccess.getRoutinesFromRedis()
                 
             }
-
-            
-
-            
         } else if(!email.hasText || !password.hasText) {
             self.present(notAllFormsFilled, animated: true, completion: nil)
         }

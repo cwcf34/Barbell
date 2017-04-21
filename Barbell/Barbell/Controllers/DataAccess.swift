@@ -701,6 +701,9 @@ public class DataAccess {
         if routine.isPublic == true {
             isPublicInt = 1
         }
+        if routine.name == nil{
+            return false
+        }
         routineName = routine.name!
         postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(user.email!)}\" "
         
@@ -921,7 +924,7 @@ public class DataAccess {
     
     class func checkRoutines(){
         let redisRoutines = reloadRoutinesFromRedis()
-        let fetchRequest = NSFetchRequest<User>(entityName: "Routine")
+        let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
         
         var coreRoutines = [Routine] ()
         do{
@@ -1120,5 +1123,128 @@ public class DataAccess {
         task.resume()
         sem.wait()
         return
+    }
+    
+    class func getAchievementsfromRedis(email : String){
+        var request = URLRequest(url: URL(string: apiURL + "achievement/\(email)/")!)
+        request.httpMethod = "GET"
+        var responseString = ""
+        
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": self.accessToken
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("\nGET USER FROM REDIS response = \(response)\n")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("\nGet achievement response \(responseString)\n")
+            
+            
+            sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+       
+        if let data = responseString.data(using: .utf8) as? Data{
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                //print("JSONFULL == \(json)\n\n")
+                
+                for eachAchievement in json {
+                    
+                    let newAchievement : Achievement = NSEntityDescription.insertNewObject(forEntityName: "Achievement", into: CoreDataController.getContext()) as! Achievement
+                    
+                    
+                    for (key,value) in eachAchievement{
+                        if (key == "achievementNumber"){
+                            if let value = value as? String{
+                                if let castedValue = Int16(value){
+                                    newAchievement.achievementNumber = castedValue
+                                }
+                            }
+                        }
+                        if (key == "Name"){
+                            if let value = value as? String{
+                                print("Found routine named in redis" + value)
+                                newAchievement.name = value
+                            }
+                        }
+                        if (key == "achievedOn"){
+                            let formatter = DateFormatter()
+                            formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
+                            formatter.locale = Locale.init(identifier: "en_GB")
+                            let dateObj = formatter.date(from: value as! String)
+                        }
+                    }
+                    print("loaded achievement" + String(newAchievement.achievementNumber))
+                    
+                }
+                
+            }
+        }
+        CoreDataController.saveContext()
+    }
+    
+    class func saveAchievementsToRedis(){
+        let user = CoreDataController.getUser()
+        let achievements = CoreDataController.getAchievements()
+        var postString = ""
+
+        var request = URLRequest(url: URL(string: apiURL + "achievement/\(user.email!)/")!)
+        
+        request.httpMethod = "POST"
+        
+        for achievement in achievements{
+            postString = "\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
+             print(postString)
+            
+            let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+            request.httpBody = postDATA
+            var responseString = ""
+            let headers = [
+                "Content-Type": "application/json",
+                "Authorization": self.accessToken
+            ]
+            
+            request.allHTTPHeaderFields = headers
+            let sem = DispatchSemaphore(value: 0)
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                    print("error=\(error)")
+                    return
+                }
+                
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("response = \(response)")
+                }
+                
+                responseString = String(data: data, encoding: .utf8)!
+                
+                print("Did save Achievement " + String(achievement.achievementNumber) + " to redis?  " + responseString)
+                
+                
+                sem.signal()
+            }
+            
+            task.resume()
+            sem.wait()
+        }
     }
 }
