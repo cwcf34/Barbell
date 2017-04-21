@@ -188,13 +188,11 @@ namespace BBAPI.Controllers
 						{
 							newAch.Date = field.Value.ToString();
 						}
-						else if (field.Name.ToString().Equals("id"))
-						{
-							newAch.Id = field.Value.ToString();
-						}
-
-						returnData.Add(newAch);
 					}
+
+					newAch.Id = i.ToString();
+
+					returnData.Add(newAch);
 				}
 				else
 				{
