@@ -2,7 +2,7 @@
     "Exercises": [
                   {
                   "group": "Shoulders",
-                  "lifts": ["Behind Neck Press","Militar Press","Shoulder Press", "Front Raise", "Upright Row","Lateral Raise", "Rear Raise", "Rear Row", "Rear Lateral Raise"]
+                  "lifts": ["Behind Neck Press","Military Press","Shoulder Press", "Front Raise", "Upright Row","Lateral Raise", "Rear Raise", "Rear Row", "Rear Lateral Raise"]
                   },
                   {
                   "group": "Chest",
@@ -14,7 +14,7 @@
                   },
                   {
                   "group": "Upper Arms",
-                  "lifts": ["Underhand Curl","Underhand Chin-Up", "Tricep Dip","Tricep Extension", "Dumbell Kickback"]
+                  "lifts": ["Underhand Curl","Underhand Chin-Up","Tricep Dip","Tricep Extension","Dumbell Kickback"]
                   },
                   {
                   "group": "Forearms",
@@ -35,6 +35,10 @@
                   {
                   "group": "Calves",
                   "lifts": ["Calf Raise","Calf Press","Calf Extension","Reverse Calf Raise","Reverse Calf Press","Reverse Calf Extension"]
+                  },
+                  {
+                  "group": "Full Body",
+                  "lifts": ["Snatch","Clean and Jerk","Power Clean"]
                   }
                 ]
 }
