@@ -29,7 +29,7 @@ namespace BBAPI.Controllers
 			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("date:") || !data.Contains("id:"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "\"{date:4/20/17,id:0}\"";
+				var resp2 = "\"{date:2017-04-21 22:22:22 +0000,id:1}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -41,12 +41,12 @@ namespace BBAPI.Controllers
 			string[] dataArr = data.Split(delimiterChars);
 
 			var date = dataArr[2];
-			var id = dataArr[4];
+			var id = dataArr[8];
 
 			var key = "user:" + email + ":achievement:" + id;
-			return Ok(id);
 
-			//return Ok(redisCache.createAchievemntHash(key, date));
+
+			return Ok(redisCache.createAchievemntHash(key, date));
 		}
 
 	}
