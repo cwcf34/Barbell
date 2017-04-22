@@ -61,28 +61,28 @@ class HistoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-            return 1 + foundRoutines.count
+            return foundRoutines.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell : UITableViewCell?
         
-            cell = tableView.dequeueReusableCell(withIdentifier: "workoutCell", for: indexPath)
-        
-                cell?.textLabel?.text = foundRoutines[indexPath.row-1].name
+        cell = tableView.dequeueReusableCell(withIdentifier: "workoutCell", for: indexPath)
+        print(indexPath.row-1)
+        cell?.textLabel?.text = foundRoutines[indexPath.row].name
         
         return cell!
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-                routine = foundRoutines[indexPath.row-1]
+                routine = foundRoutines[indexPath.row]
                 self.performSegue(withIdentifier: "finishedWorkouts", sender: self)
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "finishedWorkouts"){
-            let viewController = segue.destination as! StartRoutineTableViewController
+            let viewController = segue.destination as! WorkoutHistoryTableViewController
             viewController.routinePassed = routine
         }
     }
