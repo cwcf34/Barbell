@@ -236,6 +236,17 @@ namespace BBAPI.Controllers
 			}
 
 			return returnData;
+		}
+
+		public void deleteWorkouts(string query)
+		{
+			var data = cacheServer.Keys(0, query);
+			var returnData = new List<Routine>();
+
+			foreach (var key in data)
+			{
+				cache.KeyDelete(key);
+			}
 
 		}
 

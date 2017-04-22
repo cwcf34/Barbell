@@ -47,6 +47,43 @@ namespace BBAPI.Controllers
 			}
 		}
 
+		[HttpPut]
+		[Authorize]
+		public IHttpActionResult PutRoutine(string email, [FromBody]string data)
+		{
+
+			//check if body is empty, white space or null
+			// or appropriate JSON fields are not in post body
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:") || !data.Contains("id"))
+			{
+				var resp = "Data is null. Please send formatted data: ";
+				var resp2 = "{name:routineName,weeks:numberOfweeks,isPublic:0/1,creator:email,id:501}";
+				string emptyResponse = resp + resp2;
+				return Ok(emptyResponse);
+			}
+
+			//parse email and body data for routine
+			char[] delimiterChars = { '{', '}', ',', ':' };
+			string[] postParams = data.Split(delimiterChars);
+
+			var routineName = postParams[2];
+			var routineWeeks = postParams[4];
+			var isPubilc = postParams[6];
+			var routineCreator = postParams[8];
+			var routineId = postParams[10];
+
+			//create routine key
+			var key = "user:" + email + ":" + routineId;
+
+			//delete the workouts
+			redisCache.deleteWorkouts(key + ":*");
+
+			//create routine hash and routine data list
+			redisCache.createRoutineHash(key, Int16.Parse(routineId), routineName, routineWeeks, isPubilc, routineCreator);
+
+			return Ok(routineId);
+		}
+
 
 		//create new Routine w all empty workouts
 		[HttpPost]
