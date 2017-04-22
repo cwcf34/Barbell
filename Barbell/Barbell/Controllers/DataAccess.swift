@@ -461,7 +461,7 @@ public class DataAccess {
                         }
                     }
                     
-                    newRoutine.creator = user.fname! + user.lname!
+                    //newRoutine.creator = user.fname! + user.lname!
                     //newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)
@@ -866,7 +866,7 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
-        let tokens = responseString.components(separatedBy: ",")
+        /*let tokens = responseString.components(separatedBy: ",")
         //var token = [String]()B
         if let user = user as? User {
             for i in tokens{
@@ -886,27 +886,33 @@ public class DataAccess {
                     user.age = Int16(token[1])!
                 }
                 if token[0] == "weight"{
+                    var woTokens = token[1].components(separatedBy: "\"")
                     token[1].remove(at: token[1].startIndex)
                     user.weight = Int16(token[1])!
                 }
                 if token[0] == "squat"{
+                    var woTokens = token[1].components(separatedBy: "\"")
                     token[1].remove(at: token[1].startIndex)
                     user.squat = Int16(token[1])!
                 }
                 if token[0] == "bench"{
+                    var woTokens = token[1].components(separatedBy: "\"")
                     token[1].remove(at: token[1].startIndex)
                     user.bench = Int16(token[1])!
                 }
                 if token[0] == "deadlift"{
+                    var woTokens = token[1].components(separatedBy: "\"")
                     token[1].remove(at: token[1].startIndex)
                     user.deadlift = Int16(token[1])!
                     
                 }
                 if token[0] == "cleanjerk"{
+                    var woTokens = token[1].components(separatedBy: "\"")
                     token[1].remove(at: token[1].startIndex)
                     user.cleanAndJerk = Int16(token[1])!
                 }
                 if token[0] == "snatch"{
+                    var woTokens = token[1].components(separatedBy: "\"")
                     token[1].remove(at: token[1].startIndex)
                     user.snatch = Int16(token[1])!
                 }
@@ -916,7 +922,86 @@ public class DataAccess {
                     woTokens[0].remove(at: woTokens[0].startIndex)
                     user.workoutsCompleted = Int16(woTokens[0])!
                 }
+            }*/
+        
+        if let data = responseString.data(using: .utf8) as? Data{
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                //print("JSONFULL == \(json)\n\n")
+                
+                    
+                let newUser : User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
+                
+                
+                for (key,value) in newUser{
+                    if (key == "age"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                newUser.age = castedValue
+                            }
+                        }
+                    }
+                    if (key == "weight"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                user.weight = castedValue
+                            }
+                        }
+                    }
+                    if (key == "bench"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                user.bench = castedValue
+                            }
+                        }
+                    }
+                    if (key == "deadlift"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                user.deadlift = castedValue
+                            }
+                        }
+                    }
+                    if (key == "squat"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                user.squat = castedValue
+                            }
+                        }
+                    }
+                    if (key == "snatch"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                user.snatch = castedValue
+                            }
+                        }
+                    }
+                    if (key == "cleanjerk"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                user.cleanAndJerk = castedValue
+                            }
+                        }
+                    }
+                    if (key == "workoutsCompleted"){
+                        if let value = value as? String{
+                            if let castedValue = Int16(value){
+                                user.workoutsCompleted = castedValue
+                            }
+                        }
+                    }
+                    if (key == "Name"){
+                        let nameTokens = value.components(separatedBy: " ")
+                        user.fname = nameTokens[1]
+                        user.lname = nameTokens[2]
+                    }
+                }
+                /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
+                
             }
+        
+        
+        
+        
             CoreDataController.saveContext()
             return
         }
@@ -1329,7 +1414,7 @@ public class DataAccess {
                             newHistory.timeStamp = dateObj as! NSDate
                         }
                     }
-                    print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))
+                    /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
                 }
             }
         }
