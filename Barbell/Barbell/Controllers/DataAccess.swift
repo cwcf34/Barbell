@@ -1247,4 +1247,140 @@ public class DataAccess {
             sem.wait()
         }
     }
+    
+    class func getHistoryfromRedis(email : String){
+        var request = URLRequest(url: URL(string: apiURL + "achievement/\(email)/")!)
+        request.httpMethod = "GET"
+        var responseString = ""
+        
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": self.accessToken
+        ]
+        
+        request.allHTTPHeaderFields = headers
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("\nGET USER FROM REDIS response = \(response)\n")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("\nGet achievement response \(responseString)\n")
+            
+            
+            sem.signal()
+        }
+        
+        task.resume()
+        sem.wait()
+        
+        if let data = responseString.data(using: .utf8) as? Data{
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                //print("JSONFULL == \(json)\n\n")
+                
+                for eachHistory in json {
+                    
+                    let newHistory : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+                    
+                    
+                    for (key,value) in eachHistory{
+                        if (key == "reps"){
+                            if let value = value as? String{
+                                if let castedValue = Int16(value){
+                                    newHistory.liftRep = castedValue
+                                }
+                            }
+                        }
+                        if (key == "weight"){
+                            if let value = value as? String{
+                                if let castedValue = Int16(value){
+                                    newHistory.liftWeight = castedValue
+                                }
+                            }
+                        }
+                        if (key == "sets"){
+                            if let value = value as? String{
+                                if let castedValue = Int16(value){
+                                    newHistory.liftSets = castedValue
+                                }
+                            }
+                        }
+                        if (key == "Name"){
+                            if let value = value as? String{
+                                print("Found routine named in redis" + value)
+                                newHistory.liftName = value
+                            }
+                        }
+                        if (key == "date"){
+                            let formatter = DateFormatter()
+                            formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
+                            formatter.locale = Locale.init(identifier: "en_GB")
+                            let dateObj = formatter.date(from: value as! String)
+                            newHistory.timeStamp = dateObj as! NSDate
+                        }
+                    }
+                    print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))
+                }
+            }
+        }
+        CoreDataController.saveContext()
+    }
+    
+    class func saveHistoryToRedis(){
+        let user = CoreDataController.getUser()
+        let history = CoreDataController.getHistory()
+        var postString = ""
+        
+        var request = URLRequest(url: URL(string: apiURL + "achievement/\(user.email!)/")!)
+        
+        request.httpMethod = "POST"
+        
+        for lift in history{
+            postString = ""//fix this string!!"\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
+            print(postString)
+            
+            let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+            request.httpBody = postDATA
+            var responseString = ""
+            let headers = [
+                "Content-Type": "application/json",
+                "Authorization": self.accessToken
+            ]
+            
+            request.allHTTPHeaderFields = headers
+            let sem = DispatchSemaphore(value: 0)
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                    print("error=\(error)")
+                    return
+                }
+                
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("response = \(response)")
+                }
+                
+                responseString = String(data: data, encoding: .utf8)!
+                
+                print("Did save Historic lift " + lift.liftName! + String(describing: lift.timeStamp) + " to redis?  " + responseString)
+                
+                
+                sem.signal()
+            }
+            
+            task.resume()
+            sem.wait()
+        }
+    }
 }
