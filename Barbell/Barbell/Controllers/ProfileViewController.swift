@@ -137,11 +137,8 @@ class ProfileViewController: UIViewController {
                 if let cleanAndJerk = Int16(cleanAndJerkString) {
                     user.cleanAndJerk = cleanAndJerk
                 }
-                
             }
-            
         }
-        
         CoreDataController.saveContext()
     }
 
@@ -158,7 +155,6 @@ class ProfileViewController: UIViewController {
         }
         for routine in foundRoutines{
             if(routine.name != nil) {
-                print(routine.name)
                 if(routine.isPublic == false) {
                     DataAccess.sendRoutineToRedis(routine: routine)
                 }
@@ -166,6 +162,7 @@ class ProfileViewController: UIViewController {
         }
         DataAccess.checkRoutines()
         DataAccess.saveAchievementsToRedis()
+        DataAccess.saveHistoryToRedis()
         DataAccess.saveUserToRedis(email: (user?.email)!)
         
        self.performSegue(withIdentifier: "toLogin", sender: self)
