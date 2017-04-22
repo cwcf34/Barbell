@@ -79,8 +79,6 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
         RountineSetsLabel.text = String(liftsInWorkout[i].sets)
         RountineRepsLabel.text = String(liftsInWorkout[i].reps)
         RountineWeightLabel.text = String(liftsInWorkout[i].weight)
-        print("\n\n")
-        print(liftsInWorkout[i].weight)
         
         if(liftsInWorkout.count == 1) {
             hasFinished = true

@@ -8,17 +8,38 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+let reuseIdentifier = "MyCell"
+var carImages = ["100.png",
+                 "200.png",
+                 "300.png",
+                 "1000.png",
+                 "1500.png"]
+
+var carImagesNotDone = ["100ND.png",
+                 "200ND.png",
+                 "300ND.png",
+                 "1000ND.png",
+                 "1500ND.png"]
+
+var imageTitles = ["100 Workouts",
+                    "200 Workouts",
+                    "300 Workouts",
+                    "1000 Workouts",
+                    "1500 Workouts"]
 
 class AchievementsCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        
+        //self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
-            }
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+        
+        // Do any additional setup after loading the view.
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -31,18 +52,19 @@ class AchievementsCollectionViewController: UICollectionViewController {
         return 1
     }
     
-    let cellIdentifiers:[String] = ["100","200","300", "1000", "1500"]
-    
-    
-    let sizes:[CGSize] = [CGSize(width:100, height:100),CGSize(width:100, height:100),CGSize(width:100, height:100)]
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellIdentifiers.count
+        print(carImages.count)
+        return carImages.count
     }
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifiers[indexPath.item], for: indexPath)
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return sizes[indexPath.item]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! MyCollectionViewCell
+        
+        // Configure the cell
+        let image = UIImage(named: carImages[indexPath.row])
+        cell.imageView.image = image
+        cell.label.text = imageTitles[indexPath.row]
+        
+        return cell
     }
 }
