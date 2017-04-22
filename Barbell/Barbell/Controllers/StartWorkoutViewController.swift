@@ -28,6 +28,7 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
     var workoutPassed : Workout!
     var routinePassed : Routine!
     var liftsInWorkout = [Lift]()
+    var user : User!
     var i = 0
     var hasFinished = false
     
@@ -35,7 +36,7 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        user = CoreDataController.getUser()
         CompletedSetsTextArea.delegate = self
         CompletedRepsTextArea.delegate = self
         CompletedWeightTextArea.delegate = self
@@ -94,12 +95,58 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func nextExercise(_ sender: Any) {
         if(hasFinished == true){
-            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+            /*let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
             finished.liftName = liftsInWorkout[i].name
             finished.liftRep = liftsInWorkout[i].reps
             finished.liftSets = liftsInWorkout[i].sets
             finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate
+            finished.timeStamp = Date() as NSDate*/
+            
+            user.workoutsCompleted += 1
+            
+            if user.workoutsCompleted == 100{
+                CoreDataController.newAchievement(achievementNumber: 1)
+            }
+            else if user.workoutsCompleted == 200{
+                CoreDataController.newAchievement(achievementNumber: 2)
+            }
+            else if user.workoutsCompleted == 300{
+                CoreDataController.newAchievement(achievementNumber: 3)
+            }
+            
+            if liftsInWorkout[i].name! == "Bench Press" && Int16(CompletedWeightTextArea.text!)! > user.bench{
+                user.bench = Int16(CompletedWeightTextArea.text!)!
+                if user.bench + user.deadlift + user.squat >= 1000{
+                    CoreDataController.newAchievement(achievementNumber: 4)
+                }
+                if user.bench + user.deadlift + user.squat >= 1500{
+                    CoreDataController.newAchievement(achievementNumber: 5)
+                }
+            }
+            if liftsInWorkout[i].name! == "Deadlift" && Int16(CompletedWeightTextArea.text!)! > user.deadlift{
+                user.deadlift = Int16(CompletedWeightTextArea.text!)!
+                if user.bench + user.deadlift + user.squat >= 1000{
+                    CoreDataController.newAchievement(achievementNumber: 4)
+                }
+                if user.bench + user.deadlift + user.squat >= 1500{
+                    CoreDataController.newAchievement(achievementNumber: 5)
+                }
+            }
+            if liftsInWorkout[i].name! == "Full Squat" && Int16(CompletedWeightTextArea.text!)! > user.squat{
+                user.squat = Int16(CompletedWeightTextArea.text!)!
+                if user.bench + user.deadlift + user.squat >= 1000{
+                    CoreDataController.newAchievement(achievementNumber: 4)
+                }
+                if user.bench + user.deadlift + user.squat >= 1500{
+                    CoreDataController.newAchievement(achievementNumber: 5)
+                }
+            }
+            if liftsInWorkout[i].name! == "Snatch" && Int16(CompletedWeightTextArea.text!)! > user.snatch{
+                user.snatch = Int16(CompletedWeightTextArea.text!)!
+            }
+            if liftsInWorkout[i].name! == "Clean and Jerk" && Int16(CompletedWeightTextArea.text!)! > user.cleanAndJerk{
+                user.cleanAndJerk = Int16(CompletedWeightTextArea.text!)!
+            }
             
             CoreDataController.saveContext()
             
@@ -116,14 +163,52 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
         }else{
             i += 1
             viewWillAppear(true)
-            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+            /*let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
             finished.liftName = liftsInWorkout[i].name
             finished.liftRep = liftsInWorkout[i].reps
             finished.liftSets = liftsInWorkout[i].sets
             finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate
+            finished.timeStamp = Date() as NSDate*/
+            
+            print(liftsInWorkout[i-1].name! + String(describing: CompletedWeightTextArea.text!))
+            
+            if liftsInWorkout[i-1].name! == "Bench Press" && Int16(CompletedWeightTextArea.text!)! > user.bench{
+                user.bench = Int16(CompletedWeightTextArea.text!)!
+                if user.bench + user.deadlift + user.squat >= 1000{
+                    CoreDataController.newAchievement(achievementNumber: 4)
+                }
+                if user.bench + user.deadlift + user.squat >= 1500{
+                    CoreDataController.newAchievement(achievementNumber: 5)
+                }
+            }
+            if liftsInWorkout[i-1].name! == "Deadlift" && Int16(CompletedWeightTextArea.text!)! > user.deadlift{
+                user.deadlift = Int16(CompletedWeightTextArea.text!)!
+                if user.bench + user.deadlift + user.squat >= 1000{
+                    CoreDataController.newAchievement(achievementNumber: 4)
+                }
+                if user.bench + user.deadlift + user.squat >= 1500{
+                    CoreDataController.newAchievement(achievementNumber: 5)
+                }
+            }
+            if liftsInWorkout[i-1].name! == "Full Squat" && Int16(CompletedWeightTextArea.text!)! > user.squat{
+                user.squat = Int16(CompletedWeightTextArea.text!)!
+                if user.bench + user.deadlift + user.squat >= 1000{
+                    CoreDataController.newAchievement(achievementNumber: 4)
+                }
+                if user.bench + user.deadlift + user.squat >= 1500{
+                    CoreDataController.newAchievement(achievementNumber: 5)
+                }
+            }
+            if liftsInWorkout[i-1].name! == "Snatch" && Int16(CompletedWeightTextArea.text!)! > user.snatch{
+                user.snatch = Int16(CompletedWeightTextArea.text!)!
+            }
+            if liftsInWorkout[i-1].name! == "Clean and Jerk" && Int16(CompletedWeightTextArea.text!)! > user.cleanAndJerk{
+                user.cleanAndJerk = Int16(CompletedWeightTextArea.text!)!
+            }
             
             CoreDataController.saveContext()
+            
+            
             
             if(i == liftsInWorkout.count - 1){
                 nextButton.setTitle("Finished", for: [])

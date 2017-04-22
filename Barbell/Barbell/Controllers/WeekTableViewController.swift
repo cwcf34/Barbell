@@ -16,6 +16,8 @@ class WeekTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.tableView.tableHeaderView?.tintColor = UIColor(red:0.94, green:0.92, blue:0.85, alpha:1.0)
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
