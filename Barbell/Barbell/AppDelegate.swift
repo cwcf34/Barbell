@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         var foundRoutines = [Routine]()
-        
+        let user = CoreDataController.getUser()
         let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
         do{
             foundRoutines = try CoreDataController.getContext().fetch(fetchRequest)
@@ -53,14 +53,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         for routine in foundRoutines{
             if(routine.name != nil) {
-                print(routine.name)
                 if(routine.isPublic == false) {
                     DataAccess.sendRoutineToRedis(routine: routine)
                 }
             }
         }
-        
-        let user = CoreDataController.getUser()
+        DataAccess.checkRoutines()
+        DataAccess.saveAchievementsToRedis()
+        DataAccess.saveHistoryToRedis()
         DataAccess.saveUserToRedis(email: (user.email)!)
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
