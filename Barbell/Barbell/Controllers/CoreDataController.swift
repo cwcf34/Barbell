@@ -77,6 +77,34 @@ class CoreDataController{
         return (foundAchievements)
     }
     
+    class func getHistory() -> [LegacyLift]{
+        let fetchRequest = NSFetchRequest<LegacyLift>(entityName: "LegacyLift")
+        var foundHistory = [LegacyLift] ()
+        do{
+            foundHistory = try getContext().fetch(fetchRequest)
+            return (foundHistory)
+        }catch{
+            print("we messed this up")
+        }
+        return (foundHistory)
+    }
+    
+    class func maybeSaveHistory(name: String, reps: Int16, sets: Int16, weight: Int16){
+       
+        if name == "Bench Press" || name == "Full Squat" || name == "Deadlift" || name == "Snatch" || name == "Clean and Jerk"{
+            if reps == 1{
+                let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+                finished.liftName = name
+                finished.liftRep = reps
+                finished.liftSets = sets
+                finished.liftWeight = weight
+                finished.timeStamp = Date() as NSDate
+                
+                CoreDataController.saveContext()
+            }
+        }
+    }
+    
     class func newAchievement(achievementNumber: Int16){
         
         let existingAchievements = getAchievements()
@@ -100,6 +128,7 @@ class CoreDataController{
         var isUserEmpty = false
         var isWorkoutEmpty = false
         var isAchievementEmpty = false
+        var isLegacyLiftEmpty = false
         let context = getContext()
         
         isUserEmpty = entityIsEmpty(entity: "User")
@@ -107,6 +136,7 @@ class CoreDataController{
         isLiftEmpty = entityIsEmpty(entity: "Lift")
         isWorkoutEmpty = entityIsEmpty(entity: "Workout")
         isAchievementEmpty = entityIsEmpty(entity: "Achievement")
+        isLegacyLiftEmpty = entityIsEmpty(entity: "LegacyLift")
         
      
         if !isUserEmpty {
@@ -159,6 +189,18 @@ class CoreDataController{
         }
         if !isAchievementEmpty{
             let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Achievement")
+            let request = NSBatchDeleteRequest(fetchRequest: fetch)
+            var result : NSPersistentStoreResult?
+            do {
+                //print("deleted Workout")
+                result = try context.execute(request)
+            }
+            catch{
+                print(result?.description)
+            }
+        }
+        if !isLegacyLiftEmpty{
+            let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "LegacyLift")
             let request = NSBatchDeleteRequest(fetchRequest: fetch)
             var result : NSPersistentStoreResult?
             do {

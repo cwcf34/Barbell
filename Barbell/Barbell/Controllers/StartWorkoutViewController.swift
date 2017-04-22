@@ -95,12 +95,12 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func nextExercise(_ sender: Any) {
         if(hasFinished == true){
-            /*let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
             finished.liftName = liftsInWorkout[i].name
             finished.liftRep = liftsInWorkout[i].reps
             finished.liftSets = liftsInWorkout[i].sets
             finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate*/
+            finished.timeStamp = Date() as NSDate
             
             user.workoutsCompleted += 1
             
@@ -163,12 +163,12 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
         }else{
             i += 1
             viewWillAppear(true)
-            /*let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
             finished.liftName = liftsInWorkout[i].name
             finished.liftRep = liftsInWorkout[i].reps
             finished.liftSets = liftsInWorkout[i].sets
             finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate*/
+            finished.timeStamp = Date() as NSDate
             
             print(liftsInWorkout[i-1].name! + String(describing: CompletedWeightTextArea.text!))
             

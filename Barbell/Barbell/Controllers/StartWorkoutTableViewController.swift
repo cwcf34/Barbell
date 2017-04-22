@@ -93,14 +93,8 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
     
     @IBAction func nextExercise(_ sender: Any) {
         if(hasFinished == true){
-            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
-            finished.liftName = liftsInWorkout[i].name
-            finished.liftRep = liftsInWorkout[i].reps
-            finished.liftSets = liftsInWorkout[i].sets
-            finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate
-            
-            CoreDataController.saveContext()
+            CoreDataController.maybeSaveHistory(name: liftsInWorkout[i].name!, reps: liftsInWorkout[i].reps, sets: liftsInWorkout[i].sets, weight: liftsInWorkout[i].weight)
+        
             
             customDelegateForDataReturn?.sendDataBackToHomePageViewController(routinePassed: routinePassed)
             
@@ -115,14 +109,7 @@ class StartWorkoutTableViewController: UITableViewController, UITextFieldDelegat
         }else{
             i += 1
             viewWillAppear(true)
-            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
-            finished.liftName = liftsInWorkout[i].name
-            finished.liftRep = liftsInWorkout[i].reps
-            finished.liftSets = liftsInWorkout[i].sets
-            finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate
-            
-            CoreDataController.saveContext()
+            CoreDataController.maybeSaveHistory(name: liftsInWorkout[i].name!, reps: liftsInWorkout[i].reps, sets: liftsInWorkout[i].sets, weight: liftsInWorkout[i].weight)
             
             if(i == liftsInWorkout.count - 1){
                 nextButton.setTitle("Finished", for: [])
