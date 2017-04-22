@@ -16,8 +16,8 @@ class addRoutineViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var realTableView: UITableView!
     @IBOutlet weak var publicSwitch: UISwitch!
     
-    var weeks = ["Week 1", "Week 2", "Week 3"]
-    var value = 3
+    var weeks = ["Week 1"]
+    var value = 1
     var goingForwards : Bool!
     
     var user = [User]()
