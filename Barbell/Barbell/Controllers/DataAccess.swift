@@ -866,12 +866,12 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
-        /*let tokens = responseString.components(separatedBy: ",")
+        let tokens = responseString.components(separatedBy: ",")
         //var token = [String]()B
         if let user = user as? User {
             for i in tokens{
                 var token = i.components(separatedBy: ":")
-                if token[0] == "\"name"{
+                if token[0] == "name"{
                     token[0].remove(at: token[0].startIndex)
                     let nameTokens = token[1].components(separatedBy: " ")
                     user.fname = nameTokens[1]
@@ -882,48 +882,53 @@ public class DataAccess {
                     user.email = token[1]
                 }
                 if token[0] == "age"{
-                    token[1].remove(at: token[1].startIndex)
-                    user.age = Int16(token[1])!
+
+                    
+                    var ageTokens = token[1].components(separatedBy: "\"")
+                    //token[1].remove(at: token[1].endIndex)
+                    ageTokens[0].remove(at: ageTokens[0].startIndex)
+                    user.age = Int16(ageTokens[0])!
                 }
                 if token[0] == "weight"{
-                    var woTokens = token[1].components(separatedBy: "\"")
+                    
                     token[1].remove(at: token[1].startIndex)
                     user.weight = Int16(token[1])!
                 }
                 if token[0] == "squat"{
-                    var woTokens = token[1].components(separatedBy: "\"")
+                    
                     token[1].remove(at: token[1].startIndex)
                     user.squat = Int16(token[1])!
                 }
                 if token[0] == "bench"{
-                    var woTokens = token[1].components(separatedBy: "\"")
+                   
                     token[1].remove(at: token[1].startIndex)
                     user.bench = Int16(token[1])!
                 }
                 if token[0] == "deadlift"{
-                    var woTokens = token[1].components(separatedBy: "\"")
+                    
                     token[1].remove(at: token[1].startIndex)
                     user.deadlift = Int16(token[1])!
                     
                 }
                 if token[0] == "cleanjerk"{
-                    var woTokens = token[1].components(separatedBy: "\"")
+                    
                     token[1].remove(at: token[1].startIndex)
                     user.cleanAndJerk = Int16(token[1])!
                 }
-                if token[0] == "snatch"{
-                    var woTokens = token[1].components(separatedBy: "\"")
+                if token[0] == "\"snatch"{
+                    
                     token[1].remove(at: token[1].startIndex)
                     user.snatch = Int16(token[1])!
                 }
                 if token[0] == "workoutsCompleted"{
-                    var woTokens = token[1].components(separatedBy: "\"")
-                    //token[1].remove(at: token[1].endIndex)
-                    woTokens[0].remove(at: woTokens[0].startIndex)
-                    user.workoutsCompleted = Int16(woTokens[0])!
+
+                    
+                    token[1].remove(at: token[1].startIndex)
+                    user.workoutsCompleted = Int16(token[1])!
                 }
-            }*/
-        
+            }
+        }
+        /*
         if let data = responseString.data(using: .utf8) as? Data{
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
                 //print("JSONFULL == \(json)\n\n")
@@ -994,17 +999,13 @@ public class DataAccess {
                         user.fname = nameTokens[1]
                         user.lname = nameTokens[2]
                     }
-                }
-                /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
                 
-            }
-        
-        
-        
+                }*/
+                /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
         
             CoreDataController.saveContext()
             return
-        }
+        
     }
     
     class func checkRoutines(){
