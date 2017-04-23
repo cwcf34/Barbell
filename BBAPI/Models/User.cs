@@ -11,5 +11,7 @@
 		public int Deadlift { get; set; }
 		public int Snatch { get; set; }
 		public int CleanAndJerk { get; set; }
+		public int WorkoutsCompleted { get; set; }
+		public string Password { get; set; }
 	}
 }

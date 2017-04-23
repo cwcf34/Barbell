@@ -49,19 +49,28 @@ namespace BBAPI.Controllers
 			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("date:") || !data.Contains("exercise:") || !data.Contains("sets:") || !data.Contains("reps:") || !data.Contains("weight"))
 			{
 				var resp = "Data is not formatted correctly. Please send formatted data: ";
-				var resp2 = "\"{date:date, exercise:exerciseName, sets:numOfSets, reps:numOfReps, weight:weightLifted}\"";
+				var resp2 = "\"{date:2017-04-21 22:22:22 +0000, exercise:exerciseName, sets:numOfSets, reps:numOfReps, weight:weightLifted}\"";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
 
 			//Parse the data given
-			char[] delimiterChars = { '{', '}', ',', ':', ' ' };
+			char[] delimiterChars = { '{', '}', ',', ':'};
 			string[] dataArr = data.Split(delimiterChars);
 
 			//extract data from the data given
-			string date = dataArr[2];
-			string exerciseName = dataArr[4];
-			string exerciseData = dataArr[6] + ":" + dataArr[8] + ":" + dataArr[10];
+			string unparsedDate = dataArr[2];
+			string[] dateArr = unparsedDate.Split(' ');
+			string date = dateArr[0];
+
+			string exerciseName = dataArr[6];
+			if (exerciseName.Contains(" "))
+			{
+				string[] exArr = exerciseName.Split(' ');
+				exerciseName = exArr[0] + " " + exArr[1];
+			}
+
+			string exerciseData = dataArr[8] + ":" + dataArr[10] + ":" + dataArr[12];
 
 			string key = "user:" + email + ":" + exerciseName + "Data";
 
