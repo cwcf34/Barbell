@@ -879,60 +879,68 @@ public class DataAccess {
         let tokens = responseString.components(separatedBy: ",")
         //var token = [String]()B
         if let user = user as? User {
-            for i in tokens{
-                var token = i.components(separatedBy: ":")
-                if token[0] == "name"{
-                    token[0].remove(at: token[0].startIndex)
-                    let nameTokens = token[1].components(separatedBy: " ")
-                    user.fname = nameTokens[1]
-                    user.lname = nameTokens[2]
-                }
-                if token[0] == "email"{
-                    token[1].remove(at: token[1].startIndex)
-                    user.email = token[1]
-                }
-                if token[0] == "age"{
-                    token[1].remove(at: token[1].startIndex)
-                    user.age = Int16(token[1])!
-                }
-                if token[0] == "\"weight"{
+            if let data = responseString.data(using: .utf8){
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any]{
+                    print("\nUSERJSON == \(json)\n\n")
                     
-                    token[1].remove(at: token[1].startIndex)
-                    user.weight = Int16(token[1])!
-                }
-                if token[0] == "squat"{
                     
-                    token[1].remove(at: token[1].startIndex)
-                    user.squat = Int16(token[1])!
-                }
-                if token[0] == "bench"{
-                   
-                    token[1].remove(at: token[1].startIndex)
-                    user.bench = Int16(token[1])!
-                }
-                if token[0] == "deadlift"{
+                    for (key,value) in json {
+                        if (key == "Age"){
+                            if let value = value as? Int16{
+                                user.age = value
+                            }
+                        }
+                        else if (key == "Weight"){
+                            if let value = value as? Int16{
+                                user.weight = value
+                            }
+                        }
+                        else if (key == "Bench"){
+                            if let value = value as? Int16{
+                                user.bench = value
+                            }
+                        }
+                        else if (key == "Deadlift"){
+                            if let value = value as? Int16{
+                                user.deadlift = value
+                            }
+                        }
+                        else if (key == "Squat"){
+                            if let value = value as? Int16{
+                                user.squat = value
+                            }
+                        }
+                        else if (key == "Snatch"){
+                            if let value = value as? Int16{
+                                user.snatch = value
+                            }
+                        }
+                        else if (key == "CleanAndJerk"){
+                            if let value = value as? Int16{
+                                user.cleanAndJerk = value
+                            }
+                        }
+                        else if (key == "WorkoutsCompleted"){
+                            if let value = value as? Int16{
+                                user.workoutsCompleted = value
+                            }
+                        }
+                        else if (key == "Email"){
+                            if let value = value as? String{
+                                user.email = value
+                            }
+                        }
+                        else if (key == "Name"){
+                            if let value = value as? String{
+                                var name = value.components(separatedBy: " ")
+                                user.fname = name[0]
+                                user.lname = name[1]
+                            }
+                        }
+                    }
                     
-                    token[1].remove(at: token[1].startIndex)
-                    user.deadlift = Int16(token[1])!
-                    
                 }
-                if token[0] == "cleanjerk"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.cleanAndJerk = Int16(token[1])!
-                }
-                if token[0] == "\"snatch"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.snatch = Int16(token[1])!
-                }
-                if token[0] == "workoutsCompleted"{
-                    var ageTokens = token[1].components(separatedBy: "\"")
-                    //token[1].remove(at: token[1].endIndex)
-                    ageTokens[0].remove(at: ageTokens[0].startIndex)
-                    user.workoutsCompleted = Int16(ageTokens[0])!
-                }
-            }
+                /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/            }
         }
         
         CoreDataController.saveContext()
