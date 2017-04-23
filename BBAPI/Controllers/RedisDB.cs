@@ -241,7 +241,7 @@ namespace BBAPI.Controllers
 		public void deleteWorkouts(string query)
 		{
 			var data = cacheServer.Keys(0, query);
-			var returnData = new List<Routine>();
+
 
 			foreach (var key in data)
 			{
@@ -288,7 +288,7 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-		public HashEntry[] getUserHashData(string email)
+		public User getUserHashData(string email)
 		{
 			//check if email is verifyed in Redis
 			int emailVerifyResponse = emailVerify(email);
@@ -296,13 +296,13 @@ namespace BBAPI.Controllers
 			switch (emailVerifyResponse)
 			{
 				case 1: //no email exists
-					return new HashEntry[] { new HashEntry("error", "User not found.") };
+					return null;
 
 				case -1: //empty field email
-					return new HashEntry[] { new HashEntry("error", "Email field empty.") };
+					return null;
 
 				case -2: //incorrect email format
-					return new HashEntry[] { new HashEntry("error", "Email not formatted correctly.") };
+					return null;
 
 				case -3: //YAY email exists
 
@@ -312,6 +312,52 @@ namespace BBAPI.Controllers
 					//new empty Hash to pass data
 					var data = new HashEntry[] { };
 					data = cache.HashGetAll(key);
+
+					var getUser = new User();
+
+					foreach (var userKey in data)
+					{
+						if (userKey.Name.ToString() == "name")
+						{
+							getUser.Name = userKey.Value.ToString();
+						}
+						else if (userKey.Name.ToString() == "email")
+						{
+							getUser.Email = userKey.Value.ToString();
+						}
+						else if (userKey.Name.ToString() == "age")
+						{
+							getUser.Age = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "weight")
+						{
+							getUser.Weight = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "bench")
+						{
+							getUser.Bench = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "squat")
+						{
+							getUser.Squat = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "snatch")
+						{
+							getUser.Snatch = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "deadlift")
+						{
+							getUser.Deadlift = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "cleanjerk")
+						{
+							getUser.CleanAndJerk = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "workoutsCompleted")
+						{
+							getUser.WorkoutsCompleted = Int16.Parse(userKey.Value.ToString());
+						}
+					}
 
 
 					string getResponse = string.Empty;
@@ -327,11 +373,12 @@ namespace BBAPI.Controllers
 							getResponse = getResponse + data[i] + ",";
 						}
 					}
-					return new HashEntry[] { new HashEntry("data", getResponse) };
+
+					return getUser;
 
 				case -4:
 				default:
-					return new HashEntry[] { new HashEntry("error", "Try/Catch Error on Email Verification") };
+					return null;
 			}
 		}
 
