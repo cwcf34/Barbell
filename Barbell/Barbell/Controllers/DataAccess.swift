@@ -1,4 +1,4 @@
-//
+    //
 //  DataAccess.swift
 //  Barbell
 //
@@ -892,14 +892,10 @@ public class DataAccess {
                     user.email = token[1]
                 }
                 if token[0] == "age"{
-
-                    
-                    var ageTokens = token[1].components(separatedBy: "\"")
-                    //token[1].remove(at: token[1].endIndex)
-                    ageTokens[0].remove(at: ageTokens[0].startIndex)
-                    user.age = Int16(ageTokens[0])!
+                    token[1].remove(at: token[1].startIndex)
+                    user.age = Int16(token[1])!
                 }
-                if token[0] == "weight"{
+                if token[0] == "\"weight"{
                     
                     token[1].remove(at: token[1].startIndex)
                     user.weight = Int16(token[1])!
@@ -931,10 +927,10 @@ public class DataAccess {
                     user.snatch = Int16(token[1])!
                 }
                 if token[0] == "workoutsCompleted"{
-
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.workoutsCompleted = Int16(token[1])!
+                    var ageTokens = token[1].components(separatedBy: "\"")
+                    //token[1].remove(at: token[1].endIndex)
+                    ageTokens[0].remove(at: ageTokens[0].startIndex)
+                    user.workoutsCompleted = Int16(ageTokens[0])!
                 }
             }
         }
