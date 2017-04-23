@@ -38,33 +38,33 @@ public class DataAccess {
             "content-type": "application/json"
         ]
         
-
+        
         
         request.allHTTPHeaderFields = headers
         let sem = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                    guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                    print("error=\(error)")
-                    return
-                }
-                
-                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                    print("\nREgister response = \(response)\n")
-                }
-                
-                responseString = String(data: data, encoding: .utf8)!
-                
-                if(responseString == "\"true\""){
-                    result = true
-                } else{
-                    result = false
-                }
-                
-                sem.signal()
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
             }
             
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("\nREgister response = \(response)\n")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            if(responseString == "\"true\""){
+                result = true
+            } else{
+                result = false
+            }
+            
+            sem.signal()
+        }
+        
         task.resume()
         sem.wait()
         
@@ -118,7 +118,7 @@ public class DataAccess {
                 }
                 
                 
-                    
+                
                 // check for http errors
                 if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
                     print("statusCode should be 200, but is \(httpStatus.statusCode)")
@@ -177,7 +177,7 @@ public class DataAccess {
         
         //access token and refresh token expire in 60m/3600s
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3000)) {
-        
+            
             //refresh both tokens 50m/3000s after register or login to be safe
             refreshAuthToken(token: refreshToken)
             
@@ -355,7 +355,7 @@ public class DataAccess {
                                 //add searched Routine to searchedResults LIst
                                 searchedRoutines.append(newRoutine)
                             }
-
+                            
                         }
                         
                     }
@@ -418,7 +418,7 @@ public class DataAccess {
                 for eachRoutine in json {
                     
                     let newRoutine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
-                
+                    
                     
                     for (key,value) in eachRoutine{
                         if (key == "numWeeks"){
@@ -470,7 +470,7 @@ public class DataAccess {
                     //newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)
-
+                    
                 }
             }
         }
@@ -479,7 +479,7 @@ public class DataAccess {
         //print("Hopefully no square brackets: " + responseString)
         
         CoreDataController.saveContext()
-
+        
         return allRoutines
     }
     
@@ -487,7 +487,7 @@ public class DataAccess {
     
     class func getWorkoutForRoutineFromRedis (routineId: Int16) -> [Workout]  {
         if let user = CoreDataController.getUser() as? User {
-        
+            
             var request = URLRequest(url: URL(string: apiURL + "workout/\(user.email!)/\(routineId)/")!)
             
             print("\n\nNEW WORKOUT REQUEST\(request)\n")
@@ -523,7 +523,7 @@ public class DataAccess {
             
             task.resume()
             sem.wait()
-
+            
             
             var allWorkouts = [Workout]()
             var count = 0
@@ -605,7 +605,7 @@ public class DataAccess {
                             newWorkout.addToHasExercises(addingList)
                             
                             allWorkouts.append(newWorkout)
-
+                            
                         }else{
                             print("empty workout day")
                         }
@@ -618,9 +618,9 @@ public class DataAccess {
             return allWorkouts
         }
     }
-
-    class func editRoutineinRedis (routine: Routine) -> Bool {
     
+    class func editRoutineinRedis (routine: Routine) -> Bool {
+        
         let user : User = CoreDataController.getUser()
         
         var putString = ""
@@ -656,19 +656,19 @@ public class DataAccess {
             guard let data = data, error == nil else {                                   // check for fundamental networking error
                 print("error=\(error)")
                 return
-        }
-        
-        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-            print("statusCode should be 200, but is \(httpStatus.statusCode)")
-            print("response = \(response)")
-        }
-        
-        responseString = String(data: data, encoding: .utf8)!
-        
-        print("Did save routine to redis?  " + responseString)
-        
-        
-        sem.signal()
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            responseString = String(data: data, encoding: .utf8)!
+            
+            print("Did save routine to redis?  " + responseString)
+            
+            
+            sem.signal()
         }
         
         task.resume()
@@ -688,9 +688,9 @@ public class DataAccess {
         return true
         
     }
-
-
-
+    
+    
+    
     class func sendRoutineToRedis (routine: Routine) -> Bool {
         
         let user : User = CoreDataController.getUser()
@@ -777,7 +777,7 @@ public class DataAccess {
     }
     
     class func sendLiftToRedis (liftModel: LiftModel) -> Bool {
-     
+        
         let user : User = CoreDataController.getUser()
         
         var postString = ""
@@ -887,7 +887,7 @@ public class DataAccess {
                     user.email = token[1]
                 }
                 if token[0] == "age"{
-
+                    
                     
                     var ageTokens = token[1].components(separatedBy: "\"")
                     //token[1].remove(at: token[1].endIndex)
@@ -905,7 +905,7 @@ public class DataAccess {
                     user.squat = Int16(token[1])!
                 }
                 if token[0] == "bench"{
-                   
+                    
                     token[1].remove(at: token[1].startIndex)
                     user.bench = Int16(token[1])!
                 }
@@ -926,7 +926,7 @@ public class DataAccess {
                     user.snatch = Int16(token[1])!
                 }
                 if token[0] == "workoutsCompleted"{
-
+                    
                     
                     token[1].remove(at: token[1].startIndex)
                     user.workoutsCompleted = Int16(token[1])!
@@ -934,82 +934,82 @@ public class DataAccess {
             }
         }
         /*
-        if let data = responseString.data(using: .utf8) as? Data{
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
-                //print("JSONFULL == \(json)\n\n")
-                
-                    
-                let newUser : User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
-                
-                
-                for (key,value) in newUser{
-                    if (key == "age"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                newUser.age = castedValue
-                            }
-                        }
-                    }
-                    if (key == "weight"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.weight = castedValue
-                            }
-                        }
-                    }
-                    if (key == "bench"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.bench = castedValue
-                            }
-                        }
-                    }
-                    if (key == "deadlift"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.deadlift = castedValue
-                            }
-                        }
-                    }
-                    if (key == "squat"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.squat = castedValue
-                            }
-                        }
-                    }
-                    if (key == "snatch"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.snatch = castedValue
-                            }
-                        }
-                    }
-                    if (key == "cleanjerk"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.cleanAndJerk = castedValue
-                            }
-                        }
-                    }
-                    if (key == "workoutsCompleted"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.workoutsCompleted = castedValue
-                            }
-                        }
-                    }
-                    if (key == "Name"){
-                        let nameTokens = value.components(separatedBy: " ")
-                        user.fname = nameTokens[1]
-                        user.lname = nameTokens[2]
-                    }
-                
-                }*/
-                /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
+         if let data = responseString.data(using: .utf8) as? Data{
+         if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+         //print("JSONFULL == \(json)\n\n")
+         
+         
+         let newUser : User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
+         
+         
+         for (key,value) in newUser{
+         if (key == "age"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         newUser.age = castedValue
+         }
+         }
+         }
+         if (key == "weight"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         user.weight = castedValue
+         }
+         }
+         }
+         if (key == "bench"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         user.bench = castedValue
+         }
+         }
+         }
+         if (key == "deadlift"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         user.deadlift = castedValue
+         }
+         }
+         }
+         if (key == "squat"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         user.squat = castedValue
+         }
+         }
+         }
+         if (key == "snatch"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         user.snatch = castedValue
+         }
+         }
+         }
+         if (key == "cleanjerk"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         user.cleanAndJerk = castedValue
+         }
+         }
+         }
+         if (key == "workoutsCompleted"){
+         if let value = value as? String{
+         if let castedValue = Int16(value){
+         user.workoutsCompleted = castedValue
+         }
+         }
+         }
+         if (key == "Name"){
+         let nameTokens = value.components(separatedBy: " ")
+         user.fname = nameTokens[1]
+         user.lname = nameTokens[2]
+         }
+         
+         }*/
+        /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
         
-            CoreDataController.saveContext()
-            return
+        CoreDataController.saveContext()
+        return
         
     }
     
@@ -1025,8 +1025,8 @@ public class DataAccess {
         }
         
         /*for redisRoutine in redisRoutines{
-            print("redis routine id:  " + String(redisRoutine.id))
-        }*/
+         print("redis routine id:  " + String(redisRoutine.id))
+         }*/
         for coreRoutine in coreRoutines{
             print("core routine id: " + String(coreRoutine.id))
             if coreRoutine.id == 0 {
@@ -1042,7 +1042,7 @@ public class DataAccess {
                     isInCore = true
                     break
                 }
-               
+                
             }
             if isInCore == false {
                 deleteRoutineFromRedis(routine: redisRoutine)
@@ -1097,7 +1097,7 @@ public class DataAccess {
                     
                     
                     for (key,value) in eachRoutine{
-
+                        
                         if (key == "Id"){
                             if let value = value as? String{
                                 if let castedValue = Int16(value){
@@ -1151,7 +1151,7 @@ public class DataAccess {
         sem.wait()
         
     }
-
+    
     class func saveUserToRedis(email : String){
         let user = CoreDataController.getUser()
         print(email)
@@ -1170,9 +1170,9 @@ public class DataAccess {
             let snatch = String(user.snatch) as? String,
             let cleanAndJerk = String(user.cleanAndJerk) as? String,
             let workoutsCompleted = String(user.workoutsCompleted) as? String{
-        
-
-        putString = "\"{name:\(fname) " + "\(lname)" + "," + "password:" + "," + "age:\(age)" + "," + "weight:\(weight)" + "," + "squat:\(squat)" + "," + "bench:\(bench)" + "," + "deadlift:\(deadlift)" + "," + "snatch:\(snatch)" + "," + "cleanjerk:\(cleanAndJerk)" + "," + "workoutsCompleted:\(workoutsCompleted)}\" "
+            
+            
+            putString = "\"{name:\(fname) " + "\(lname)" + "," + "password:" + "," + "age:\(age)" + "," + "weight:\(weight)" + "," + "squat:\(squat)" + "," + "bench:\(bench)" + "," + "deadlift:\(deadlift)" + "," + "snatch:\(snatch)" + "," + "cleanjerk:\(cleanAndJerk)" + "," + "workoutsCompleted:\(workoutsCompleted)}\" "
         }
         //let postString = "\"{name:\(registerInfo.firstName) " + "\(registerInfo.lastName)" + "," + "password:\(registerInfo.password)}\" "
         
@@ -1184,14 +1184,14 @@ public class DataAccess {
         ]
         
         print(putString)
-    
+        
         let postDATA:Data = putString.data(using: String.Encoding.utf8)!
         
         request.httpBody = postDATA
         request.allHTTPHeaderFields = headers
-
+        
         let sem = DispatchSemaphore(value: 0)
-
+        
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {                                                 // check for fundamental networking error
                 print("error=\(error)")
@@ -1210,7 +1210,7 @@ public class DataAccess {
             
             sem.signal()
         }
-
+        
         task.resume()
         sem.wait()
         return
@@ -1251,7 +1251,7 @@ public class DataAccess {
         
         task.resume()
         sem.wait()
-       
+        
         if let data = responseString.data(using: .utf8) as? Data{
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
                 //print("JSONFULL == \(json)\n\n")
@@ -1295,14 +1295,15 @@ public class DataAccess {
         let user = CoreDataController.getUser()
         let achievements = CoreDataController.getAchievements()
         var postString = ""
-
+        
         var request = URLRequest(url: URL(string: apiURL + "achievement/\(user.email!)/")!)
         
         request.httpMethod = "POST"
         
+        
         for achievement in achievements{
             postString = "\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
-             print(postString)
+            print(postString)
             
             let postDATA:Data = postString.data(using: String.Encoding.utf8)!
             request.httpBody = postDATA
@@ -1339,8 +1340,11 @@ public class DataAccess {
         }
     }
     
-    class func getHistoryfromRedis(email : String){
-        var request = URLRequest(url: URL(string: apiURL + "achievement/\(email)/")!)
+    class func getHistoryfromRedis(email : String, pastlift: String) -> [LegacyLift]{
+        var request = URLRequest(url: URL(string: apiURL + "exercise/\(email)/?exercise=\(pastlift)")!)
+        
+        var liftData = [LegacyLift]()
+        
         request.httpMethod = "GET"
         var responseString = ""
         
@@ -1366,7 +1370,7 @@ public class DataAccess {
             
             responseString = String(data: data, encoding: .utf8)!
             
-            print("\nGet achievement response \(responseString)\n")
+            print("\nGet ExerciseData for \(pastlift) response \(responseString)\n")
             
             
             sem.signal()
@@ -1383,48 +1387,45 @@ public class DataAccess {
                     
                     let newHistory : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
                     
+                    newHistory.liftName = pastlift
                     
                     for (key,value) in eachHistory{
-                        if (key == "reps"){
+                        if (key == "Reps"){
                             if let value = value as? String{
                                 if let castedValue = Int16(value){
                                     newHistory.liftRep = castedValue
                                 }
                             }
                         }
-                        if (key == "weight"){
+                        if (key == "Weight"){
                             if let value = value as? String{
                                 if let castedValue = Int16(value){
                                     newHistory.liftWeight = castedValue
                                 }
                             }
                         }
-                        if (key == "sets"){
+                        if (key == "Sets"){
                             if let value = value as? String{
                                 if let castedValue = Int16(value){
                                     newHistory.liftSets = castedValue
                                 }
                             }
                         }
-                        if (key == "Name"){
-                            if let value = value as? String{
-                                print("Found routine named in redis" + value)
-                                newHistory.liftName = value
-                            }
-                        }
-                        if (key == "date"){
+                        if (key == "Date"){
                             let formatter = DateFormatter()
                             formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
                             formatter.locale = Locale.init(identifier: "en_GB")
                             let dateObj = formatter.date(from: value as! String)
-                            newHistory.timeStamp = dateObj as! NSDate
+                            newHistory.timeStamp = dateObj! as NSDate
                         }
                     }
                     /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
+                    liftData.append(newHistory)
                 }
             }
         }
         CoreDataController.saveContext()
+        return liftData
     }
     
     class func saveHistoryToRedis(){
@@ -1432,46 +1433,49 @@ public class DataAccess {
         let history = CoreDataController.getHistory()
         var postString = ""
         
-        var request = URLRequest(url: URL(string: apiURL + "achievement/\(user.email!)/")!)
+        var request = URLRequest(url: URL(string: apiURL + "exercise/\(user.email!)/")!)
         
-        request.httpMethod = "POST"
+        request.httpMethod = "PUT"
         
         for lift in history{
-            postString = ""//fix this string!!"\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
-            print(postString)
-            
-            let postDATA:Data = postString.data(using: String.Encoding.utf8)!
-            request.httpBody = postDATA
-            var responseString = ""
-            let headers = [
-                "Content-Type": "application/json",
-                "Authorization": self.accessToken
-            ]
-            
-            request.allHTTPHeaderFields = headers
-            let sem = DispatchSemaphore(value: 0)
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                    print("error=\(error)")
-                    return
+            if let lift = lift as? LegacyLift{
+                postString = "\"{date:\(lift.timeStamp),exercise:\(lift.liftName),sets:\(lift.liftSets),reps:\(lift.liftRep),weight:\(lift.liftWeight)}\""
+                
+                print(postString)
+                
+                let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+                request.httpBody = postDATA
+                var responseString = ""
+                let headers = [
+                    "Content-Type": "application/json",
+                    "Authorization": self.accessToken
+                ]
+                
+                request.allHTTPHeaderFields = headers
+                let sem = DispatchSemaphore(value: 0)
+                
+                let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                    guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                        print("error=\(error)")
+                        return
+                    }
+                    
+                    if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                        print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                        print("response = \(response)")
+                    }
+                    
+                    responseString = String(data: data, encoding: .utf8)!
+                    
+                    print("Did save Historic lift " + lift.liftName! + String(describing: lift.timeStamp) + " to redis?  " + responseString)
+                    
+                    
+                    sem.signal()
                 }
                 
-                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                    print("response = \(response)")
-                }
-                
-                responseString = String(data: data, encoding: .utf8)!
-                
-                print("Did save Historic lift " + lift.liftName! + String(describing: lift.timeStamp) + " to redis?  " + responseString)
-                
-                
-                sem.signal()
+                task.resume()
+                sem.wait()
             }
-            
-            task.resume()
-            sem.wait()
         }
     }
 }
