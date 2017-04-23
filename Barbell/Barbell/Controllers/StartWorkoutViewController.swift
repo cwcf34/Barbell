@@ -93,14 +93,16 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func nextExercise(_ sender: Any) {
         if(hasFinished == true){
-            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
-            finished.liftName = liftsInWorkout[i].name
-            finished.liftRep = liftsInWorkout[i].reps
-            finished.liftSets = liftsInWorkout[i].sets
-            finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate
+            CoreDataController.maybeSaveHistory(name: liftsInWorkout[i].name!, reps: liftsInWorkout[i].reps, sets: liftsInWorkout[i].sets, weight: liftsInWorkout[i].weight)
             
             user.workoutsCompleted += 1
+            
+            
+            let workoutArray = routinePassed.workouts?.allObjects as! [Workout]
+            if workoutPassed === workoutArray.last{
+                print("Last workout in routine completed")
+                routinePassed.isFinished = true
+            }
             
             if user.workoutsCompleted == 100{
                 CoreDataController.newAchievement(achievementNumber: 1)
@@ -111,6 +113,10 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
             else if user.workoutsCompleted == 300{
                 CoreDataController.newAchievement(achievementNumber: 3)
             }
+            
+            liftsInWorkout[i].sets = Int16(CompletedSetsTextArea.text!)!
+            liftsInWorkout[i].reps = Int16(CompletedRepsTextArea.text!)!
+            liftsInWorkout[i].weight = Int16(CompletedWeightTextArea.text!)!
             
             if liftsInWorkout[i].name! == "Bench Press" && Int16(CompletedWeightTextArea.text!)! > user.bench{
                 user.bench = Int16(CompletedWeightTextArea.text!)!
@@ -161,14 +167,12 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
         }else{
             i += 1
             viewWillAppear(true)
-            let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
-            finished.liftName = liftsInWorkout[i].name
-            finished.liftRep = liftsInWorkout[i].reps
-            finished.liftSets = liftsInWorkout[i].sets
-            finished.liftWeight = liftsInWorkout[i].weight
-            finished.timeStamp = Date() as NSDate
+            CoreDataController.maybeSaveHistory(name: liftsInWorkout[i-1].name!, reps: liftsInWorkout[i-1].reps, sets: liftsInWorkout[i-1].sets, weight: liftsInWorkout[i-1].weight)
+           
             
-            print(liftsInWorkout[i-1].name! + String(describing: CompletedWeightTextArea.text!))
+            liftsInWorkout[i-1].sets = Int16(CompletedSetsTextArea.text!)!
+            liftsInWorkout[i-1].reps = Int16(CompletedRepsTextArea.text!)!
+            liftsInWorkout[i-1].weight = Int16(CompletedWeightTextArea.text!)!
             
             if liftsInWorkout[i-1].name! == "Bench Press" && Int16(CompletedWeightTextArea.text!)! > user.bench{
                 user.bench = Int16(CompletedWeightTextArea.text!)!

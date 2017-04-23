@@ -443,6 +443,11 @@ public class DataAccess {
                                 }
                             }
                         }
+                        if (key == "creator"){
+                            if let value = value as? String{
+                                newRoutine.creator = value
+                            }
+                        }
                         
                         //getting exercises for every workoutday
                         if (key == "Id"){
@@ -466,7 +471,7 @@ public class DataAccess {
                         }
                     }
                     
-                    //newRoutine.creator = user.fname! + user.lname!
+                    newRoutine.creator = user.fname! + user.lname!
                     //newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)
@@ -482,8 +487,6 @@ public class DataAccess {
         
         return allRoutines
     }
-    
-    
     
     class func getWorkoutForRoutineFromRedis (routineId: Int16) -> [Workout]  {
         if let user = CoreDataController.getUser() as? User {
@@ -689,8 +692,6 @@ public class DataAccess {
         
     }
     
-    
-    
     class func sendRoutineToRedis (routine: Routine) -> Bool {
         
         let user : User = CoreDataController.getUser()
@@ -874,70 +875,6 @@ public class DataAccess {
         //let tokens = responseString.components(separatedBy: ",")
         //var token = [String]()
         if let user = user as? User {
-            
-            /*
-            for i in tokens{
-                var token = i.components(separatedBy: ":")
-                if token[0] == "name"{
-                    token[0].remove(at: token[0].startIndex)
-                    let nameTokens = token[1].components(separatedBy: " ")
-                    user.fname = nameTokens[1]
-                    user.lname = nameTokens[2]
-                }
-                if token[0] == "email"{
-                    token[1].remove(at: token[1].startIndex)
-                    user.email = token[1]
-                }
-                if token[0] == "age"{
-                    
-                    
-                    var ageTokens = token[1].components(separatedBy: "\"")
-                    //token[1].remove(at: token[1].endIndex)
-                    ageTokens[0].remove(at: ageTokens[0].startIndex)
-                    user.age = Int16(ageTokens[0])!
-                }
-                if token[0] == "weight"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.weight = Int16(token[1])!
-                }
-                if token[0] == "squat"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.squat = Int16(token[1])!
-                }
-                if token[0] == "bench"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.bench = Int16(token[1])!
-                }
-                if token[0] == "deadlift"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.deadlift = Int16(token[1])!
-                    
-                }
-                if token[0] == "cleanjerk"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.cleanAndJerk = Int16(token[1])!
-                }
-                if token[0] == "\"snatch"{
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.snatch = Int16(token[1])!
-                }
-                if token[0] == "workoutsCompleted"{
-                    
-                    
-                    token[1].remove(at: token[1].startIndex)
-                    user.workoutsCompleted = Int16(token[1])!
-                }
-            } */
-            
-            
-        
-        
             if let data = responseString.data(using: .utf8){
                 if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any]{
                     print("\nUSERJSON == \(json)\n\n")
@@ -1002,11 +939,8 @@ public class DataAccess {
             /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
             }
         }
+        
         CoreDataController.saveContext()
-        
-        
-        print(user)
-        
         return
         
     }
@@ -1437,7 +1371,28 @@ public class DataAccess {
         
         for lift in history{
             if let lift = lift as? LegacyLift{
-                postString = "\"{date:\(lift.timeStamp),exercise:\(lift.liftName),sets:\(lift.liftSets),reps:\(lift.liftRep),weight:\(lift.liftWeight)}\""
+
+                postString = "\"{date:\(lift.timeStamp)" + "," + "exercise:\(lift.liftName)" + "," + "sets:\(lift.liftSets)" + "," + "reps:\(lift.liftRep)" + "," + "weight:\(lift.liftWeight)}\" "
+        
+
+            print(postString)
+            
+            let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+            request.httpBody = postDATA
+            var responseString = ""
+            let headers = [
+                "Content-Type": "application/json",
+                "Authorization": self.accessToken
+            ]
+            
+            request.allHTTPHeaderFields = headers
+            let sem = DispatchSemaphore(value: 0)
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                    print("error=\(error)")
+                    return
+                }
                 
                 print(postString)
                 
@@ -1476,4 +1431,6 @@ public class DataAccess {
             }
         }
     }
+}
+    
 }
