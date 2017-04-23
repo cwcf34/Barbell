@@ -940,7 +940,7 @@ public class DataAccess {
                     }
                     
                 }
-                /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
+            /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
             }
         }
         
