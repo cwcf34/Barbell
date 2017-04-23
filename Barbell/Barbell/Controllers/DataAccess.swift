@@ -871,9 +871,11 @@ public class DataAccess {
         task.resume()
         sem.wait()
         
-        let tokens = responseString.components(separatedBy: ",")
-        //var token = [String]()B
+        //let tokens = responseString.components(separatedBy: ",")
+        //var token = [String]()
         if let user = user as? User {
+            
+            /*
             for i in tokens{
                 var token = i.components(separatedBy: ":")
                 if token[0] == "name"{
@@ -931,84 +933,80 @@ public class DataAccess {
                     token[1].remove(at: token[1].startIndex)
                     user.workoutsCompleted = Int16(token[1])!
                 }
+            } */
+            
+            
+        
+        
+            if let data = responseString.data(using: .utf8){
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any]{
+                    print("\nUSERJSON == \(json)\n\n")
+             
+                    
+                        for (key,value) in json {
+                            if (key == "Age"){
+                                if let value = value as? Int16{
+                                    user.age = value
+                                }
+                             }
+                             else if (key == "Weight"){
+                                if let value = value as? Int16{
+                                    user.weight = value
+                                }
+                             }
+                             else if (key == "Bench"){
+                                if let value = value as? Int16{
+                                    user.bench = value
+                                }
+                             }
+                             else if (key == "Deadlift"){
+                                if let value = value as? Int16{
+                                    user.deadlift = value
+                                }
+                             }
+                             else if (key == "Squat"){
+                                if let value = value as? Int16{
+                                    user.squat = value
+                                }
+                             }
+                             else if (key == "Snatch"){
+                                if let value = value as? Int16{
+                                    user.snatch = value
+                                }
+                             }
+                             else if (key == "CleanAndJerk"){
+                                if let value = value as? Int16{
+                                    user.cleanAndJerk = value
+                                }
+                             }
+                             else if (key == "WorkoutsCompleted"){
+                                if let value = value as? Int16{
+                                    user.workoutsCompleted = value
+                                }
+                             }
+                             else if (key == "Email"){
+                                if let value = value as? String{
+                                    user.email = value
+                                }
+                            }
+                            else if (key == "Name"){
+                                if let value = value as? String{
+                                    var name = value.components(separatedBy: " ")
+                                    user.fname = name[0]
+                                    user.lname = name[1]
+                                }
+                            }
+                        }
+                    
+                }
+            /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
             }
         }
-        /*
-         if let data = responseString.data(using: .utf8) as? Data{
-         if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
-         //print("JSONFULL == \(json)\n\n")
-         
-         
-         let newUser : User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
-         
-         
-         for (key,value) in newUser{
-         if (key == "age"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         newUser.age = castedValue
-         }
-         }
-         }
-         if (key == "weight"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         user.weight = castedValue
-         }
-         }
-         }
-         if (key == "bench"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         user.bench = castedValue
-         }
-         }
-         }
-         if (key == "deadlift"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         user.deadlift = castedValue
-         }
-         }
-         }
-         if (key == "squat"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         user.squat = castedValue
-         }
-         }
-         }
-         if (key == "snatch"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         user.snatch = castedValue
-         }
-         }
-         }
-         if (key == "cleanjerk"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         user.cleanAndJerk = castedValue
-         }
-         }
-         }
-         if (key == "workoutsCompleted"){
-         if let value = value as? String{
-         if let castedValue = Int16(value){
-         user.workoutsCompleted = castedValue
-         }
-         }
-         }
-         if (key == "Name"){
-         let nameTokens = value.components(separatedBy: " ")
-         user.fname = nameTokens[1]
-         user.lname = nameTokens[2]
-         }
-         
-         }*/
-        /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
-        
         CoreDataController.saveContext()
+        
+        
+        print(user)
+        
         return
         
     }
