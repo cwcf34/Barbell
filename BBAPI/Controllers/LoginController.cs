@@ -5,7 +5,7 @@ namespace BBAPI.Controllers
 	public class LoginController : ApiController
 	{
 		//use singleton
-		readonly RedisDB redisCache = RedisDB._instance;
+		//readonly RedisDB redisCache = RedisDB._instance;
 
         
 		//login is a post request

@@ -48,6 +48,22 @@ namespace BBAPI.Controllers
 			cache.HashSet(key, new HashEntry[] { new HashEntry("name", name), new HashEntry("email", email), new HashEntry("password", securePassword), new HashEntry("age", 0), new HashEntry("weight", 0), new HashEntry("squat", 0), new HashEntry("bench", 0), new HashEntry("deadlift", 0), new HashEntry("snatch", 0), new HashEntry("cleanjerk", 0), new HashEntry("workoutsCompleted", 0) });
 		}
 
+		public bool createAchievemntHash(string key, string date)
+		{
+			try
+			{
+				//Add a field to the hash for that achievement with the key as the "date" and the date as the data from the completed achievement
+				cache.HashSet(key, new HashEntry[] { new HashEntry("date", date) });
+			}
+			catch
+			{
+				//An exception occured
+				return false;
+			}
+			//Success
+			return true;
+		}
+
 		public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
 		{
 			//creates hash data for routine
@@ -148,6 +164,45 @@ namespace BBAPI.Controllers
 			return data.ToArray();
 		}
 
+		public List<Achievement> getAchievements(string key)
+		{
+			
+			var newHash = new HashEntry[] { };
+			var returnData = new List<Achievement>();
+
+
+
+			for (var i = 1; i < 6; i++)
+			{
+				var keyWithId = key + i.ToString();
+
+				var data = cache.HashGetAll(keyWithId);
+
+				if (data != newHash)
+				{
+					var newAch = new Achievement();
+
+					foreach (var field in data)
+					{
+						if (field.Name.ToString().Equals("date"))
+						{
+							newAch.Date = field.Value.ToString();
+						}
+
+						newAch.Id = i.ToString();
+
+						returnData.Add(newAch);
+					}
+				}
+				else
+				{
+					returnData.Add(new Achievement());
+				}
+			}
+
+			return returnData;
+		}
+
 		public string validateUserPass(string key)
 		{
 			return cache.HashGet(key, "password");
@@ -157,7 +212,7 @@ namespace BBAPI.Controllers
 
 		public List<Routine> searchForRoutine(string name) {
 
-			var data = cacheServer.Keys(0, "user:[A-Za-z@.]*:[^:][^:][^:][^:][^:]");
+			var data = cacheServer.Keys(0, "user:[A-Za-z@.]*:[0-9]*[^:]?");
 
 			var returnData = new List<Routine>();
 
@@ -170,6 +225,7 @@ namespace BBAPI.Controllers
 					{
 						if (field.Name.ToString().Equals("name") && field.Value.ToString().ToLower().Contains(name.ToLower()))
 						{
+							//if isPublic is true
 							if (routineData[3].Value.ToString().Equals("1")) {
 								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value, creator = routineData[4].Value });
 							}
@@ -180,6 +236,17 @@ namespace BBAPI.Controllers
 			}
 
 			return returnData;
+		}
+
+		public void deleteWorkouts(string query)
+		{
+			var data = cacheServer.Keys(0, query);
+
+
+			foreach (var key in data)
+			{
+				cache.KeyDelete(key);
+			}
 
 		}
 
@@ -221,7 +288,7 @@ namespace BBAPI.Controllers
 		/// <returns>The user data.</returns>
 		/// <param name="email">Email.</param>
 
-		public HashEntry[] getUserHashData(string email)
+		public User getUserHashData(string email)
 		{
 			//check if email is verifyed in Redis
 			int emailVerifyResponse = emailVerify(email);
@@ -229,13 +296,13 @@ namespace BBAPI.Controllers
 			switch (emailVerifyResponse)
 			{
 				case 1: //no email exists
-					return new HashEntry[] { new HashEntry("error", "User not found.") };
+					return null;
 
 				case -1: //empty field email
-					return new HashEntry[] { new HashEntry("error", "Email field empty.") };
+					return null;
 
 				case -2: //incorrect email format
-					return new HashEntry[] { new HashEntry("error", "Email not formatted correctly.") };
+					return null;
 
 				case -3: //YAY email exists
 
@@ -245,6 +312,56 @@ namespace BBAPI.Controllers
 					//new empty Hash to pass data
 					var data = new HashEntry[] { };
 					data = cache.HashGetAll(key);
+
+					var getUser = new User();
+
+					foreach (var userKey in data)
+					{
+						if (userKey.Name.ToString() == "name")
+						{
+							getUser.Name = userKey.Value.ToString();
+						}
+						else if (userKey.Name.ToString() == "email")
+						{
+							getUser.Email = userKey.Value.ToString();
+						}
+						else if (userKey.Name.ToString() == "age")
+						{
+							getUser.Age = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "weight")
+						{
+							getUser.Weight = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "bench")
+						{
+							getUser.Bench = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "squat")
+						{
+							getUser.Squat = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "snatch")
+						{
+							getUser.Snatch = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "deadlift")
+						{
+							getUser.Deadlift = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "cleanjerk")
+						{
+							getUser.CleanAndJerk = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "workoutsCompleted")
+						{
+							getUser.WorkoutsCompleted = Int16.Parse(userKey.Value.ToString());
+						}
+						else if (userKey.Name.ToString() == "password")
+						{
+							getUser.Password = userKey.Value.ToString();
+						}
+					}
 
 
 					string getResponse = string.Empty;
@@ -260,11 +377,12 @@ namespace BBAPI.Controllers
 							getResponse = getResponse + data[i] + ",";
 						}
 					}
-					return new HashEntry[] { new HashEntry("data", getResponse) };
+
+					return getUser;
 
 				case -4:
 				default:
-					return new HashEntry[] { new HashEntry("error", "Try/Catch Error on Email Verification") };
+					return null;
 			}
 		}
 

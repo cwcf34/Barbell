@@ -58,7 +58,6 @@ class LoginViewController: UIViewController {
                 //Add user info to persistent Database
                 DataAccess.getUserfromRedis(email: email.text!)
                 DataAccess.getAchievementsfromRedis(email: email.text!)
-                DataAccess.getHistoryfromRedis(email: email.text!)
                 _ = DataAccess.getRoutinesFromRedis()
                 
             }
