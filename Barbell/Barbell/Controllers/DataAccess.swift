@@ -438,6 +438,11 @@ public class DataAccess {
                                 }
                             }
                         }
+                        if (key == "creator"){
+                            if let value = value as? String{
+                                newRoutine.creator = value
+                            }
+                        }
                         
                         //getting exercises for every workoutday
                         if (key == "Id"){
@@ -461,7 +466,7 @@ public class DataAccess {
                         }
                     }
                     
-                    //newRoutine.creator = user.fname! + user.lname!
+                    newRoutine.creator = user.fname! + user.lname!
                     //newRoutine.addToUsers(user)
                     
                     allRoutines.append(newRoutine)
@@ -928,83 +933,9 @@ public class DataAccess {
                 }
             }
         }
-        /*
-        if let data = responseString.data(using: .utf8) as? Data{
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
-                //print("JSONFULL == \(json)\n\n")
-                
-                    
-                let newUser : User = NSEntityDescription.insertNewObject(forEntityName: "User", into: CoreDataController.getContext()) as! User
-                
-                
-                for (key,value) in newUser{
-                    if (key == "age"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                newUser.age = castedValue
-                            }
-                        }
-                    }
-                    if (key == "weight"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.weight = castedValue
-                            }
-                        }
-                    }
-                    if (key == "bench"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.bench = castedValue
-                            }
-                        }
-                    }
-                    if (key == "deadlift"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.deadlift = castedValue
-                            }
-                        }
-                    }
-                    if (key == "squat"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.squat = castedValue
-                            }
-                        }
-                    }
-                    if (key == "snatch"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.snatch = castedValue
-                            }
-                        }
-                    }
-                    if (key == "cleanjerk"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.cleanAndJerk = castedValue
-                            }
-                        }
-                    }
-                    if (key == "workoutsCompleted"){
-                        if let value = value as? String{
-                            if let castedValue = Int16(value){
-                                user.workoutsCompleted = castedValue
-                            }
-                        }
-                    }
-                    if (key == "Name"){
-                        let nameTokens = value.components(separatedBy: " ")
-                        user.fname = nameTokens[1]
-                        user.lname = nameTokens[2]
-                    }
-                
-                }*/
-                /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
         
-            CoreDataController.saveContext()
-            return
+        CoreDataController.saveContext()
+        return
         
     }
     
@@ -1427,12 +1358,14 @@ public class DataAccess {
         let history = CoreDataController.getHistory()
         var postString = ""
         
-        var request = URLRequest(url: URL(string: apiURL + "achievement/\(user.email!)/")!)
+        var request = URLRequest(url: URL(string: apiURL + "exercise/\(user.email!)/")!)
         
-        request.httpMethod = "POST"
+        request.httpMethod = "PUT"
         
         for lift in history{
-            postString = ""//fix this string!!"\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
+            postString = "\"{date:\(lift.timeStamp)" + "," + "exercise:\(lift.liftName)" + "," + "sets:\(lift.liftSets)" + "," + "reps:\(lift.liftRep)" + "," + "weight:\(lift.liftWeight)}\" "
+        
+
             print(postString)
             
             let postDATA:Data = postString.data(using: String.Encoding.utf8)!
