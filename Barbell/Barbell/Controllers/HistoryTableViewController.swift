@@ -33,6 +33,15 @@ class HistoryTableViewController: UITableViewController {
         let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
         do{
             foundRoutines = try context.fetch(fetchRequest)
+            var counter = 0
+            for foundRoutine in foundRoutines{
+                if foundRoutine.isFinished == false{
+                    foundRoutines.remove(at: counter)
+                }
+                else{
+                    counter += 1
+                }
+            }
             
         }catch{
             print("Bad getExercise query")

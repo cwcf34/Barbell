@@ -34,6 +34,13 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
         let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
         do{
             foundRoutines = try context.fetch(fetchRequest)
+            var counter = 0
+            for foundRoutine in foundRoutines{
+                if foundRoutine.isFinished == true{
+                    foundRoutines.remove(at: counter)
+                }
+                counter += 1
+            }
             
         }catch{
             print("Bad getExercise query")
@@ -55,6 +62,7 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
                 print("Bad getExercise query")
             }
         }
+        
         
         self.tableView.reloadData()
     }
