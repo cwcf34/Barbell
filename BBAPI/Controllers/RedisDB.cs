@@ -357,6 +357,10 @@ namespace BBAPI.Controllers
 						{
 							getUser.WorkoutsCompleted = Int16.Parse(userKey.Value.ToString());
 						}
+						else if (userKey.Name.ToString() == "password")
+						{
+							getUser.Password = userKey.Value.ToString();
+						}
 					}
 
 
