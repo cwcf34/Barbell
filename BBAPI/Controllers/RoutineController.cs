@@ -181,6 +181,12 @@ namespace BBAPI.Controllers
 			//create key
 			if (redisCache.deleteRoutineItem("user:"+email+":routines", id) != 0)
 			{
+				//workout deletion key
+				var key = "user:" + email + ":" + id;
+
+				//delete the workouts
+				redisCache.deleteWorkouts(key + ":*");
+
 				return Ok(true);
 			}
 			else
