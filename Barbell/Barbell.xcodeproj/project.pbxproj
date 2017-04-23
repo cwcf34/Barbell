@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2424EA4A1EA9842A00E68FBD /* Plus Math Filled_50.png in Resources */ = {isa = PBXBuildFile; fileRef = 2424EA481EA9842A00E68FBD /* Plus Math Filled_50.png */; };
+		2424EA4B1EA9842A00E68FBD /* Plus Math Filled_25.png in Resources */ = {isa = PBXBuildFile; fileRef = 2424EA491EA9842A00E68FBD /* Plus Math Filled_25.png */; };
 		6328E9131E78A4DC005A5E3D /* LoginInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328E9121E78A4DC005A5E3D /* LoginInfo.swift */; };
 		6328E9151E78BE25005A5E3D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328E9141E78BE25005A5E3D /* ProfileViewController.swift */; };
 		635AA01F1E93181100063C25 /* 100.png in Resources */ = {isa = PBXBuildFile; fileRef = 635AA01A1E93181100063C25 /* 100.png */; };
@@ -15,6 +17,10 @@
 		635AA0221E93181100063C25 /* 1000.png in Resources */ = {isa = PBXBuildFile; fileRef = 635AA01D1E93181100063C25 /* 1000.png */; };
 		635AA0231E93181100063C25 /* 1500.png in Resources */ = {isa = PBXBuildFile; fileRef = 635AA01E1E93181100063C25 /* 1500.png */; };
 		635AA0251E931F7800063C25 /* AchievementsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635AA0241E931F7800063C25 /* AchievementsCollectionViewController.swift */; };
+		637C65751EABF41C003DCDA9 /* MyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637C65741EABF41C003DCDA9 /* MyCollectionViewCell.swift */; };
+		637C65771EAC0B1F003DCDA9 /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637C65761EAC0B1F003DCDA9 /* HistoryTableViewController.swift */; };
+		637C65791EAC102F003DCDA9 /* WorkoutHistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637C65781EAC102F003DCDA9 /* WorkoutHistoryTableViewController.swift */; };
+		637C657B1EAC12A1003DCDA9 /* ExerciseHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637C657A1EAC12A1003DCDA9 /* ExerciseHistoryViewController.swift */; };
 		639BC8261E820210008FD198 /* ExercisesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639BC8251E820210008FD198 /* ExercisesViewController.swift */; };
 		63C60DEC1E91AAA000604A13 /* StartRoutineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C60DEB1E91AAA000604A13 /* StartRoutineTableViewController.swift */; };
 		63F4E5491EA59AAD006C0C89 /* StartWorkoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */; };
@@ -43,8 +49,16 @@
 		C30AE7F81E5CF7F80093507B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30AE7F71E5CF7F80093507B /* AppDelegate.swift */; };
 		C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30AE8001E5CF7F80093507B /* Assets.xcassets */; };
 		C30AE8041E5CF7F80093507B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C30AE8021E5CF7F80093507B /* LaunchScreen.storyboard */; };
+		C31395471EA847E5006523F2 /* User_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395451EA847E5006523F2 /* User_25.png */; };
+		C31395481EA847E5006523F2 /* User_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395461EA847E5006523F2 /* User_50.png */; };
+		C313954B1EA847F2006523F2 /* Trophy_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395491EA847F2006523F2 /* Trophy_25.png */; };
+		C313954C1EA847F2006523F2 /* Trophy_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C313954A1EA847F2006523F2 /* Trophy_50.png */; };
+		C313954F1EA84806006523F2 /* Calendar_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C313954D1EA84806006523F2 /* Calendar_25.png */; };
+		C31395501EA84806006523F2 /* Calendar_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C313954E1EA84806006523F2 /* Calendar_50.png */; };
+		C31395531EA8485B006523F2 /* Dumbbell_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395511EA8485B006523F2 /* Dumbbell_25.png */; };
+		C31395541EA8485B006523F2 /* Dumbbell_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395521EA8485B006523F2 /* Dumbbell_50.png */; };
+		C31395561EA84B58006523F2 /* FakeLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395551EA84B58006523F2 /* FakeLogo.png */; };
 		C33A5DB61E8D584900936AA4 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33A5DB51E8D584900936AA4 /* StatsViewController.swift */; };
-		C33A5DBA1E8D69A900936AA4 /* StartWorkoutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */; };
 		C384A1C41E5D0D3B0026FD99 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */; };
 		C384A1CA1E5D202D0026FD99 /* RegisterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384A1C91E5D202D0026FD99 /* RegisterInfo.swift */; };
 		C384A1CC1E5D26AC0026FD99 /* DataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384A1CB1E5D26AC0026FD99 /* DataAccess.swift */; };
@@ -56,6 +70,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2424EA481EA9842A00E68FBD /* Plus Math Filled_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plus Math Filled_50.png"; sourceTree = "<group>"; };
+		2424EA491EA9842A00E68FBD /* Plus Math Filled_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plus Math Filled_25.png"; sourceTree = "<group>"; };
 		6328E9121E78A4DC005A5E3D /* LoginInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInfo.swift; sourceTree = "<group>"; };
 		6328E9141E78BE25005A5E3D /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		635AA01A1E93181100063C25 /* 100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 100.png; sourceTree = "<group>"; };
@@ -64,6 +80,10 @@
 		635AA01D1E93181100063C25 /* 1000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1000.png; sourceTree = "<group>"; };
 		635AA01E1E93181100063C25 /* 1500.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1500.png; sourceTree = "<group>"; };
 		635AA0241E931F7800063C25 /* AchievementsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AchievementsCollectionViewController.swift; sourceTree = "<group>"; };
+		637C65741EABF41C003DCDA9 /* MyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCollectionViewCell.swift; sourceTree = "<group>"; };
+		637C65761EAC0B1F003DCDA9 /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
+		637C65781EAC102F003DCDA9 /* WorkoutHistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryTableViewController.swift; sourceTree = "<group>"; };
+		637C657A1EAC12A1003DCDA9 /* ExerciseHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseHistoryViewController.swift; sourceTree = "<group>"; };
 		639BC8251E820210008FD198 /* ExercisesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExercisesViewController.swift; sourceTree = "<group>"; };
 		63C60DEB1E91AAA000604A13 /* StartRoutineTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartRoutineTableViewController.swift; sourceTree = "<group>"; };
 		63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartWorkoutViewController.swift; sourceTree = "<group>"; };
@@ -95,8 +115,16 @@
 		C30AE8001E5CF7F80093507B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C30AE8031E5CF7F80093507B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C30AE8051E5CF7F80093507B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C31395451EA847E5006523F2 /* User_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = User_25.png; sourceTree = "<group>"; };
+		C31395461EA847E5006523F2 /* User_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = User_50.png; sourceTree = "<group>"; };
+		C31395491EA847F2006523F2 /* Trophy_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trophy_25.png; sourceTree = "<group>"; };
+		C313954A1EA847F2006523F2 /* Trophy_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trophy_50.png; sourceTree = "<group>"; };
+		C313954D1EA84806006523F2 /* Calendar_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calendar_25.png; sourceTree = "<group>"; };
+		C313954E1EA84806006523F2 /* Calendar_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Calendar_50.png; sourceTree = "<group>"; };
+		C31395511EA8485B006523F2 /* Dumbbell_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_25.png; sourceTree = "<group>"; };
+		C31395521EA8485B006523F2 /* Dumbbell_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_50.png; sourceTree = "<group>"; };
+		C31395551EA84B58006523F2 /* FakeLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FakeLogo.png; sourceTree = "<group>"; };
 		C33A5DB51E8D584900936AA4 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
-		C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartWorkoutTableViewController.swift; sourceTree = "<group>"; };
 		C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationViewController.swift; path = ../RegistrationViewController.swift; sourceTree = "<group>"; };
 		C384A1C91E5D202D0026FD99 /* RegisterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterInfo.swift; sourceTree = "<group>"; };
 		C384A1CB1E5D26AC0026FD99 /* DataAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataAccess.swift; sourceTree = "<group>"; };
@@ -121,6 +149,17 @@
 		63FA5E0D1E72248C00DEE65D /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				2424EA481EA9842A00E68FBD /* Plus Math Filled_50.png */,
+				2424EA491EA9842A00E68FBD /* Plus Math Filled_25.png */,
+				C31395551EA84B58006523F2 /* FakeLogo.png */,
+				C31395511EA8485B006523F2 /* Dumbbell_25.png */,
+				C31395521EA8485B006523F2 /* Dumbbell_50.png */,
+				C313954D1EA84806006523F2 /* Calendar_25.png */,
+				C313954E1EA84806006523F2 /* Calendar_50.png */,
+				C31395491EA847F2006523F2 /* Trophy_25.png */,
+				C313954A1EA847F2006523F2 /* Trophy_50.png */,
+				C31395451EA847E5006523F2 /* User_25.png */,
+				C31395461EA847E5006523F2 /* User_50.png */,
 				635AA01A1E93181100063C25 /* 100.png */,
 				635AA01B1E93181100063C25 /* 200.png */,
 				635AA01C1E93181100063C25 /* 300.png */,
@@ -172,16 +211,19 @@
 				C3AB29631E8865BF006D97A4 /* AllExercisesTableViewController.swift */,
 				6F0E3CE11E6A038900357004 /* CoreDataController.swift */,
 				C384A1CB1E5D26AC0026FD99 /* DataAccess.swift */,
+				637C657A1EAC12A1003DCDA9 /* ExerciseHistoryViewController.swift */,
 				639BC8251E820210008FD198 /* ExercisesViewController.swift */,
+				637C65761EAC0B1F003DCDA9 /* HistoryTableViewController.swift */,
 				6F0E3CE21E6A038900357004 /* LoginViewController.swift */,
+				637C65741EABF41C003DCDA9 /* MyCollectionViewCell.swift */,
 				6328E9141E78BE25005A5E3D /* ProfileViewController.swift */,
 				C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */,
 				C3E32C3A1E6F8E4800800545 /* RoutineTableViewController.swift */,
 				63C60DEB1E91AAA000604A13 /* StartRoutineTableViewController.swift */,
-				C33A5DB91E8D69A900936AA4 /* StartWorkoutTableViewController.swift */,
 				63F4E5481EA59AAD006C0C89 /* StartWorkoutViewController.swift */,
 				C33A5DB51E8D584900936AA4 /* StatsViewController.swift */,
 				C3FCF3E61E81EF7300E7BB0E /* WeekTableViewController.swift */,
+				637C65781EAC102F003DCDA9 /* WorkoutHistoryTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -271,17 +313,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C313954C1EA847F2006523F2 /* Trophy_50.png in Resources */,
+				C313954B1EA847F2006523F2 /* Trophy_25.png in Resources */,
+				C313954F1EA84806006523F2 /* Calendar_25.png in Resources */,
+				C31395531EA8485B006523F2 /* Dumbbell_25.png in Resources */,
+				C31395541EA8485B006523F2 /* Dumbbell_50.png in Resources */,
 				635AA01F1E93181100063C25 /* 100.png in Resources */,
+				C31395481EA847E5006523F2 /* User_50.png in Resources */,
 				635AA0231E93181100063C25 /* 1500.png in Resources */,
 				C3FCF3E51E81ED4600E7BB0E /* Main.storyboard in Resources */,
 				635AA0221E93181100063C25 /* 1000.png in Resources */,
 				C30AE8041E5CF7F80093507B /* LaunchScreen.storyboard in Resources */,
+				C31395561EA84B58006523F2 /* FakeLogo.png in Resources */,
 				C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */,
 				635AA0201E93181100063C25 /* 200.png in Resources */,
 				63FA5E111E7224AF00DEE65D /* Plus.png in Resources */,
 				635AA0211E93181100063C25 /* 300.png in Resources */,
+				C31395501EA84806006523F2 /* Calendar_50.png in Resources */,
+				2424EA4A1EA9842A00E68FBD /* Plus Math Filled_50.png in Resources */,
+				2424EA4B1EA9842A00E68FBD /* Plus Math Filled_25.png in Resources */,
 				6F9E12471E733D0800A05FA5 /* workouts.json in Resources */,
 				63FA5E101E7224AF00DEE65D /* HeadDick.jpeg in Resources */,
+				C31395471EA847E5006523F2 /* User_25.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,22 +347,25 @@
 			files = (
 				6F18D0CA1EA2E929000C7637 /* Workout+CoreDataProperties.swift in Sources */,
 				63FA5E131E722A1800DEE65D /* addRoutineViewController.swift in Sources */,
+				637C65751EABF41C003DCDA9 /* MyCollectionViewCell.swift in Sources */,
 				6F18D0C91EA2E929000C7637 /* Workout+CoreDataClass.swift in Sources */,
 				6F18D0CD1EA2E929000C7637 /* Lift+CoreDataClass.swift in Sources */,
 				6F0E3CE41E6A038900357004 /* LoginViewController.swift in Sources */,
 				6F18D0CC1EA2E929000C7637 /* Routine+CoreDataProperties.swift in Sources */,
 				6F18D0CE1EA2E929000C7637 /* Lift+CoreDataProperties.swift in Sources */,
+				637C65791EAC102F003DCDA9 /* WorkoutHistoryTableViewController.swift in Sources */,
 				6F18D0C81EA2E929000C7637 /* User+CoreDataProperties.swift in Sources */,
 				6FB6F9931E93214B006ED784 /* LiftModel.swift in Sources */,
+				637C657B1EAC12A1003DCDA9 /* ExerciseHistoryViewController.swift in Sources */,
 				6F18D0D11EA2E929000C7637 /* LegacyLift+CoreDataClass.swift in Sources */,
 				C384A1C41E5D0D3B0026FD99 /* RegistrationViewController.swift in Sources */,
 				63F4E5491EA59AAD006C0C89 /* StartWorkoutViewController.swift in Sources */,
 				6F0E3CE81E6A0FF600357004 /* WorkoutModel.swift in Sources */,
 				C30AE7F81E5CF7F80093507B /* AppDelegate.swift in Sources */,
 				6F18D0C71EA2E929000C7637 /* User+CoreDataClass.swift in Sources */,
-				C33A5DBA1E8D69A900936AA4 /* StartWorkoutTableViewController.swift in Sources */,
 				C33A5DB61E8D584900936AA4 /* StatsViewController.swift in Sources */,
 				C384A1CA1E5D202D0026FD99 /* RegisterInfo.swift in Sources */,
+				637C65771EAC0B1F003DCDA9 /* HistoryTableViewController.swift in Sources */,
 				C3FCF3E71E81EF7300E7BB0E /* WeekTableViewController.swift in Sources */,
 				635AA0251E931F7800063C25 /* AchievementsCollectionViewController.swift in Sources */,
 				6F18D0D21EA2E929000C7637 /* LegacyLift+CoreDataProperties.swift in Sources */,

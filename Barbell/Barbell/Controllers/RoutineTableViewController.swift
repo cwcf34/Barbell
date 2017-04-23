@@ -21,6 +21,8 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //might see if we can get to the hex color
+        
         self.tableView.reloadData()
         
     }
@@ -113,7 +115,25 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
         //myfingersarefallingasleep\\ //beansinmyfings\\
         //reset valid search flag
         validSearch = true
-        tableView.reloadData()
+        
+        if (routineSearchResults.count > 0) {
+            tableView.reloadData()
+        }else {
+            //alert you must enter text
+            let alertCont: UIAlertController = UIAlertController(title: "Uh Oh!", message: "Found 0 results matching your search.", preferredStyle: .alert)
+            
+            // set the confirm action
+            let confirmAction: UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            
+            // add confirm button to alert
+            alertCont.addAction(confirmAction)
+            
+            //tellem
+            self.present(alertCont, animated: true, completion: nil)
+            
+            //reset the search bar to nil
+            resultSearchController.searchBar.text = ""
+        }
     }
     
     func handleClearOrCancel() {
