@@ -30,23 +30,15 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewWillAppear(_ animated: Bool) {
         let context = CoreDataController.getContext()
         didDelete = false
-        
         let fetchRequest = NSFetchRequest<Routine>(entityName: "Routine")
+        
         do{
             foundRoutines = try context.fetch(fetchRequest)
-            var counter = 0
-            for foundRoutine in foundRoutines{
-                if foundRoutine.isFinished == true{
-                    foundRoutines.remove(at: counter)
-                }else{
-                    counter += 1    
-                }
-                
-            }
             
         }catch{
             print("Bad getExercise query")
         }
+        
         for routine in foundRoutines{
             if(routine.name == nil || routine.name == "") {
                 CoreDataController.getContext().delete(routine)
@@ -63,6 +55,19 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
             }catch{
                 print("Bad getExercise query")
             }
+        }
+        
+        do{
+            var counter = 0
+            for foundRoutine in foundRoutines{
+                if foundRoutine.isFinished == true{
+                    foundRoutines.remove(at: counter)
+                }else{
+                    counter += 1
+                }
+            }
+        }catch{
+            print("Bad getExercise query")
         }
         
         

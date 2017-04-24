@@ -35,6 +35,7 @@ class HistoryTableViewController: UITableViewController {
             foundRoutines = try context.fetch(fetchRequest)
             var counter = 0
             for foundRoutine in foundRoutines{
+                
                 if foundRoutine.isFinished == false{
                     foundRoutines.remove(at: counter)
                 }
@@ -42,7 +43,7 @@ class HistoryTableViewController: UITableViewController {
                     counter += 1
                 }
             }
-            
+ 
         }catch{
             print("Bad getExercise query")
         }
