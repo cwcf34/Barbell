@@ -449,12 +449,16 @@ public class DataAccess {
                             }
                         }
                         if (key == "isFinished"){
-                            if let value = value as? Bool{
-                                newRoutine.isFinished = value
+                            if let value = value as? String{
+                                if value == "false"{
+                                    newRoutine.isFinished = false
+                                }
+                                else if value == "true"{
+                                    newRoutine.isFinished = true
+                                }
+                                print("is finished value" + String(value))
                             }
                         }
-                        
-                        //getting exercises for every workoutday
                         if (key == "Id"){
                             if let value = value as? String{
                                 if let castedValue = Int16(value){
