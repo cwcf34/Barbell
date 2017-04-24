@@ -54,10 +54,10 @@ namespace BBAPI.Controllers
 
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:") || !data.Contains("id"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:") || !data.Contains("id") || !data.Contains("isFinished"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "{name:routineName,weeks:numberOfweeks,isPublic:0/1,creator:email,id:501}";
+				var resp2 = "{name:routineName,weeks:numberOfweeks,isPublic:0/1,creator:email,id:501,isFinished:true}";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -71,6 +71,7 @@ namespace BBAPI.Controllers
 			var isPubilc = postParams[6];
 			var routineCreator = postParams[8];
 			var routineId = postParams[10];
+			var routineFinished = postParams[12];
 
 			//create routine key
 			var key = "user:" + email + ":" + routineId;
@@ -79,7 +80,7 @@ namespace BBAPI.Controllers
 			redisCache.deleteWorkouts(key + ":*");
 
 			//create routine hash and routine data list
-			redisCache.createRoutineHash(key, Int16.Parse(routineId), routineName, routineWeeks, isPubilc, routineCreator);
+			redisCache.createRoutineHash(key, Int16.Parse(routineId), routineName, routineWeeks, isPubilc, routineCreator,routineFinished );
 
 			return Ok(routineId);
 		}
@@ -92,10 +93,10 @@ namespace BBAPI.Controllers
 		{
 			//check if body is empty, white space or null
 			// or appropriate JSON fields are not in post body
-			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:"))
+			if (string.IsNullOrWhiteSpace(data) || string.Equals("{}", data) || !data.Contains("name:") || !data.Contains("weeks:") || !data.Contains("isPublic:") || !data.Contains("creator:") || !data.Contains("isFinished"))
 			{
 				var resp = "Data is null. Please send formatted data: ";
-				var resp2 = "{name:routineName,weeks:numberOfweeks,isPublic:0/1,creator:email}";
+				var resp2 = "{name:routineName,weeks:numberOfweeks,isPublic:0/1,creator:email,isFinished:true}";
 				string emptyResponse = resp + resp2;
 				return Ok(emptyResponse);
 			}
@@ -149,9 +150,10 @@ namespace BBAPI.Controllers
 			var routineWeeks = postParams[4];
 			var isPubilc = postParams[6];
 			var routineCreator = postParams[8];
+			var routineFinished = postParams[10];
 
 			//create routine hash and routine data list
-			redisCache.createRoutineHash(key, routineId, routineName, routineWeeks, isPubilc, routineCreator);
+			redisCache.createRoutineHash(key, routineId, routineName, routineWeeks, isPubilc, routineCreator, routineFinished);
 
 			/* 
 			 * create list to hold workouts
