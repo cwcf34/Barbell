@@ -1303,7 +1303,7 @@ public class DataAccess {
             
             if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("\nGET USER FROM REDIS response = \(response)\n")
+                print("\nGET Exercise response = \(response)\n")
             }
             
             responseString = String(data: data, encoding: .utf8)!

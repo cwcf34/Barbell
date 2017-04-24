@@ -276,7 +276,7 @@ namespace BBAPI.Controllers
 
 			data = cache.HashGetAll(key);
 
-			var searchedRoutine = new Routine { Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value, creator = data[4].Value };
+			var searchedRoutine = new Routine { Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value, creator = data[4].Value, isFinished = data[5].Value};
 
 			return searchedRoutine;
 
