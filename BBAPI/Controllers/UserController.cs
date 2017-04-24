@@ -7,12 +7,14 @@ namespace BBAPI.Controllers
 {
 	public class UserController : ApiController
 	{
+		/*
 		User[] users = {
 			new User {Email = "dlopez@me.com", Name = "me", Age = 22},
 			new User {Email = "d@me.com", Name = "you", Age = 57},
 			new User {Email = "dl@me.com", Name = "us", Age = 100}
 		};
 
+		*/
 		//use singleton
 		readonly RedisDB redisCache = RedisDB._instance;
 
@@ -39,9 +41,9 @@ namespace BBAPI.Controllers
 		{
 			//search for user hash w key in cache
 			var returnString = redisCache.getUserHashData(email);
-			if (returnString[0].Name == "data")
+			if (returnString != null)
 			{
-				return Ok(returnString[0].Value.ToString());
+				return Ok(returnString);
 			}
 			else
 			{
@@ -177,153 +179,83 @@ namespace BBAPI.Controllers
 
 			//grab old user Hash data
 			var returnedUser = redisCache.getUserHashData(currEmail);
-			var currData = string.Empty;
 
-			if (returnedUser[0].Name == "data")
+
+			var currUser = new User();
+
+			if (returnedUser != null)
 			{
-				currData = returnedUser[0].Value.ToString();
+				currUser = returnedUser;
 			}
 			else
 			{
-				return Ok(returnedUser[0].Value.ToString());
+				return Ok(returnedUser);
 			}
-
-			var currRedisData = currData.Split(delimiterChars);
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postName))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "name")
-					{
-						//grab curr name
-						postName = currRedisData[i + 2];
-					}
-				}
+				postName = currUser.Name;
 			}
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postAge))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "age")
-					{
-						//grab curr name
-						postAge = currRedisData[i + 2];
-					}
-				}
+				postAge = currUser.Age.ToString();
 			}
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postWeight))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "weight")
-					{
-						//grab curr name
-						postWeight = currRedisData[i + 2];
-					}
-				}
+				postWeight = currUser.Weight.ToString();
 			}
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postSquat))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "squat")
-					{
-						//grab curr name
-						postSquat = currRedisData[i + 2];
-					}
-				}
+				postSquat = currUser.Squat.ToString();
 			}
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postBench))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "bench")
-					{
-						//grab curr name
-						postBench = currRedisData[i + 2];
-					}
-				}
+				postBench = currUser.Bench.ToString();
 			}
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postDeadlift))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "deadlift")
-					{
-						//grab curr name
-						postDeadlift = currRedisData[i + 2];
-					}
-				}
+				postDeadlift = currUser.Deadlift.ToString();
 			}
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postSnatch))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "snatch")
-					{
-						//grab curr name
-						postSnatch = currRedisData[i + 2];
-					}
-				}
+				postSnatch = currUser.Snatch.ToString();
 			}
 
 			//if null, user keeps curr name
 			if (string.IsNullOrWhiteSpace(postCleanjerk))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "cleanjerk")
-					{
-						//grab curr name
-						postCleanjerk = currRedisData[i + 2];
-					}
-				}
+				postCleanjerk = currUser.CleanAndJerk.ToString();
 			}
 
 			//if null, user keeps curr workouts
 			if (string.IsNullOrWhiteSpace(postWorkouts))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "workoutsCompleted")
-					{
-						//grab curr name
-						postWorkouts = currRedisData[i + 2];
-					}
-				}
+				postWorkouts = currUser.WorkoutsCompleted.ToString();
 			}
 
 			//if null, user keeps curr password
 			if (string.IsNullOrWhiteSpace(postPassword))
 			{
-				for (int i = 0; i < currRedisData.Length; i++)
-				{
-					if (currRedisData[i] == "password")
-					{
-						//grab curr password
-						postPassword = currRedisData[i + 2];
-					}
-				}
+				postPassword = currUser.Password;
 			}
 			else
 			{
 				postPassword = AuthController.ComputeHash(postPassword, "SHA512", null);
 			}
 
-				redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight,postBench, postSquat, postDeadlift, postSnatch, postCleanjerk, postWorkouts);
+			redisCache.updateUserHash("user:" + currEmail, postName, postPassword, postAge, postWeight,postBench, postSquat, postDeadlift, postSnatch, postCleanjerk, postWorkouts);
 
 			//return Ok("Successfully Updated your profile");
 			return Ok("true");
