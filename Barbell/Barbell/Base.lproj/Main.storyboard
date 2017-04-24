@@ -23,27 +23,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pYX-dM-pLA">
-                                <rect key="frame" x="214" y="428" width="45" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="45" id="vat-7G-N8G"/>
-                                </constraints>
-                                <state key="normal" title="Back">
-                                    <color key="titleColor" red="0.4549019608" green="0.54901960780000003" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="ufj-Q2-zB6" kind="show" id="uCg-4Q-JAf"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0s-3R-VVG">
-                                <rect key="frame" x="100" y="428" width="73" height="30"/>
-                                <state key="normal" title="Register">
-                                    <color key="titleColor" red="0.4549019608" green="0.54901960780000003" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="register:" destination="xcK-e6-qEr" eventType="touchUpInside" id="bZ9-Pd-Chb"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vOf-zv-AMv">
                                 <rect key="frame" x="67" y="242" width="240" height="30"/>
                                 <color key="backgroundColor" red="0.24313725489999999" green="0.36078431370000003" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -53,26 +32,6 @@
                                 <color key="textColor" red="0.94117647059999998" green="0.92156862750000001" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vMY-Jo-QfS">
-                                <rect key="frame" x="67" y="302" width="240" height="30"/>
-                                <color key="backgroundColor" red="0.24313725489999999" green="0.36078431370000003" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="fq7-mJ-Lqu"/>
-                                </constraints>
-                                <color key="textColor" red="0.94117647059999998" green="0.92156862750000001" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dMV-EW-1hB">
-                                <rect key="frame" x="67" y="362" width="240" height="30"/>
-                                <color key="backgroundColor" red="0.24313725489999999" green="0.36078431370000003" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="uo5-f5-Asq"/>
-                                </constraints>
-                                <color key="textColor" red="0.94117647059999998" green="0.92156862750000001" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FakeLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="l2G-xi-7m8">
                                 <rect key="frame" x="134" y="11" width="106" height="171"/>
@@ -90,10 +49,61 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mkf-2R-1Eo">
+                                <rect key="frame" x="67" y="301" width="240" height="30"/>
+                                <color key="backgroundColor" red="0.24313725489999999" green="0.36078431370000003" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.94117647059999998" green="0.92156862750000001" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pYX-dM-pLA">
+                                <rect key="frame" x="214" y="486" width="45" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="45" id="vat-7G-N8G"/>
+                                </constraints>
+                                <state key="normal" title="Back">
+                                    <color key="titleColor" red="0.4549019608" green="0.54901960780000003" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="ufj-Q2-zB6" kind="show" id="uCg-4Q-JAf"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0s-3R-VVG">
+                                <rect key="frame" x="100" y="486" width="73" height="30"/>
+                                <state key="normal" title="Register">
+                                    <color key="titleColor" red="0.4549019608" green="0.54901960780000003" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="register:" destination="xcK-e6-qEr" eventType="touchUpInside" id="bZ9-Pd-Chb"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vMY-Jo-QfS">
+                                <rect key="frame" x="67" y="360" width="240" height="30"/>
+                                <color key="backgroundColor" red="0.24313725489999999" green="0.36078431370000003" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="fq7-mJ-Lqu"/>
+                                </constraints>
+                                <color key="textColor" red="0.94117647059999998" green="0.92156862750000001" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dMV-EW-1hB">
+                                <rect key="frame" x="67" y="420" width="240" height="30"/>
+                                <color key="backgroundColor" red="0.24313725489999999" green="0.36078431370000003" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="uo5-f5-Asq"/>
+                                </constraints>
+                                <color key="textColor" red="0.94117647059999998" green="0.92156862750000001" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.050980392156862744" green="0.074509803921568626" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="3Fu-9g-1YC" firstAttribute="top" secondItem="d0s-3R-VVG" secondAttribute="bottom" constant="209" id="2Nt-A6-zS7"/>
+                            <constraint firstItem="Mkf-2R-1Eo" firstAttribute="top" secondItem="vOf-zv-AMv" secondAttribute="bottom" constant="29" id="1Bk-xf-Vk3"/>
+                            <constraint firstItem="Mkf-2R-1Eo" firstAttribute="leading" secondItem="vOf-zv-AMv" secondAttribute="leading" id="29p-JJ-IcQ"/>
+                            <constraint firstItem="3Fu-9g-1YC" firstAttribute="top" secondItem="d0s-3R-VVG" secondAttribute="bottom" constant="151" id="2Nt-A6-zS7"/>
+                            <constraint firstItem="Mkf-2R-1Eo" firstAttribute="trailing" secondItem="vOf-zv-AMv" secondAttribute="trailing" id="5e4-pU-whu"/>
                             <constraint firstItem="vMY-Jo-QfS" firstAttribute="leading" secondItem="dMV-EW-1hB" secondAttribute="leading" id="Dc4-gC-Iiz"/>
                             <constraint firstItem="d0s-3R-VVG" firstAttribute="baseline" secondItem="pYX-dM-pLA" secondAttribute="baseline" id="DrP-XK-t4E"/>
                             <constraint firstItem="dMV-EW-1hB" firstAttribute="top" secondItem="vMY-Jo-QfS" secondAttribute="bottom" constant="30" id="Jhx-RZ-tl7"/>
@@ -105,7 +115,7 @@
                             <constraint firstItem="vOf-zv-AMv" firstAttribute="leading" secondItem="vMY-Jo-QfS" secondAttribute="leading" id="PpX-aL-teW"/>
                             <constraint firstItem="nn1-sG-DdT" firstAttribute="leading" secondItem="vOf-zv-AMv" secondAttribute="leading" id="RL5-MM-YEo"/>
                             <constraint firstItem="d0s-3R-VVG" firstAttribute="top" secondItem="dMV-EW-1hB" secondAttribute="bottom" constant="36" id="Ub0-zy-C1S"/>
-                            <constraint firstItem="vMY-Jo-QfS" firstAttribute="top" secondItem="vOf-zv-AMv" secondAttribute="bottom" constant="30" id="ZpM-b0-VQ6"/>
+                            <constraint firstItem="vMY-Jo-QfS" firstAttribute="top" secondItem="vOf-zv-AMv" secondAttribute="bottom" constant="88" id="ZpM-b0-VQ6"/>
                             <constraint firstItem="d0s-3R-VVG" firstAttribute="leading" secondItem="mqd-S3-tYb" secondAttribute="leading" constant="100" id="emh-qV-Qnr"/>
                             <constraint firstItem="nn1-sG-DdT" firstAttribute="trailing" secondItem="vOf-zv-AMv" secondAttribute="trailing" id="iF8-G4-bDQ"/>
                             <constraint firstItem="pYX-dM-pLA" firstAttribute="leading" secondItem="d0s-3R-VVG" secondAttribute="trailing" constant="41" id="qZF-BF-krn"/>
@@ -121,12 +131,13 @@
                         <outlet property="firstNameField" destination="vMY-Jo-QfS" id="cPa-sS-sEh"/>
                         <outlet property="lastNameField" destination="dMV-EW-1hB" id="vEn-DQ-z7a"/>
                         <outlet property="passwordField" destination="vOf-zv-AMv" id="f2i-IO-PPG"/>
+                        <outlet property="reEnterPassword" destination="Mkf-2R-1Eo" id="eIz-7X-Z89"/>
                         <segue destination="wSQ-Bk-HAY" kind="show" identifier="registerSegue" id="cha-Y0-p8d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BEO-4g-hio" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-567" y="738"/>
+            <point key="canvasLocation" x="-567.20000000000005" y="737.18140929535241"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="akR-st-0f8">
@@ -1795,7 +1806,7 @@
         <image name="User_25.png" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="hTW-Zn-CHp"/>
+        <segue reference="cha-Y0-p8d"/>
         <segue reference="zRf-bH-u2P"/>
     </inferredMetricsTieBreakers>
 </document>

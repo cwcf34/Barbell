@@ -1236,6 +1236,9 @@ public class DataAccess {
         request.httpMethod = "POST"
         
         for achievement in achievements{
+            print(achievement.achievedOn)
+            print(achievement.achievementNumber)
+            
             postString = "\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
             print(postString)
             
