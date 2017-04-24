@@ -449,12 +449,16 @@ public class DataAccess {
                             }
                         }
                         if (key == "isFinished"){
-                            if let value = value as? Bool{
-                                newRoutine.isFinished = value
+                            if let value = value as? String{
+                                if value == "false"{
+                                    newRoutine.isFinished = false
+                                }
+                                else if value == "true"{
+                                    newRoutine.isFinished = true
+                                }
+                                print("is finished value" + String(value))
                             }
                         }
-                        
-                        //getting exercises for every workoutday
                         if (key == "Id"){
                             if let value = value as? String{
                                 if let castedValue = Int16(value){
@@ -1189,45 +1193,38 @@ public class DataAccess {
         
         if let data = responseString.data(using: .utf8) as? Data{
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
-                //print("JSONFULL == \(json)\n\n")
+                print("JSONFULL == \(json)\n\n")
                 
                 for eachAchievement in json {
                     
                     let newAchievement : Achievement = NSEntityDescription.insertNewObject(forEntityName: "Achievement", into: CoreDataController.getContext()) as! Achievement
-                    
-                    
-                    for eachAchievement in json {
                         
-                        let newAchievement : Achievement = NSEntityDescription.insertNewObject(forEntityName: "Achievement", into: CoreDataController.getContext()) as! Achievement
-                        
-                        
-                        for (key,value) in eachAchievement{
-                            if (key == "Id"){
-                                if let value = value as? Int16{
-                                    
-                                    newAchievement.achievementNumber = value
-                                    
-                                }
-                            }
-                            if (key == "Date"){
-                                if let value = value as? String {
-                                    let formatter = DateFormatter()
-                                    formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
-                                    formatter.locale = Locale.init(identifier: "en_GB")
-                                    let dateObj = formatter.date(from: value)
-                                }
+                    for (key,value) in eachAchievement{
+                        if (key == "Id"){
+                            if let value = value as? Int16{
+                                
+                                newAchievement.achievementNumber = value
+                        }
+                        if (key == "Date"){
+                            if let value = value as? String {
+                                let formatter = DateFormatter()
+                                formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
+                                formatter.locale = Locale.init(identifier: "en_GB")
+                                let dateObj = formatter.date(from: value)
+                                //newAchievement.achievedOn = dateObj as NSDate
                             }
                         }
-                        print("loaded achievement" + String(newAchievement.achievementNumber))
-                        
                     }
-                    
+
+                    print("loaded achievement" + String(newAchievement.achievementNumber))
                 }
                 
             }
         }
         CoreDataController.saveContext()
     }
+
+}
     
     class func saveAchievementsToRedis(){
         let user = CoreDataController.getUser()
@@ -1238,9 +1235,12 @@ public class DataAccess {
         
         request.httpMethod = "POST"
         
-        
         for achievement in achievements{
-            postString = "\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
+            print(achievement.achievedOn)
+            print(achievement.achievementNumber)
+            
+            postString = "\"{date:\("")" + "," + "id:\(achievement.achievementNumber)}\" "
+            //postString = "\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
             print(postString)
             
             let postDATA:Data = postString.data(using: String.Encoding.utf8)!
@@ -1404,46 +1404,46 @@ public class DataAccess {
         for lift in history{
             if let lift = lift as? LegacyLift, let time = lift.timeStamp, let name = lift.liftName{
                 
-
+                
                 postString = "\"{date:\(time)" + "," + "exercise:\(name)" + "," + "sets:\(lift.liftSets)" + "," + "reps:\(lift.liftRep)" + "," + "weight:\(lift.liftWeight)}\" "
-        
-
-            print(postString)
-            
-            let postDATA:Data = postString.data(using: String.Encoding.utf8)!
-            request.httpBody = postDATA
-            var responseString = ""
-            let headers = [
-                "Content-Type": "application/json",
-                "Authorization": self.accessToken
-            ]
-            
-            request.allHTTPHeaderFields = headers
-            let sem = DispatchSemaphore(value: 0)
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                    print("error=\(error)")
-                    return
+                
+                
+                print(postString)
+                
+                let postDATA:Data = postString.data(using: String.Encoding.utf8)!
+                request.httpBody = postDATA
+                var responseString = ""
+                let headers = [
+                    "Content-Type": "application/json",
+                    "Authorization": self.accessToken
+                ]
+                
+                request.allHTTPHeaderFields = headers
+                let sem = DispatchSemaphore(value: 0)
+                
+                let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                    guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                        print("error=\(error)")
+                        return
+                    }
+                    
+                    if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                        print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                        print("response = \(response)")
+                    }
+                    
+                    responseString = String(data: data, encoding: .utf8)!
+                    
+                    print("Did save Historic lift " + lift.liftName! + String(describing: lift.timeStamp) + " to redis?  " + responseString)
+                    
+                    
+                    sem.signal()
                 }
                 
-                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                    print("response = \(response)")
-                }
-                
-                responseString = String(data: data, encoding: .utf8)!
-                
-                print("Did save Historic lift " + lift.liftName! + String(describing: lift.timeStamp) + " to redis?  " + responseString)
-                
-                
-                sem.signal()
+                task.resume()
+                sem.wait()
             }
-                
-            task.resume()
-            sem.wait()
         }
     }
-}
-    
+
 }

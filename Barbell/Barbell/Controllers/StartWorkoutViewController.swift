@@ -102,6 +102,7 @@ class StartWorkoutViewController: UIViewController, UITextFieldDelegate {
             if workoutPassed === workoutArray.last{
                 print("Last workout in routine completed")
                 routinePassed.isFinished = true
+                routinePassed.id = 0
             }
             
             if user.workoutsCompleted == 100{
