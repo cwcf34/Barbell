@@ -24,8 +24,8 @@ var carImagesNotDone = ["100ND.png",
 var imageTitles = ["100 Workouts",
                     "200 Workouts",
                     "300 Workouts",
-                    "1000 Workouts",
-                    "1500 Workouts"]
+                    "1000 Pound Club",
+                    "1500 Pound Club"]
 
 class AchievementsCollectionViewController: UICollectionViewController {
 
@@ -53,7 +53,6 @@ class AchievementsCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(carImages.count)
         return carImages.count
     }
     
@@ -63,33 +62,44 @@ class AchievementsCollectionViewController: UICollectionViewController {
 
         cell.label.text = imageTitles[indexPath.row]
     
-        for achievement in achievements{
-            if(achievement.achievementNumber == 1){
-                cell.imageView.image = UIImage(named: carImages[0])
+        for achievement in achievements {
+            if(achievement.achievementNumber == indexPath.row+1){
+                cell.imageView.image = UIImage(named: carImages[indexPath.row])
             }else{
-                cell.imageView.image = UIImage(named: carImagesNotDone[0])
-            }
-            if(achievement.achievementNumber == 2){
-                cell.imageView.image = UIImage(named: carImages[1])
-            }else{
-                cell.imageView.image = UIImage(named: carImagesNotDone[1])
-            }
-            if(achievement.achievementNumber == 3){
-                cell.imageView.image = UIImage(named: carImages[2])
-            }else{
-                cell.imageView.image = UIImage(named: carImagesNotDone[2])
-            }
-            if(achievement.achievementNumber == 4){
-                cell.imageView.image = UIImage(named: carImages[3])
-            }else{
-                cell.imageView.image = UIImage(named: carImagesNotDone[3])
-            }
-            if(achievement.achievementNumber == 5){
-                cell.imageView.image = UIImage(named: carImages[4])
-            }else{
-                cell.imageView.image = UIImage(named: carImagesNotDone[4])
+                print("\n\nTesting does " + String(achievement.achievementNumber) + " equals " + String(indexPath.row+1))
+                cell.imageView.image = UIImage(named: carImagesNotDone[indexPath.row])
             }
         }
+        
+//        for integer in achievements{
+//            if(achievement.achievementNumber == 1){
+//                cell.imageView.image = UIImage(named: carImages[0])
+//            }else{
+//                cell.imageView.image = UIImage(named: carImagesNotDone[0])
+//            }
+//            if(achievement.achievementNumber == 2){
+//                cell.imageView.image = UIImage(named: carImages[1])
+//            }else{
+//                cell.imageView.image = UIImage(named: carImagesNotDone[1])
+//            }
+//            if(achievement.achievementNumber == 3){
+//                cell.imageView.image = UIImage(named: carImages[2])
+//            }else{
+//                cell.imageView.image = UIImage(named: carImagesNotDone[2])
+//            }
+//            if(achievement.achievementNumber == 4){
+//                cell.imageView.image = UIImage(named: carImages[3])
+//            }else{
+//                cell.imageView.image = UIImage(named: carImagesNotDone[3])
+//            }
+//            if(achievement.achievementNumber == 5){
+//                cell.imageView.image = UIImage(named: carImages[4])
+//            }else{
+//                cell.imageView.image = UIImage(named: carImagesNotDone[4])
+//            }
+//        }
+        
+        
         return cell
     }
 }

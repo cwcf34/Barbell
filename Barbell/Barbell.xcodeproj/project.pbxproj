@@ -58,6 +58,11 @@
 		C31395531EA8485B006523F2 /* Dumbbell_25.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395511EA8485B006523F2 /* Dumbbell_25.png */; };
 		C31395541EA8485B006523F2 /* Dumbbell_50.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395521EA8485B006523F2 /* Dumbbell_50.png */; };
 		C31395561EA84B58006523F2 /* FakeLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = C31395551EA84B58006523F2 /* FakeLogo.png */; };
+		C3223D1A1EAD948D007CD51C /* 100ND.png in Resources */ = {isa = PBXBuildFile; fileRef = C3223D151EAD948D007CD51C /* 100ND.png */; };
+		C3223D1B1EAD948D007CD51C /* 200ND.png in Resources */ = {isa = PBXBuildFile; fileRef = C3223D161EAD948D007CD51C /* 200ND.png */; };
+		C3223D1C1EAD948D007CD51C /* 300ND.png in Resources */ = {isa = PBXBuildFile; fileRef = C3223D171EAD948D007CD51C /* 300ND.png */; };
+		C3223D1D1EAD948D007CD51C /* 1000ND.png in Resources */ = {isa = PBXBuildFile; fileRef = C3223D181EAD948D007CD51C /* 1000ND.png */; };
+		C3223D1E1EAD948D007CD51C /* 1500ND.png in Resources */ = {isa = PBXBuildFile; fileRef = C3223D191EAD948D007CD51C /* 1500ND.png */; };
 		C33A5DB61E8D584900936AA4 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33A5DB51E8D584900936AA4 /* StatsViewController.swift */; };
 		C384A1C41E5D0D3B0026FD99 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */; };
 		C384A1CA1E5D202D0026FD99 /* RegisterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384A1C91E5D202D0026FD99 /* RegisterInfo.swift */; };
@@ -126,6 +131,11 @@
 		C31395511EA8485B006523F2 /* Dumbbell_25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_25.png; sourceTree = "<group>"; };
 		C31395521EA8485B006523F2 /* Dumbbell_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dumbbell_50.png; sourceTree = "<group>"; };
 		C31395551EA84B58006523F2 /* FakeLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FakeLogo.png; sourceTree = "<group>"; };
+		C3223D151EAD948D007CD51C /* 100ND.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 100ND.png; sourceTree = "<group>"; };
+		C3223D161EAD948D007CD51C /* 200ND.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 200ND.png; sourceTree = "<group>"; };
+		C3223D171EAD948D007CD51C /* 300ND.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 300ND.png; sourceTree = "<group>"; };
+		C3223D181EAD948D007CD51C /* 1000ND.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1000ND.png; sourceTree = "<group>"; };
+		C3223D191EAD948D007CD51C /* 1500ND.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1500ND.png; sourceTree = "<group>"; };
 		C33A5DB51E8D584900936AA4 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		C384A1C31E5D0D3B0026FD99 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationViewController.swift; path = ../RegistrationViewController.swift; sourceTree = "<group>"; };
 		C384A1C91E5D202D0026FD99 /* RegisterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterInfo.swift; sourceTree = "<group>"; };
@@ -153,6 +163,11 @@
 		63FA5E0D1E72248C00DEE65D /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				C3223D151EAD948D007CD51C /* 100ND.png */,
+				C3223D161EAD948D007CD51C /* 200ND.png */,
+				C3223D171EAD948D007CD51C /* 300ND.png */,
+				C3223D181EAD948D007CD51C /* 1000ND.png */,
+				C3223D191EAD948D007CD51C /* 1500ND.png */,
 				2424EA481EA9842A00E68FBD /* Plus Math Filled_50.png */,
 				2424EA491EA9842A00E68FBD /* Plus Math Filled_25.png */,
 				C31395551EA84B58006523F2 /* FakeLogo.png */,
@@ -336,14 +351,19 @@
 				C31395481EA847E5006523F2 /* User_50.png in Resources */,
 				635AA0231E93181100063C25 /* 1500.png in Resources */,
 				C3FCF3E51E81ED4600E7BB0E /* Main.storyboard in Resources */,
+				C3223D1A1EAD948D007CD51C /* 100ND.png in Resources */,
 				635AA0221E93181100063C25 /* 1000.png in Resources */,
 				C30AE8041E5CF7F80093507B /* LaunchScreen.storyboard in Resources */,
+				C3223D1E1EAD948D007CD51C /* 1500ND.png in Resources */,
+				C3223D1D1EAD948D007CD51C /* 1000ND.png in Resources */,
 				C31395561EA84B58006523F2 /* FakeLogo.png in Resources */,
 				C30AE8011E5CF7F80093507B /* Assets.xcassets in Resources */,
 				635AA0201E93181100063C25 /* 200.png in Resources */,
 				63FA5E111E7224AF00DEE65D /* Plus.png in Resources */,
+				C3223D1B1EAD948D007CD51C /* 200ND.png in Resources */,
 				635AA0211E93181100063C25 /* 300.png in Resources */,
 				C31395501EA84806006523F2 /* Calendar_50.png in Resources */,
+				C3223D1C1EAD948D007CD51C /* 300ND.png in Resources */,
 				2424EA4A1EA9842A00E68FBD /* Plus Math Filled_50.png in Resources */,
 				2424EA4B1EA9842A00E68FBD /* Plus Math Filled_25.png in Resources */,
 				6F9E12471E733D0800A05FA5 /* workouts.json in Resources */,
