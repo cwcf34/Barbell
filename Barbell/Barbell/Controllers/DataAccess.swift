@@ -1196,28 +1196,31 @@ public class DataAccess {
                     let newAchievement : Achievement = NSEntityDescription.insertNewObject(forEntityName: "Achievement", into: CoreDataController.getContext()) as! Achievement
                     
                     
-                    for (key,value) in eachAchievement{
-                        if (key == "achievementNumber"){
-                            if let value = value as? String{
-                                if let castedValue = Int16(value){
-                                    newAchievement.achievementNumber = castedValue
+                    for eachAchievement in json {
+                        
+                        let newAchievement : Achievement = NSEntityDescription.insertNewObject(forEntityName: "Achievement", into: CoreDataController.getContext()) as! Achievement
+                        
+                        
+                        for (key,value) in eachAchievement{
+                            if (key == "Id"){
+                                if let value = value as? Int16{
+                                    
+                                    newAchievement.achievementNumber = value
+                                    
+                                }
+                            }
+                            if (key == "Date"){
+                                if let value = value as? String {
+                                    let formatter = DateFormatter()
+                                    formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
+                                    formatter.locale = Locale.init(identifier: "en_GB")
+                                    let dateObj = formatter.date(from: value)
                                 }
                             }
                         }
-                        if (key == "Name"){
-                            if let value = value as? String{
-                                print("Found routine named in redis" + value)
-                                newAchievement.name = value
-                            }
-                        }
-                        if (key == "achievedOn"){
-                            let formatter = DateFormatter()
-                            formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
-                            formatter.locale = Locale.init(identifier: "en_GB")
-                            let dateObj = formatter.date(from: value as! String)
-                        }
+                        print("loaded achievement" + String(newAchievement.achievementNumber))
+                        
                     }
-                    print("loaded achievement" + String(newAchievement.achievementNumber))
                     
                 }
                 
@@ -1318,44 +1321,49 @@ public class DataAccess {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
                 //print("JSONFULL == \(json)\n\n")
                 
-                for eachHistory in json {
+                if(json.description.contains("Data does not exist")) {
+                    return liftData
+                }else {
                     
-                    let newHistory : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
-                    
-                    newHistory.liftName = pastlift
-                    
-                    for (key,value) in eachHistory{
-                        if (key == "Reps"){
-                            if let value = value as? String{
-                                if let castedValue = Int16(value){
-                                    newHistory.liftRep = castedValue
+                    for eachHistory in json {
+                        
+                        let newHistory : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+                        
+                        newHistory.liftName = pastlift
+                        
+                        for (key,value) in eachHistory{
+                            if (key == "Reps"){
+                                if let value = value as? String{
+                                    if let castedValue = Int16(value){
+                                        newHistory.liftRep = castedValue
+                                    }
                                 }
                             }
-                        }
-                        if (key == "Weight"){
-                            if let value = value as? String{
-                                if let castedValue = Int16(value){
-                                    newHistory.liftWeight = castedValue
+                            if (key == "Weight"){
+                                if let value = value as? String{
+                                    if let castedValue = Int16(value){
+                                        newHistory.liftWeight = castedValue
+                                    }
                                 }
                             }
-                        }
-                        if (key == "Sets"){
-                            if let value = value as? String{
-                                if let castedValue = Int16(value){
-                                    newHistory.liftSets = castedValue
+                            if (key == "Sets"){
+                                if let value = value as? String{
+                                    if let castedValue = Int16(value){
+                                        newHistory.liftSets = castedValue
+                                    }
                                 }
                             }
+                            if (key == "Date"){
+                                let formatter = DateFormatter()
+                                formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
+                                formatter.locale = Locale.init(identifier: "en_GB")
+                                let dateObj = formatter.date(from: value as! String)
+                                newHistory.timeStamp = dateObj! as NSDate
+                            }
                         }
-                        if (key == "Date"){
-                            let formatter = DateFormatter()
-                            formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
-                            formatter.locale = Locale.init(identifier: "en_GB")
-                            let dateObj = formatter.date(from: value as! String)
-                            newHistory.timeStamp = dateObj! as NSDate
-                        }
+                        /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
+                        liftData.append(newHistory)
                     }
-                    /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
-                    liftData.append(newHistory)
                 }
             }
         }
