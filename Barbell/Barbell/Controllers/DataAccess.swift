@@ -1189,7 +1189,7 @@ public class DataAccess {
         
         if let data = responseString.data(using: .utf8) as? Data{
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
-                //print("JSONFULL == \(json)\n\n")
+                print("JSONFULL == \(json)\n\n")
                 
                 for eachAchievement in json {
                     
@@ -1197,7 +1197,8 @@ public class DataAccess {
                     
                     
                     for (key,value) in eachAchievement{
-                        if (key == "achievementNumber"){
+                        print(key)
+                        if (key == "Id"){
                             if let value = value as? String{
                                 if let castedValue = Int16(value){
                                     newAchievement.achievementNumber = castedValue
@@ -1210,7 +1211,7 @@ public class DataAccess {
                                 newAchievement.name = value
                             }
                         }
-                        if (key == "achievedOn"){
+                        if (key == "Date"){
                             let formatter = DateFormatter()
                             formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
                             formatter.locale = Locale.init(identifier: "en_GB")
@@ -1235,9 +1236,12 @@ public class DataAccess {
         
         request.httpMethod = "POST"
         
-        
         for achievement in achievements{
-            postString = "\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
+            print(achievement.achievedOn)
+            print(achievement.achievementNumber)
+            
+            postString = "\"{date:\("")" + "," + "id:\(achievement.achievementNumber)}\" "
+            //postString = "\"{date:\(achievement.achievedOn!)" + "," + "id:\(achievement.achievementNumber)}\" "
             print(postString)
             
             let postDATA:Data = postString.data(using: String.Encoding.utf8)!
