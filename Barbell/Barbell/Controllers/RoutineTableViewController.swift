@@ -38,8 +38,10 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
             for foundRoutine in foundRoutines{
                 if foundRoutine.isFinished == true{
                     foundRoutines.remove(at: counter)
+                }else{
+                    counter += 1    
                 }
-                counter += 1
+                
             }
             
         }catch{
