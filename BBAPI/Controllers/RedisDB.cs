@@ -64,10 +64,10 @@ namespace BBAPI.Controllers
 			return true;
 		}
 
-		public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator)
+		public void createRoutineHash(string key, int id, string name, string numweek, string isPublic, string creator, string finished)
 		{
 			//creates hash data for routine
-			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator) });
+			cache.HashSet(key, new HashEntry[] { new HashEntry("id", id), new HashEntry("name", name), new HashEntry("weeks", numweek), new HashEntry("isPublic", isPublic), new HashEntry("creator", creator), new HashEntry("isFinished", finished) });
 		}
 
 		public void createWorkoutDataHash(string key, string exercise, string exerciseValue)
@@ -227,7 +227,7 @@ namespace BBAPI.Controllers
 						{
 							//if isPublic is true
 							if (routineData[3].Value.ToString().Equals("1")) {
-								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value, creator = routineData[4].Value });
+								returnData.Add(new Routine { Name = routineData[1].Value, Id = routineData[0].Value, numWeeks = routineData[2].Value, isPublic = routineData[3].Value, creator = routineData[4].Value, isFinished = routineData[5].Value });
 							}
 						}
 					}
@@ -276,7 +276,7 @@ namespace BBAPI.Controllers
 
 			data = cache.HashGetAll(key);
 
-			var searchedRoutine = new Routine { Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value, creator = data[4].Value };
+			var searchedRoutine = new Routine { Name = data[1].Value, Id = data[0].Value, numWeeks = data[2].Value, isPublic = data[3].Value, creator = data[4].Value, isFinished = data[5].Value};
 
 			return searchedRoutine;
 

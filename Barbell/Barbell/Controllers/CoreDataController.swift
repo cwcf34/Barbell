@@ -92,7 +92,7 @@ class CoreDataController{
     class func maybeSaveHistory(name: String, reps: Int16, sets: Int16, weight: Int16){
        
         if name == "Bench Press" || name == "Full Squat" || name == "Deadlift" || name == "Snatch" || name == "Clean and Jerk"{
-            if reps == 1{
+            if reps > 0{
                 let finished : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
                 finished.liftName = name
                 finished.liftRep = reps

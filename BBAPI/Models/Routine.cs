@@ -7,5 +7,6 @@
 		public string numWeeks { get; set; }
 		public string isPublic { get; set; }
 		public string creator { get; set; }
+		public string isFinished { get; set; }
 	}
 }
