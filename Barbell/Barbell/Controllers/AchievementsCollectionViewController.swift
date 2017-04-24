@@ -59,12 +59,37 @@ class AchievementsCollectionViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! MyCollectionViewCell
-        
-        // Configure the cell
-        let image = UIImage(named: carImages[indexPath.row])
-        cell.imageView.image = image
+        let achievements = CoreDataController.getAchievements()
+
         cell.label.text = imageTitles[indexPath.row]
-        
+    
+        for achievement in achievements{
+            if(achievement.achievementNumber == 1){
+                cell.imageView.image = UIImage(named: carImages[0])
+            }else{
+                cell.imageView.image = UIImage(named: carImagesNotDone[0])
+            }
+            if(achievement.achievementNumber == 2){
+                cell.imageView.image = UIImage(named: carImages[1])
+            }else{
+                cell.imageView.image = UIImage(named: carImagesNotDone[1])
+            }
+            if(achievement.achievementNumber == 3){
+                cell.imageView.image = UIImage(named: carImages[2])
+            }else{
+                cell.imageView.image = UIImage(named: carImagesNotDone[2])
+            }
+            if(achievement.achievementNumber == 4){
+                cell.imageView.image = UIImage(named: carImages[3])
+            }else{
+                cell.imageView.image = UIImage(named: carImagesNotDone[3])
+            }
+            if(achievement.achievementNumber == 5){
+                cell.imageView.image = UIImage(named: carImages[4])
+            }else{
+                cell.imageView.image = UIImage(named: carImagesNotDone[4])
+            }
+        }
         return cell
     }
 }
