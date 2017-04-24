@@ -1,4 +1,4 @@
-//
+    //
 //  DataAccess.swift
 //  Barbell
 //
@@ -448,6 +448,11 @@ public class DataAccess {
                                 newRoutine.creator = value
                             }
                         }
+                        if (key == "isFinished"){
+                            if let value = value as? Bool{
+                                newRoutine.isFinished = value
+                            }
+                        }
                         
                         //getting exercises for every workoutday
                         if (key == "Id"){
@@ -479,8 +484,6 @@ public class DataAccess {
                 }
             }
         }
-        
-        
         //print("Hopefully no square brackets: " + responseString)
         
         CoreDataController.saveContext()
@@ -623,7 +626,7 @@ public class DataAccess {
     }
     
     class func editRoutineinRedis (routine: Routine) -> Bool {
-        
+    /*
         let user : User = CoreDataController.getUser()
         
         var putString = ""
@@ -636,7 +639,7 @@ public class DataAccess {
             isPublicInt = 1
         }
         routineName = routine.name!
-        putString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator)}\" "
+        putString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator) + "," "isfinished:\(routine.is)}\" "
         
         request.httpMethod = "PUT"
         
@@ -686,7 +689,7 @@ public class DataAccess {
                 let workoutModel = WorkoutModel(id: Int(responseString)!, workout: workout)
                 sendWorkoutToRedis(workoutModel: workoutModel)
             }
-        }
+        }*/
         
         return true
         
@@ -711,7 +714,7 @@ public class DataAccess {
             return false
         }
         routineName = routine.name!
-        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(user.email!)}\" "
+        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator!)" + "," + "isFinished:\(routine.isFinished)}\" "
         
         request.httpMethod = "POST"
         
@@ -878,62 +881,62 @@ public class DataAccess {
             if let data = responseString.data(using: .utf8){
                 if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any]{
                     print("\nUSERJSON == \(json)\n\n")
-             
                     
-                        for (key,value) in json {
-                            if (key == "Age"){
-                                if let value = value as? Int16{
-                                    user.age = value
-                                }
-                             }
-                             else if (key == "Weight"){
-                                if let value = value as? Int16{
-                                    user.weight = value
-                                }
-                             }
-                             else if (key == "Bench"){
-                                if let value = value as? Int16{
-                                    user.bench = value
-                                }
-                             }
-                             else if (key == "Deadlift"){
-                                if let value = value as? Int16{
-                                    user.deadlift = value
-                                }
-                             }
-                             else if (key == "Squat"){
-                                if let value = value as? Int16{
-                                    user.squat = value
-                                }
-                             }
-                             else if (key == "Snatch"){
-                                if let value = value as? Int16{
-                                    user.snatch = value
-                                }
-                             }
-                             else if (key == "CleanAndJerk"){
-                                if let value = value as? Int16{
-                                    user.cleanAndJerk = value
-                                }
-                             }
-                             else if (key == "WorkoutsCompleted"){
-                                if let value = value as? Int16{
-                                    user.workoutsCompleted = value
-                                }
-                             }
-                             else if (key == "Email"){
-                                if let value = value as? String{
-                                    user.email = value
-                                }
-                            }
-                            else if (key == "Name"){
-                                if let value = value as? String{
-                                    var name = value.components(separatedBy: " ")
-                                    user.fname = name[0]
-                                    user.lname = name[1]
-                                }
+                    
+                    for (key,value) in json {
+                        if (key == "Age"){
+                            if let value = value as? Int16{
+                                user.age = value
                             }
                         }
+                        else if (key == "Weight"){
+                            if let value = value as? Int16{
+                                user.weight = value
+                            }
+                        }
+                        else if (key == "Bench"){
+                            if let value = value as? Int16{
+                                user.bench = value
+                            }
+                        }
+                        else if (key == "Deadlift"){
+                            if let value = value as? Int16{
+                                user.deadlift = value
+                            }
+                        }
+                        else if (key == "Squat"){
+                            if let value = value as? Int16{
+                                user.squat = value
+                            }
+                        }
+                        else if (key == "Snatch"){
+                            if let value = value as? Int16{
+                                user.snatch = value
+                            }
+                        }
+                        else if (key == "CleanAndJerk"){
+                            if let value = value as? Int16{
+                                user.cleanAndJerk = value
+                            }
+                        }
+                        else if (key == "WorkoutsCompleted"){
+                            if let value = value as? Int16{
+                                user.workoutsCompleted = value
+                            }
+                        }
+                        else if (key == "Email"){
+                            if let value = value as? String{
+                                user.email = value
+                            }
+                        }
+                        else if (key == "Name"){
+                            if let value = value as? String{
+                                var name = value.components(separatedBy: " ")
+                                user.fname = name[0]
+                                user.lname = name[1]
+                            }
+                        }
+                    }
                     
                 }
             /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
@@ -1279,7 +1282,7 @@ public class DataAccess {
         
         request.httpMethod = "GET"
         var responseString = ""
-        
+    
         let headers = [
             "Content-Type": "application/json",
             "Authorization": self.accessToken
