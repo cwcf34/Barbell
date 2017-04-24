@@ -880,7 +880,7 @@ public class DataAccess {
         if let user = user as? User {
             if let data = responseString.data(using: .utf8){
                 if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String:Any]{
-                    print("\nUSERJSON == \(json)\n\n")
+                    //print("\nUSERJSON == \(json)\n\n")
                     
                     
                     for (key,value) in json {
@@ -1279,96 +1279,117 @@ public class DataAccess {
     }
     
     class func getHistoryfromRedis(email : String, pastlift: String) -> [LegacyLift]{
-        var request = URLRequest(url: URL(string: apiURL + "exercise/\(email)/?exercise=\(pastlift)")!)
+        var lift = ""
         
-        var liftData = [LegacyLift]()
-        
-        request.httpMethod = "GET"
-        var responseString = ""
-    
-        let headers = [
-            "Content-Type": "application/json",
-            "Authorization": self.accessToken
-        ]
-        
-        request.allHTTPHeaderFields = headers
-        
-        let sem = DispatchSemaphore(value: 0)
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("\nGET Exercise response = \(response)\n")
-            }
-            
-            responseString = String(data: data, encoding: .utf8)!
-            
-            print("\nGet ExerciseData for \(pastlift) response \(responseString)\n")
-            
-            
-            sem.signal()
+        if (pastlift == "Bench Press"){
+            lift = "Bench"
+        }else if(pastlift.contains("Clean")) {
+            lift = "Clean"
+        }else if (pastlift == "Full Squat") {
+            lift = "Full"
+        }else if (pastlift == "Deadlift") {
+            lift = "Deadlift"
+        }else if (pastlift == "Snatch") {
+            lift = "Snatch"
         }
         
-        task.resume()
-        sem.wait()
         
-        if let data = responseString.data(using: .utf8) as? Data{
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
-                //print("JSONFULL == \(json)\n\n")
+        if let url = URL(string: "\(apiURL)exercise/\(email)/?exercise=\(lift)"){
+            
+            var request = URLRequest(url: url)
+            
+            var liftData = [LegacyLift]()
+            
+            request.httpMethod = "GET"
+            var responseString = ""
+            
+            let headers = [
+                "Content-Type": "application/json",
+                "Authorization": self.accessToken
+            ]
+            
+            request.allHTTPHeaderFields = headers
+            
+            let sem = DispatchSemaphore(value: 0)
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                    print("error=\(error)")
+                    return
+                }
                 
-                if(json.description.contains("Data does not exist")) {
-                    return liftData
-                }else {
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("\nGET Exercise response = \(response)\n")
+                }
+                
+                responseString = String(data: data, encoding: .utf8)!
+                
+                print("\nGet ExerciseData for \(pastlift) response \(responseString)\n")
+                
+                
+                sem.signal()
+            }
+            
+            task.resume()
+            sem.wait()
+            
+            if let data = responseString.data(using: .utf8) as? Data{
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [[String:Any]]{
+                    //print("JSONFULL == \(json)\n\n")
                     
-                    for eachHistory in json {
+                    if(json.description.contains("Data does not exist")) {
+                        return liftData
+                    }else {
                         
-                        let newHistory : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
-                        
-                        newHistory.liftName = pastlift
-                        
-                        for (key,value) in eachHistory{
-                            if (key == "Reps"){
-                                if let value = value as? String{
-                                    if let castedValue = Int16(value){
-                                        newHistory.liftRep = castedValue
+                        for eachHistory in json {
+                            
+                            let newHistory : LegacyLift = NSEntityDescription.insertNewObject(forEntityName: "LegacyLift", into: CoreDataController.getContext()) as! LegacyLift
+                            
+                            newHistory.liftName = pastlift
+                            
+                            for (key,value) in eachHistory{
+                                if (key == "Reps"){
+                                    if let value = value as? String{
+                                        if let castedValue = Int16(value){
+                                            newHistory.liftRep = castedValue
+                                        }
                                     }
                                 }
-                            }
-                            if (key == "Weight"){
-                                if let value = value as? String{
-                                    if let castedValue = Int16(value){
-                                        newHistory.liftWeight = castedValue
+                                if (key == "Weight"){
+                                    if let value = value as? String{
+                                        if let castedValue = Int16(value){
+                                            newHistory.liftWeight = castedValue
+                                        }
                                     }
                                 }
-                            }
-                            if (key == "Sets"){
-                                if let value = value as? String{
-                                    if let castedValue = Int16(value){
-                                        newHistory.liftSets = castedValue
+                                if (key == "Sets"){
+                                    if let value = value as? String{
+                                        if let castedValue = Int16(value){
+                                            newHistory.liftSets = castedValue
+                                        }
                                     }
                                 }
+                                if (key == "Date"){
+                                    let formatter = DateFormatter()
+                                    formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
+                                    formatter.locale = Locale.init(identifier: "en_GB")
+                                    let dateObj = formatter.date(from: value as! String)
+                                    newHistory.timeStamp = dateObj! as NSDate
+                                }
                             }
-                            if (key == "Date"){
-                                let formatter = DateFormatter()
-                                formatter.dateFormat = "EEE, dd MMM yyyy hh:mm:ss +zzzz"
-                                formatter.locale = Locale.init(identifier: "en_GB")
-                                let dateObj = formatter.date(from: value as! String)
-                                newHistory.timeStamp = dateObj! as NSDate
-                            }
+                            /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
+                            liftData.append(newHistory)
                         }
-                        /*print("loaded achievement" + newHistory.liftName! + String(describing: newHistory.timeStamp))*/
-                        liftData.append(newHistory)
                     }
                 }
             }
+            CoreDataController.saveContext()
+            return liftData
+            
+        }else {
+            return [LegacyLift]()
         }
-        CoreDataController.saveContext()
-        return liftData
     }
     
     class func saveHistoryToRedis(){
@@ -1381,9 +1402,10 @@ public class DataAccess {
         request.httpMethod = "PUT"
         
         for lift in history{
-            if let lift = lift as? LegacyLift{
+            if let lift = lift as? LegacyLift, let time = lift.timeStamp, let name = lift.liftName{
+                
 
-                postString = "\"{date:\(lift.timeStamp)" + "," + "exercise:\(lift.liftName)" + "," + "sets:\(lift.liftSets)" + "," + "reps:\(lift.liftRep)" + "," + "weight:\(lift.liftWeight)}\" "
+                postString = "\"{date:\(time)" + "," + "exercise:\(name)" + "," + "sets:\(lift.liftSets)" + "," + "reps:\(lift.liftRep)" + "," + "weight:\(lift.liftWeight)}\" "
         
 
             print(postString)
@@ -1405,41 +1427,21 @@ public class DataAccess {
                     return
                 }
                 
-                print(postString)
-                
-                let postDATA:Data = postString.data(using: String.Encoding.utf8)!
-                request.httpBody = postDATA
-                var responseString = ""
-                let headers = [
-                    "Content-Type": "application/json",
-                    "Authorization": self.accessToken
-                ]
-                
-                request.allHTTPHeaderFields = headers
-                let sem = DispatchSemaphore(value: 0)
-                
-                let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                    guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                        print("error=\(error)")
-                        return
-                    }
-                    
-                    if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                        print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                        print("response = \(response)")
-                    }
-                    
-                    responseString = String(data: data, encoding: .utf8)!
-                    
-                    print("Did save Historic lift " + lift.liftName! + String(describing: lift.timeStamp) + " to redis?  " + responseString)
-                    
-                    
-                    sem.signal()
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("response = \(response)")
                 }
                 
-                task.resume()
-                sem.wait()
+                responseString = String(data: data, encoding: .utf8)!
+                
+                print("Did save Historic lift " + lift.liftName! + String(describing: lift.timeStamp) + " to redis?  " + responseString)
+                
+                
+                sem.signal()
             }
+                
+            task.resume()
+            sem.wait()
         }
     }
 }
