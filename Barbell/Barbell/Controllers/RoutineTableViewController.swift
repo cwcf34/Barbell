@@ -171,7 +171,7 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar?) {
         handleClearOrCancel()
     }
     
@@ -211,7 +211,6 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
             }else{
                 cell?.textLabel?.text = routineSearchResults[indexPath.row-1].name
             }
-
         }
 
         
@@ -235,7 +234,26 @@ class RoutineTableViewController: UITableViewController, UISearchBarDelegate {
                 self.performSegue(withIdentifier: "startRoutineSegue", sender: self)
             }else {
                 routine = routineSearchResults[indexPath.row-1]
-                //perform segue to do somwthing w someonelse's routine
+                
+                //ADD TO CORE DATA
+                let newRoutine : Routine = NSEntityDescription.insertNewObject(forEntityName: "Routine", into: CoreDataController.getContext()) as! Routine
+                newRoutine.name = routineSearchResults[indexPath.row-1].name
+                newRoutine.isPublic = routineSearchResults[indexPath.row-1].isPublic
+                newRoutine.isFinished = false
+                newRoutine.numberOfWeeks = routineSearchResults[indexPath.row-1].numberOfWeeks
+                newRoutine.creator = routineSearchResults[indexPath.row-1].creator
+                newRoutine.id = 0
+                
+                let workouts = routineSearchResults[indexPath.row-1].workouts?.allObjects as! [Workout]
+                for workout in workouts{
+                    newRoutine.addToWorkouts(workout)
+                }
+                
+                
+                CoreDataController.saveContext()
+                
+                searchBarCancelButtonClicked(nil)
+                tableView.reloadData()
             }
         }
         

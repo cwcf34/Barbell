@@ -448,6 +448,11 @@ public class DataAccess {
                                 newRoutine.creator = value
                             }
                         }
+                        if (key == "isFinished"){
+                            if let value = value as? Bool{
+                                newRoutine.isFinished = value
+                            }
+                        }
                         
                         //getting exercises for every workoutday
                         if (key == "Id"){
@@ -479,8 +484,6 @@ public class DataAccess {
                 }
             }
         }
-        
-        
         //print("Hopefully no square brackets: " + responseString)
         
         CoreDataController.saveContext()
@@ -623,7 +626,7 @@ public class DataAccess {
     }
     
     class func editRoutineinRedis (routine: Routine) -> Bool {
-        
+    /*
         let user : User = CoreDataController.getUser()
         
         var putString = ""
@@ -636,7 +639,7 @@ public class DataAccess {
             isPublicInt = 1
         }
         routineName = routine.name!
-        putString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator)}\" "
+        putString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator) + "," "isfinished:\(routine.is)}\" "
         
         request.httpMethod = "PUT"
         
@@ -686,7 +689,7 @@ public class DataAccess {
                 let workoutModel = WorkoutModel(id: Int(responseString)!, workout: workout)
                 sendWorkoutToRedis(workoutModel: workoutModel)
             }
-        }
+        }*/
         
         return true
         
@@ -711,7 +714,7 @@ public class DataAccess {
             return false
         }
         routineName = routine.name!
-        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(user.email!)}\" "
+        postString = "\"{name:\(routineName!)" + "," + "weeks:\(routine.numberOfWeeks)" + "," + "isPublic:\(isPublicInt)" + "," + "creator:\(routine.creator!)" + "," + "isFinished:\(routine.isFinished)}\" "
         
         request.httpMethod = "POST"
         
@@ -1279,7 +1282,7 @@ public class DataAccess {
         
         request.httpMethod = "GET"
         var responseString = ""
-        
+    
         let headers = [
             "Content-Type": "application/json",
             "Authorization": self.accessToken
